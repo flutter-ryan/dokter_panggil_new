@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "181405829335",
+    "project_id": "admin-drp",
+    "storage_bucket": "admin-drp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181405829335:android:587a0e94878cfce2ee4892",
+        "android_client_info": {
+          "package_name": "com.dokterpanggil.admin_dokter_panggil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181405829335-ctp3hb6fup4a64h4fmrae44n3j184rgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSb55cqhbR7APaQtBQKkbIURHdS0Vjp7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181405829335-ctp3hb6fup4a64h4fmrae44n3j184rgv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "181405829335-t8grn3po98a00gpbvi2lqta5mmolnnjf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dokterpanggil.dokterPanggil"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181405829335:android:981078c57de4b28cee4892",
+        "android_client_info": {
+          "package_name": "com.dokterpanggil.dokter_panggil_dok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181405829335-ctp3hb6fup4a64h4fmrae44n3j184rgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSb55cqhbR7APaQtBQKkbIURHdS0Vjp7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181405829335-ctp3hb6fup4a64h4fmrae44n3j184rgv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "181405829335-t8grn3po98a00gpbvi2lqta5mmolnnjf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dokterpanggil.dokterPanggil"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181405829335:android:b73a802169f5f67fee4892",
+        "android_client_info": {
+          "package_name": "com.dokterpanggil.dokter_panggil_healthworkers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181405829335-ctp3hb6fup4a64h4fmrae44n3j184rgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSb55cqhbR7APaQtBQKkbIURHdS0Vjp7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181405829335-ctp3hb6fup4a64h4fmrae44n3j184rgv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "181405829335-t8grn3po98a00gpbvi2lqta5mmolnnjf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dokterpanggil.dokterPanggil"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
