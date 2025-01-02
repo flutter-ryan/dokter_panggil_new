@@ -19,7 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 
 class DiagnosaPage extends StatefulWidget {
-  const DiagnosaPage({Key? key}) : super(key: key);
+  const DiagnosaPage({super.key});
 
   @override
   State<DiagnosaPage> createState() => _DiagnosaPageState();
@@ -143,6 +143,7 @@ class _DiagnosaPageState extends State<DiagnosaPage> {
                     ),
                   ).then((value) {
                     if (value != null) {
+                      if (!mounted) return;
                       FocusScope.of(context).requestFocus(FocusNode());
                       var data = value as Diagnosa;
                       _edit(data);

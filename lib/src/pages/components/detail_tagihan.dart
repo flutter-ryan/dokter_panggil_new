@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 class Detailtagihan extends StatelessWidget {
   const Detailtagihan({
-    Key? key,
+    super.key,
     this.namaTagihan,
     this.tarifTagihan,
+    this.tanggalTagihan,
     this.subTagihan,
     this.onTap,
     this.contentPadding = EdgeInsets.zero,
-  }) : super(key: key);
+  });
 
   final Widget? namaTagihan;
   final Widget? tarifTagihan;
+  final Widget? tanggalTagihan;
   final Widget? subTagihan;
   final VoidCallback? onTap;
   final EdgeInsetsGeometry contentPadding;
@@ -22,9 +24,11 @@ class Detailtagihan extends StatelessWidget {
       onTap: onTap,
       contentPadding: contentPadding,
       dense: true,
+      visualDensity: VisualDensity.compact,
       title: namaTagihan,
       subtitle: subTagihan,
       trailing: tarifTagihan,
+      leading: tanggalTagihan,
     );
   }
 }

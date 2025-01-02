@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
   const Header({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     this.closeButton,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget? subtitle;

@@ -23,7 +23,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class AkunPage extends StatefulWidget {
-  const AkunPage({Key? key}) : super(key: key);
+  const AkunPage({super.key});
 
   @override
   State<AkunPage> createState() => _AkunPageState();
@@ -130,6 +130,7 @@ class _AkunPageState extends State<AkunPage> {
         LocalNotificationService.showNotification(payload);
         _tokenFcmSaveBloc.tokenSink.add(_token!);
         _tokenFcmSaveBloc.saveTokenFcm();
+        if (!mounted) return;
         _showStreamSaveToken(context);
       }
     });
@@ -486,12 +487,12 @@ class _AkunPageState extends State<AkunPage> {
 
 class TileProfile extends StatelessWidget {
   const TileProfile({
-    Key? key,
+    super.key,
     this.label,
     this.body,
     this.onTap,
     this.bodyActive,
-  }) : super(key: key);
+  });
   final String? label;
   final String? body;
   final VoidCallback? onTap;

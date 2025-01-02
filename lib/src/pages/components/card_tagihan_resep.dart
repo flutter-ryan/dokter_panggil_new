@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CardTagihanResep extends StatefulWidget {
   const CardTagihanResep({
-    Key? key,
+    super.key,
     this.title,
     this.tiles,
     this.subTotal,
     this.buttonDetail,
     this.transportWidget,
-  }) : super(key: key);
+  });
 
   final String? title;
   final Widget? tiles;

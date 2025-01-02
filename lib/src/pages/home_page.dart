@@ -28,10 +28,10 @@ import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({
-    Key? key,
+    super.key,
     required this.name,
     required this.role,
-  }) : super(key: key);
+  });
 
   final String name;
   final int role;
@@ -425,6 +425,7 @@ class _HomepageState extends State<Homepage> {
                   _kunjunganBloc.kunjunganPasien();
                   setState(() {});
                 },
+                role: widget.role,
               );
           }
         }
@@ -476,11 +477,11 @@ class _HomepageState extends State<Homepage> {
 
 class QuickActionButton extends StatelessWidget {
   const QuickActionButton({
-    Key? key,
+    super.key,
     this.label,
     this.icon,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Widget? label;
   final Widget? icon;
@@ -509,12 +510,12 @@ class QuickActionButton extends StatelessWidget {
 
 class KunjunganPasien extends StatefulWidget {
   const KunjunganPasien({
-    Key? key,
+    super.key,
     required this.data,
     this.reload,
     this.type = 'create',
     this.role,
-  }) : super(key: key);
+  });
 
   final List<Kunjungan> data;
   final VoidCallback? reload;
@@ -589,12 +590,12 @@ class _KunjunganPasienState extends State<KunjunganPasien> {
 
 class CardLayananVertPasien extends StatefulWidget {
   const CardLayananVertPasien({
-    Key? key,
+    super.key,
     required this.data,
     required this.reload,
     this.type = 'create',
     this.role,
-  }) : super(key: key);
+  });
 
   final Kunjungan data;
   final VoidCallback reload;

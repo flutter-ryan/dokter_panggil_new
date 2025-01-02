@@ -202,6 +202,7 @@ class _ListTindakanLabState extends State<ListTindakanLab> {
     ).then((value) {
       if (value != null) {
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context);
         });
       }

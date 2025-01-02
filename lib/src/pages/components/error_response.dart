@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class ErrorResponse extends StatelessWidget {
   const ErrorResponse({
-    Key? key,
+    super.key,
     this.message,
     this.onTap,
     this.button = true,
-  }) : super(key: key);
+  });
 
   final String? message;
   final VoidCallback? onTap;

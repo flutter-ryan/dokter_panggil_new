@@ -34,7 +34,7 @@ class DetailKunjungan {
     this.pegawai,
     this.pasien,
     this.tindakan,
-    this.resep,
+    this.resepObatOral,
     this.tagihanResep,
     this.resepRacikan,
     this.tagihanResepRacikan,
@@ -43,7 +43,7 @@ class DetailKunjungan {
     this.tagihanTindakanLab,
     this.tagihanTindakanRad,
     this.bhp,
-    this.obatInjeksi,
+    this.resepObatInjeksi,
     this.tagihanBhp,
     this.totalTindakan,
     this.totalResep,
@@ -83,7 +83,7 @@ class DetailKunjungan {
   List<Pegawaikunjungan>? pegawai;
   Pasien? pasien;
   List<Tindakan>? tindakan;
-  List<Resep>? resep;
+  List<ResepObatOral>? resepObatOral;
   List<TagihanResep>? tagihanResep;
   List<ResepRacikan>? resepRacikan;
   List<TindakanLab>? tindakanLab;
@@ -92,7 +92,7 @@ class DetailKunjungan {
   List<TagihanTindakanRad>? tagihanTindakanRad;
   List<TagihanResep>? tagihanResepRacikan;
   List<Bhp>? bhp;
-  List<KunjunganObatInjeksi>? obatInjeksi;
+  List<ResepObatInjeksi>? resepObatInjeksi;
   List<TagihanBhp>? tagihanBhp;
   int? totalTindakan;
   int? totalResep;
@@ -137,7 +137,8 @@ class DetailKunjungan {
         pasien: Pasien.fromJson(json["pasien"]),
         tindakan: List<Tindakan>.from(
             json["tindakan"].map((x) => Tindakan.fromJson(x))),
-        resep: List<Resep>.from(json["resep"].map((x) => Resep.fromJson(x))),
+        resepObatOral: List<ResepObatOral>.from(
+            json["resep_oral"].map((x) => ResepObatOral.fromJson(x))),
         tagihanResep: List<TagihanResep>.from(
             json["tagihan_resep"].map((x) => TagihanResep.fromJson(x))),
         resepRacikan: List<ResepRacikan>.from(
@@ -155,8 +156,8 @@ class DetailKunjungan {
             json["tagihan_tindakan_rad"]
                 .map((x) => TagihanTindakanRad.fromJson(x))),
         bhp: List<Bhp>.from(json["bhp"].map((x) => Bhp.fromJson(x))),
-        obatInjeksi: List<KunjunganObatInjeksi>.from(
-            json["obat_injeksi"].map((x) => KunjunganObatInjeksi.fromJson(x))),
+        resepObatInjeksi: List<ResepObatInjeksi>.from(json["resep_obat_injeksi"]
+            .map((x) => ResepObatInjeksi.fromJson(x))),
         tagihanBhp: List<TagihanBhp>.from(
             json["tagihan_bhp"].map((x) => TagihanBhp.fromJson(x))),
         totalTindakan: json["total_tindakan"],
@@ -261,6 +262,38 @@ class Pasien {
         alamat: json["alamat"],
         jenisKelamin: json["jenis_kelamin"],
         nomorTelepon: json["nomor_telepon"],
+      );
+}
+
+class ResepObatOral {
+  int? id;
+  String? tanggalResepOral;
+  String? tanggalShort;
+  String? jamShort;
+  String? dokter;
+  int? status;
+  List<Resep>? obatOral;
+
+  ResepObatOral({
+    this.id,
+    this.tanggalResepOral,
+    this.tanggalShort,
+    this.jamShort,
+    this.dokter,
+    this.status,
+    this.obatOral,
+  });
+
+  factory ResepObatOral.fromJson(Map<String, dynamic> json) => ResepObatOral(
+        id: json["id"],
+        tanggalResepOral: json["tanggal_resep_oral"],
+        tanggalShort: json["tanggal_short"],
+        jamShort: json["jam_short"],
+        dokter: json["dokter"],
+        status: json["status"],
+        obatOral: json["obatOral"] == null
+            ? []
+            : List<Resep>.from(json["obatOral"]!.map((x) => Resep.fromJson(x))),
       );
 }
 
@@ -370,6 +403,7 @@ class Jumlah {
 class Tindakan {
   Tindakan({
     this.id,
+    this.kunjunganId,
     this.namaTindakan,
     this.petugas,
     this.quantity,
@@ -383,9 +417,11 @@ class Tindakan {
     this.dataTransportasi,
     this.dataOjol,
     this.foc,
+    this.createdAt,
   });
 
   int? id;
+  int? kunjunganId;
   String? namaTindakan;
   String? petugas;
   int? quantity;
@@ -399,9 +435,11 @@ class Tindakan {
   Transportasi? dataTransportasi;
   OjolTindakan? dataOjol;
   int? foc;
+  String? createdAt;
 
   factory Tindakan.fromJson(Map<String, dynamic> json) => Tindakan(
         id: json["id"],
+        kunjunganId: json["kunjungan_id"],
         namaTindakan: json["nama_tindakan"],
         petugas: json["petugas"],
         quantity: json["quantity"],
@@ -419,6 +457,7 @@ class Tindakan {
             ? null
             : OjolTindakan.fromJson(json["data_ojol"]),
         foc: json["foc"],
+        createdAt: json["created_at"],
       );
 }
 
@@ -699,6 +738,40 @@ class MitraTindakanLab {
         kode: json["kode"],
         jenis: json["jenis"],
         status: json["status"],
+      );
+}
+
+class ResepObatInjeksi {
+  int? id;
+  String? tanggalResepInjeksi;
+  String? tanggalShort;
+  String? jamShort;
+  String? dokter;
+  int? status;
+  List<KunjunganObatInjeksi>? obatInjeksi;
+
+  ResepObatInjeksi({
+    this.id,
+    this.tanggalResepInjeksi,
+    this.tanggalShort,
+    this.jamShort,
+    this.dokter,
+    this.status,
+    this.obatInjeksi,
+  });
+
+  factory ResepObatInjeksi.fromJson(Map<String, dynamic> json) =>
+      ResepObatInjeksi(
+        id: json["id"],
+        tanggalResepInjeksi: json["tanggal_resep_injeksi"],
+        tanggalShort: json["tanggal_short"],
+        jamShort: json["jam_short"],
+        dokter: json["dokter"],
+        status: json["status"],
+        obatInjeksi: json["obatInjeksi"] == null
+            ? []
+            : List<KunjunganObatInjeksi>.from(json["obatInjeksi"]!
+                .map((x) => KunjunganObatInjeksi.fromJson(x))),
       );
 }
 

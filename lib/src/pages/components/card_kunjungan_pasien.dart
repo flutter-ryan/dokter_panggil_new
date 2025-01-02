@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class CardKunjunganPasien extends StatefulWidget {
   const CardKunjunganPasien({
-    Key? key,
+    super.key,
     required this.kunjungan,
     this.type = 'create',
     this.reload,
-  }) : super(key: key);
+  });
 
   final Kunjungan kunjungan;
   final String type;

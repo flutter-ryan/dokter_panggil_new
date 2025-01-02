@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Loginpage extends StatefulWidget {
-  const Loginpage({Key? key}) : super(key: key);
+  const Loginpage({super.key});
 
   @override
   State<Loginpage> createState() => _LoginpageState();

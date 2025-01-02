@@ -179,6 +179,7 @@ class _FormTransportasiTindakanState extends State<FormTransportasiTindakan> {
           data: data,
         );
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context, biayaMod);
         });
       }

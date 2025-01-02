@@ -1,4 +1,4 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+// import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,15 +53,15 @@ class _DialogRangeDateState extends State<DialogRangeDate> {
               height: 0.0,
               color: Colors.grey,
             ),
-            CalendarDatePicker2(
-              config: CalendarDatePicker2WithActionButtonsConfig(
-                centerAlignModePicker: true,
-                calendarType: CalendarDatePicker2Type.range,
-                selectedDayHighlightColor: kPrimaryColor,
-              ),
-              value: _dates,
-              onValueChanged: (dates) => _dates = dates,
-            ),
+            // CalendarDatePicker(
+            //   config: CalendarDatePicker2WithActionButtonsConfig(
+            //     centerAlignModePicker: true,
+            //     calendarType: CalendarDatePicker2Type.range,
+            //     selectedDayHighlightColor: kPrimaryColor,
+            //   ),
+            //   value: _dates,
+            //   onValueChanged: (dates) => _dates = dates,
+            // ),
             const Padding(
               padding: EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
               child: Text(

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class ListJabatanWidget extends StatefulWidget {
   const ListJabatanWidget({
-    Key? key,
+    super.key,
     required this.data,
     this.selectedId = 0,
     required this.selectId,
-  }) : super(key: key);
+  });
 
   final List<Jabatan> data;
   final int selectedId;

@@ -12,7 +12,7 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Rootpage extends StatefulWidget {
-  const Rootpage({Key? key}) : super(key: key);
+  const Rootpage({super.key});
 
   @override
   State<Rootpage> createState() => _RootpageState();

@@ -148,6 +148,7 @@ class _DetailTagihanLabWidgetState extends State<DetailTagihanLabWidget> {
       if (value != null) {
         var data = value as DetailKunjungan;
         Future.delayed(const Duration(milliseconds: 600), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }

@@ -141,6 +141,7 @@ class _TindakanRadiologiPageState extends State<TindakanRadiologiPage> {
                 ),
               ).then((value) {
                 if (value != null) {
+                  if (!mounted) return;
                   FocusScope.of(context).requestFocus(FocusNode());
                   var data = value as MasterTindakanRad;
                   _edit(data);

@@ -15,11 +15,11 @@ import 'package:intl/intl.dart';
 
 class DetailIdentitasWidget extends StatefulWidget {
   const DetailIdentitasWidget({
-    Key? key,
+    super.key,
     required this.id,
     required this.data,
     this.type = 'create',
-  }) : super(key: key);
+  });
 
   final int id;
   final DetailKunjungan data;
@@ -89,6 +89,7 @@ class _DetailIdentitasWidgetState extends State<DetailIdentitasWidget> {
     ).then((value) {
       if (value != null) {
         HomeAction homeAction = HomeAction(type: 'batal');
+        if (!mounted) return;
         Navigator.pop(context, homeAction);
       }
     });
@@ -231,10 +232,10 @@ class _DetailIdentitasWidgetState extends State<DetailIdentitasWidget> {
 
 class DetailInfoRegPasien extends StatelessWidget {
   const DetailInfoRegPasien({
-    Key? key,
+    super.key,
     required this.label,
     required this.body,
-  }) : super(key: key);
+  });
 
   final String label;
   final Widget body;
@@ -262,10 +263,10 @@ class DetailInfoRegPasien extends StatelessWidget {
 
 class DetailPasien extends StatelessWidget {
   const DetailPasien({
-    Key? key,
+    super.key,
     this.title,
     this.body,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String? body;

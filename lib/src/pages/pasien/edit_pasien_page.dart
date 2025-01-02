@@ -193,6 +193,7 @@ class _EditPasienPageState extends State<EditPasienPage> {
       if (value != null) {
         var data = value as Pasien;
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }

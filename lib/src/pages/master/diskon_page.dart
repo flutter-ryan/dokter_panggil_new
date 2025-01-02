@@ -150,6 +150,7 @@ class _DiskonPageState extends State<DiskonPage> {
                     ),
                   ).then((value) {
                     if (value != null) {
+                      if (!mounted) return;
                       FocusScope.of(context).requestFocus(FocusNode());
                       var data = value as MasterDiskon;
                       _formKey.currentState!.reset();

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class TitleQuickAct extends StatelessWidget {
   const TitleQuickAct({
-    Key? key,
+    super.key,
     this.title,
-  }) : super(key: key);
+  });
   final String? title;
 
   @override

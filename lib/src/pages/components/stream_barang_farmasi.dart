@@ -14,9 +14,9 @@ import 'package:flutter/services.dart';
 
 class StreamBarangFarmasi extends StatefulWidget {
   const StreamBarangFarmasi({
-    Key? key,
+    super.key,
     this.selectedData,
-  }) : super(key: key);
+  });
 
   final List<BarangFarmasi>? selectedData;
 

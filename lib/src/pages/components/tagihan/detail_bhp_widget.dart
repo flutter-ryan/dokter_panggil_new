@@ -8,6 +8,7 @@ import 'package:dokter_panggil/src/models/master_bhp_by_category_model.dart';
 import 'package:dokter_panggil/src/models/master_bhp_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
 import 'package:dokter_panggil/src/pages/components/card_bhp.dart';
+import 'package:dokter_panggil/src/pages/components/card_tagihan.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
@@ -160,51 +161,49 @@ class _DetailBhpState extends State<DetailBhp> {
 
   @override
   Widget build(BuildContext context) {
-    return CardBhp(
+    return Cardtagihan(
       title: 'Barang Habis Pakai',
       subTotal: Text(
         _rupiah.format(widget.data.totalBhp),
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
-      tiles: Column(
-        children: ListTile.divideTiles(
-          context: context,
-          tiles: _data!
-              .map(
-                (bhp) => ListTile(
-                  onTap: () => widget.type != 'view' && widget.role == 99
-                      ? _edit(context, bhp)
-                      : null,
-                  dense: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
-                  horizontalTitleGap: 0,
-                  title: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(child: Text('${bhp.barang!.namaBarang}')),
-                      if (widget.role == 99 && widget.type != 'view')
-                        const SizedBox(
-                          width: 12.0,
-                        ),
-                      if (widget.role == 99 && widget.type != 'view')
-                        const Icon(
-                          Icons.edit_note_rounded,
-                          size: 22.0,
-                          color: Colors.blue,
-                        )
-                    ],
-                  ),
-                  subtitle: Text(
-                      '${bhp.jumlah} x ${_rupiahNo.format(bhp.hargaModal! + bhp.tarifAplikasi!)}'),
-                  trailing: Text(
-                    _rupiah.format(bhp.tarif),
-                  ),
+      tiles: ListTile.divideTiles(
+        context: context,
+        tiles: _data!
+            .map(
+              (bhp) => ListTile(
+                onTap: () => widget.type != 'view' && widget.role == 99
+                    ? _edit(context, bhp)
+                    : null,
+                dense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
+                horizontalTitleGap: 0,
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(child: Text('${bhp.barang!.namaBarang}')),
+                    if (widget.role == 99 && widget.type != 'view')
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                    if (widget.role == 99 && widget.type != 'view')
+                      const Icon(
+                        Icons.edit_note_rounded,
+                        size: 22.0,
+                        color: Colors.blue,
+                      )
+                  ],
                 ),
-              )
-              .toList(),
-        ).toList(),
-      ),
+                subtitle: Text(
+                    '${bhp.jumlah} x ${_rupiahNo.format(bhp.hargaModal! + bhp.tarifAplikasi!)}'),
+                trailing: Text(
+                  _rupiah.format(bhp.tarif),
+                ),
+              ),
+            )
+            .toList(),
+      ).toList(),
     );
   }
 

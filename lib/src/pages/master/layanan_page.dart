@@ -23,7 +23,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 
 class LayananPage extends StatefulWidget {
-  const LayananPage({Key? key}) : super(key: key);
+  const LayananPage({super.key});
 
   @override
   State<LayananPage> createState() => _LayananPageState();

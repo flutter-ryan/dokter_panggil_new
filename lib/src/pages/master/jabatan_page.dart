@@ -21,7 +21,7 @@ class _JabatanPageState extends State<JabatanPage> {
   final _formKey = GlobalKey<FormState>();
   final _group = TextEditingController();
   final _jabatan = TextEditingController();
-  bool _editForm = false;
+  final bool _editForm = false;
 
   bool validateAndSave() {
     var formData = _formKey.currentState;

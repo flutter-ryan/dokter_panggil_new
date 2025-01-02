@@ -18,10 +18,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TambahBarangPage extends StatefulWidget {
   const TambahBarangPage({
-    Key? key,
+    super.key,
     required this.form,
     this.barang,
-  }) : super(key: key);
+  });
 
   final String form;
   final Barang? barang;
@@ -94,6 +94,7 @@ class _TambahBarangPageState extends State<TambahBarangPage> {
     ).then((value) {
       if (value != null) {
         Future.delayed(const Duration(milliseconds: 300), () {
+          if (!mounted) return;
           Navigator.pop(context, 'reload');
         });
       }

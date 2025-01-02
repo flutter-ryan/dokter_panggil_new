@@ -17,6 +17,7 @@ import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
 import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
@@ -25,11 +26,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DetailTagihanResepWidget extends StatefulWidget {
   const DetailTagihanResepWidget({
-    Key? key,
+    super.key,
     required this.data,
     required this.type,
     this.reload,
-  }) : super(key: key);
+  });
 
   final DetailKunjungan data;
   final String type;
@@ -50,7 +51,7 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
       NumberFormat.currency(locale: 'id', symbol: 'Rp. ', decimalDigits: 0);
   final _rupiahNo =
       NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0);
-  late DetailKunjungan _data;
+  DetailKunjungan? _data;
 
   bool validateAndSave() {
     var formState = _formKey.currentState;
@@ -124,6 +125,7 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
       animationType: DialogTransitionType.slideFromBottomFade,
     ).then((value) {
       var data = value as DetailKunjungan;
+      if (!mounted) return;
       Navigator.pop(context, data);
     });
   }
@@ -160,6 +162,7 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
     ).then((value) {
       if (value != null) {
         var data = value as DetailKunjungan;
+        if (!mounted) return;
         Navigator.pop(context, data);
       }
     });
@@ -176,155 +179,253 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
     return CardTagihanResep(
       title: 'Resep',
       tiles: Column(
-        children: [
-          if (_data.tagihanResep!.isEmpty)
-            SizedBox(
-              width: double.infinity,
-              height: 180,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.warning_amber_rounded,
-                    color: kPrimaryColor,
-                    size: 52,
-                  ),
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                  const Text(
-                    'Data tagihan resep tidak tersedia',
-                    style: TextStyle(fontSize: 15, color: Colors.grey),
-                    textAlign: TextAlign.center,
-                  ),
-                  if (widget.type != 'view')
-                    const SizedBox(
-                      height: 18.0,
-                    ),
-                  if (widget.type != 'view')
-                    ElevatedButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        SlideBottomRoute(
-                          page: TransaksiResep(
-                            idKunjungan: _data.id,
-                            dataResep: _data.resep,
+        children: ListTile.divideTiles(
+          context: context,
+          color: Colors.grey[400],
+          tiles: _data!.resepObatOral!
+              .map(
+                (resepOral) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
+                          child: Text(
+                            '${resepOral.tanggalShort}\n${resepOral.jamShort}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w600),
                           ),
                         ),
-                      ).then((value) {
-                        if (value != null) {
-                          var data = value as DetailKunjungan;
-                          widget.reload!(data);
-                        }
-                      }),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kPrimaryColor,
-                      ),
-                      child: const Text('Transaksi Barang/Obat'),
-                    )
-                ],
-              ),
-            ),
-          if (_data.tagihanResep!.isNotEmpty && widget.type == 'create')
-            Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: Colors.green.withAlpha(20),
-                border: Border.all(color: Colors.green, width: 0.5),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: ListTile(
-                onTap: () => Navigator.push(
-                  context,
-                  SlideBottomRoute(
-                    page: TransaksiResep(
-                      idKunjungan: _data.id,
-                      dataResep: _data.resep,
-                    ),
-                  ),
-                ).then((value) {
-                  if (value != null) {
-                    var data = value as DetailKunjungan;
-                    widget.reload!(data);
-                  }
-                }),
-                dense: true,
-                title: Text(
-                  'Tambah Barang/Obat',
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-                trailing: const Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          if (_data.tagihanResep!.isNotEmpty)
-            Column(
-              children: ListTile.divideTiles(
-                context: context,
-                tiles: _data.tagihanResep!
-                    .map(
-                      (tagihanResep) => ListTile(
-                        onTap: () => _edit(context, tagihanResep),
-                        dense: true,
-                        contentPadding: EdgeInsets.zero,
-                        horizontalTitleGap: 0,
-                        title: Row(
-                          children: [
-                            Flexible(
-                              child: Text('${tagihanResep.namaBarang}'),
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                      text: '${resepOral.dokter} |',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                      children: [
+                                        TextSpan(
+                                            text: ' E-Resep ',
+                                            style: TextStyle(
+                                                color: Colors.blueAccent),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {}),
+                                        TextSpan(
+                                          text: '|',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        TextSpan(
+                                          text: ' Belum diproses',
+                                          style: TextStyle(color: Colors.red),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {},
+                                        ),
+                                      ]),
+                                ),
+                                // ...resep.obatInjeksi!.map((obat) => TileObatWidget(
+                                //       title: '${obat.barang!.namaBarang}',
+                                //       subtitle:
+                                //           '${obat.jumlah} x ${_rupiahNo.format(obat.hargaModal! + obat.tarifAplikasi!)}',
+                                //       trailing: _rupiah.format(obat.tarif),
+                                //     )),
+                                SizedBox(
+                                  height: 12,
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    SlideBottomRoute(
+                                      page: TransaksiResep(
+                                        idKunjungan: _data!.id,
+                                        dataResep: resepOral.obatOral,
+                                        idResep: resepOral.id,
+                                      ),
+                                    ),
+                                  ).then((value) {
+                                    if (value != null) {
+                                      var data = value as DetailKunjungan;
+                                      widget.reload!(data);
+                                    }
+                                  }),
+                                  icon: Icon(
+                                    Icons.add_circle_outline_rounded,
+                                    size: 18,
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    visualDensity: VisualDensity.compact,
+                                    backgroundColor: Colors.grey[100],
+                                    elevation: 0,
+                                    foregroundColor: Colors.blueAccent,
+                                    textStyle: TextStyle(fontSize: 12),
+                                  ),
+                                  label: Text(
+                                    'Transaksi Barang/Obat',
+                                  ),
+                                )
+                              ],
                             ),
-                            if (widget.type != 'view')
-                              const SizedBox(
-                                width: 12.0,
-                              ),
-                            if (widget.type != 'view')
-                              const Icon(
-                                Icons.edit_note_rounded,
-                                size: 22.0,
-                                color: Colors.blue,
-                              )
-                          ],
+                          ),
                         ),
-                        subtitle: tagihanResep.tagihanMitra != null
-                            ? Text(
-                                '${tagihanResep.jumlah} x ${_rupiahNo.format(tagihanResep.hargaModal! + tagihanResep.tarifAplikasi!)} - ${tagihanResep.tagihanMitra!.namaMitra}')
-                            : Text(
-                                '${tagihanResep.jumlah} x ${_rupiahNo.format(tagihanResep.hargaModal! + tagihanResep.tarifAplikasi!)} - Apotek Mentari'),
-                        trailing: Text(
-                          _rupiah.format(tagihanResep.total),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ).toList(),
-            ),
-          if (_data.tagihanResep!.isNotEmpty) const Divider(),
-          if (_data.tagihanResep!.isNotEmpty)
-            TransportasiResepNon(
-              data: _data,
-              reload: (DetailKunjungan? data) => widget.reload!(data),
-              type: widget.type,
-            )
-        ],
+                      ],
+                    ),
+                  ],
+                ),
+              )
+              .toList(),
+        ).toList(),
+        // children: [
+        // if (_data!.tagihanResep!.isEmpty)
+        //   SizedBox(
+        //     width: double.infinity,
+        //     height: 180,
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         const Icon(
+        //           Icons.warning_amber_rounded,
+        //           color: kPrimaryColor,
+        //           size: 52,
+        //         ),
+        //         const SizedBox(
+        //           height: 15.0,
+        //         ),
+        //         const Text(
+        //           'Data tagihan resep tidak tersedia',
+        //           style: TextStyle(fontSize: 15, color: Colors.grey),
+        //           textAlign: TextAlign.center,
+        //         ),
+        //         if (widget.type != 'view')
+        //           const SizedBox(
+        //             height: 18.0,
+        //           ),
+        //         if (widget.type != 'view')
+        //           ElevatedButton(
+        //             onPressed: () => Navigator.push(
+        //               context,
+        //               SlideBottomRoute(
+        //                 page: TransaksiResep(
+        //                   idKunjungan: _data!.id,
+        //                   dataResep: _data!.resep,
+        //                 ),
+        //               ),
+        //             ).then((value) {
+        //               if (value != null) {
+        //                 var data = value as DetailKunjungan;
+        //                 widget.reload!(data);
+        //               }
+        //             }),
+        //             style: ElevatedButton.styleFrom(
+        //               backgroundColor: kPrimaryColor,
+        //             ),
+        //             child: const Text('Transaksi Barang/Obat'),
+        //           )
+        //       ],
+        //     ),
+        //   ),
+        // if (_data!.tagihanResep!.isNotEmpty && widget.type == 'create')
+        //   Container(
+        //     margin: const EdgeInsets.only(bottom: 12),
+        //     decoration: BoxDecoration(
+        //       color: Colors.green.withAlpha(20),
+        //       border: Border.all(color: Colors.green, width: 0.5),
+        //       borderRadius: BorderRadius.circular(8.0),
+        //     ),
+        //     child: ListTile(
+        //       onTap: () => Navigator.push(
+        //         context,
+        //         SlideBottomRoute(
+        //           page: TransaksiResep(
+        //             idKunjungan: _data!.id,
+        //             dataResep: _data!.resep,
+        //           ),
+        //         ),
+        //       ).then((value) {
+        //         if (value != null) {
+        //           var data = value as DetailKunjungan;
+        //           widget.reload!(data);
+        //         }
+        //       }),
+        //       dense: true,
+        //       title: Text(
+        //         'Tambah Barang/Obat',
+        //         style: TextStyle(color: Colors.grey[600]),
+        //       ),
+        //       trailing: const Icon(
+        //         Icons.keyboard_arrow_right,
+        //         color: Colors.grey,
+        //       ),
+        //     ),
+        //   ),
+        // if (_data!.tagihanResep!.isNotEmpty)
+        //   Column(
+        //     children: ListTile.divideTiles(
+        //       context: context,
+        //       tiles: _data!.tagihanResep!
+        //           .map(
+        //             (tagihanResep) => ListTile(
+        //               onTap: () => _edit(context, tagihanResep),
+        //               dense: true,
+        //               contentPadding: EdgeInsets.zero,
+        //               horizontalTitleGap: 0,
+        //               title: Row(
+        //                 children: [
+        //                   Flexible(
+        //                     child: Text('${tagihanResep.namaBarang}'),
+        //                   ),
+        //                   if (widget.type != 'view')
+        //                     const SizedBox(
+        //                       width: 12.0,
+        //                     ),
+        //                   if (widget.type != 'view')
+        //                     const Icon(
+        //                       Icons.edit_note_rounded,
+        //                       size: 22.0,
+        //                       color: Colors.blue,
+        //                     )
+        //                 ],
+        //               ),
+        //               subtitle: tagihanResep.tagihanMitra != null
+        //                   ? Text(
+        //                       '${tagihanResep.jumlah} x ${_rupiahNo.format(tagihanResep.hargaModal! + tagihanResep.tarifAplikasi!)} - ${tagihanResep.tagihanMitra!.namaMitra}')
+        //                   : Text(
+        //                       '${tagihanResep.jumlah} x ${_rupiahNo.format(tagihanResep.hargaModal! + tagihanResep.tarifAplikasi!)} - Apotek Mentari'),
+        //               trailing: Text(
+        //                 _rupiah.format(tagihanResep.total),
+        //               ),
+        //             ),
+        //           )
+        //           .toList(),
+        //     ).toList(),
+        //   ),
+        // if (_data!.tagihanResep!.isNotEmpty) const Divider(),
+        // if (_data!.tagihanResep!.isNotEmpty)
+        //   TransportasiResepNon(
+        //     data: _data!,
+        //     reload: (DetailKunjungan? data) => widget.reload!(data),
+        //     type: widget.type,
+        //   )
+        // ],
       ),
-      subTotal: _data.tagihanResep!.isNotEmpty
+      subTotal: _data!.tagihanResep!.isNotEmpty
           ? Text(
-              _rupiah.format(_data.totalResep! + _data.transportResep!),
+              _rupiah.format(_data!.totalResep! + _data!.transportResep!),
               style: const TextStyle(fontWeight: FontWeight.w600),
             )
           : const Text(
               'Rp. 0',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-      buttonDetail: InkWell(
-        onTap: _eresep,
-        child: const Text(
-          'E-Resep',
-          style: TextStyle(color: Colors.blue, fontSize: 12.0),
-        ),
-      ),
     );
   }
 
@@ -524,11 +625,11 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
 
 class TransportasiResepNon extends StatefulWidget {
   const TransportasiResepNon({
-    Key? key,
+    super.key,
     required this.data,
     this.reload,
     this.type = 'create',
-  }) : super(key: key);
+  });
 
   final DetailKunjungan data;
   final Function(DetailKunjungan? data)? reload;
@@ -595,6 +696,7 @@ class _TransportasiResepNonState extends State<TransportasiResepNon> {
     ).then((value) {
       var data = value as DetailKunjungan;
       Future.delayed(const Duration(milliseconds: 300), () {
+        if (!mounted) return;
         Navigator.pop(context, data);
       });
     });

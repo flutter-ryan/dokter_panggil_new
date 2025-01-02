@@ -11,14 +11,14 @@ import 'package:flutter/services.dart';
 
 class FormAkun extends StatefulWidget {
   const FormAkun({
-    Key? key,
+    super.key,
     this.id,
     this.namaPegawai,
     this.profesi,
     this.idProfesi,
     this.namaAkun,
     this.password,
-  }) : super(key: key);
+  });
 
   final int? id;
   final String? namaPegawai;
@@ -80,6 +80,7 @@ class _FormAkunState extends State<FormAkun> {
     ).then((value) {
       if (value != null) {
         Future.delayed(const Duration(milliseconds: 300), () {
+          if (!mounted) return;
           Navigator.pop(context, 'reload');
         });
       }

@@ -19,9 +19,9 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class Masterpage extends StatefulWidget {
   const Masterpage({
-    Key? key,
+    super.key,
     this.role,
-  }) : super(key: key);
+  });
 
   final int? role;
 
@@ -337,10 +337,10 @@ class _MasterpageState extends State<Masterpage> {
 
 class HeaderPage extends StatelessWidget {
   const HeaderPage({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
-  }) : super(key: key);
+  });
 
   final String title;
   final String subtitle;

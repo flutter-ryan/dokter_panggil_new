@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class CardPaketWidget extends StatelessWidget {
   const CardPaketWidget({
-    Key? key,
+    super.key,
     required this.title,
     this.onTap,
     this.data,
     this.isButton = true,
-  }) : super(key: key);
+  });
 
   final String title;
   final VoidCallback? onTap;

@@ -753,9 +753,9 @@ class _EditSipState extends State<EditSip> {
 
 class EditDataPegawai extends StatefulWidget {
   const EditDataPegawai({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   final MasterPegawai data;
 

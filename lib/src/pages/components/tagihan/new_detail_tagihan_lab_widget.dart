@@ -15,11 +15,14 @@ import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:dokter_panggil/src/pages/components/tagihan/upload_hasil_lab.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:whatsapp_share2/whatsapp_share2.dart';
@@ -207,16 +210,38 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return CardTagihanLab(
-      title: 'Tindakan Laboratorium',
-      buttonDetail: InkWell(
-        onTap: _epengantar,
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 4.0),
-          child: Text(
-            'E-Pengantar',
-            style: TextStyle(color: Colors.blue, fontSize: 12.0),
+      title: 'Laboratorium',
+      buttonDetail: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.grey[100],
+            child: IconButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  SlideLeftRoute(
+                      page: UploadHasilLab(
+                    idKunjungan: widget.data.id,
+                  ))),
+              icon: SvgPicture.asset(
+                'images/lab.svg',
+                height: 18,
+              ),
+            ),
           ),
-        ),
+          SizedBox(
+            width: 22,
+          ),
+          CircleAvatar(
+            backgroundColor: Colors.grey[100],
+            child: IconButton(
+              onPressed: _epengantar,
+              icon: SvgPicture.asset(
+                'images/document.svg',
+                height: 18,
+              ),
+            ),
+          ),
+        ],
       ),
       tiles: Column(
         children: [
@@ -602,10 +627,10 @@ class _FormTagihanTindakanLabState extends State<FormTagihanTindakanLab> {
     ).then((value) {
       if (value != null) {
         var data = value as DetailKunjungan;
-        Future.delayed(
-          const Duration(milliseconds: 500),
-          () => Navigator.pop(context, data),
-        );
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
+          Navigator.pop(context, data);
+        });
       }
     });
   }

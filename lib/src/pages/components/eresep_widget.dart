@@ -7,9 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class EresepWidget extends StatefulWidget {
   const EresepWidget({
-    Key? key,
+    super.key,
     required this.idKunjungan,
-  }) : super(key: key);
+  });
 
   final int idKunjungan;
 

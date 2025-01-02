@@ -282,6 +282,7 @@ class _FormInputBiayaLainState extends State<FormInputBiayaLain> {
       if (value != null) {
         var data = value as DetailKunjungan;
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }

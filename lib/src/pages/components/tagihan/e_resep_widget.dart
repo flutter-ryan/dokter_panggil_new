@@ -98,7 +98,14 @@ class _EresepWidgetState extends State<EresepWidget> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
+          Text(
+            'Resep Obat Oral',
+            style: TextStyle(fontSize: 20),
+          ),
+          Divider(
+            color: Colors.grey[400],
+          ),
+          Flexible(
             child: ListView.separated(
               controller: _scrollCon,
               padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -121,7 +128,7 @@ class _EresepWidgetState extends State<EresepWidget> {
           ElevatedButton(
             onPressed: _kirimEresep,
             style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 45.0),
+              minimumSize: const Size(double.infinity, 42.0),
               backgroundColor: kPrimaryColor,
             ),
             child: const Text('Kirim E-Resep'),

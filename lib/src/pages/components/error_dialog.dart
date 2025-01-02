@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class ErrorDialog extends StatelessWidget {
   const ErrorDialog({
-    Key? key,
+    super.key,
     this.message,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String? message;
   final VoidCallback? onTap;

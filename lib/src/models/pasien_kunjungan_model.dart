@@ -28,6 +28,7 @@ class KunjunganPasien {
     this.dokter,
     this.perawat,
     this.status,
+    this.layanan,
   });
 
   int? id;
@@ -37,6 +38,7 @@ class KunjunganPasien {
   String? dokter;
   String? perawat;
   int? status;
+  List<KunjunganLayanan>? layanan;
 
   factory KunjunganPasien.fromJson(Map<String, dynamic> json) =>
       KunjunganPasien(
@@ -47,5 +49,31 @@ class KunjunganPasien {
         dokter: json["dokter"],
         perawat: json["perawat"],
         status: json["status"],
+        layanan: json["layanan"] == null
+            ? []
+            : List<KunjunganLayanan>.from(
+                json["layanan"]!.map((x) => KunjunganLayanan.fromJson(x))),
+      );
+}
+
+class KunjunganLayanan {
+  int? id;
+  int? kunjunganId;
+  int? layananId;
+  String? namaLayanan;
+
+  KunjunganLayanan({
+    this.id,
+    this.kunjunganId,
+    this.layananId,
+    this.namaLayanan,
+  });
+
+  factory KunjunganLayanan.fromJson(Map<String, dynamic> json) =>
+      KunjunganLayanan(
+        id: json["id"],
+        kunjunganId: json["kunjungan_id"],
+        layananId: json["layanan_id"],
+        namaLayanan: json["nama_layanan"],
       );
 }

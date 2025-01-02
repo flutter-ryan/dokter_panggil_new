@@ -36,13 +36,13 @@ import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class DetailLayananWidget extends StatefulWidget {
   const DetailLayananWidget({
-    Key? key,
+    super.key,
     required this.id,
     required this.data,
     this.type = 'create',
     this.onReload,
     this.role,
-  }) : super(key: key);
+  });
 
   final DetailKunjungan data;
   final int id;
@@ -156,6 +156,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
           type: 'final',
           data: data,
         );
+        if (!mounted) return;
         Navigator.pop(context, homeAction);
       }
     });
@@ -287,9 +288,11 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                 DetailPaketWidget(
                   data: _data!,
                   type: widget.type,
-                  reload: (DetailKunjungan? data) => setState(() {
-                    _data = data;
-                  }),
+                  reload: (DetailKunjungan? data) => setState(
+                    () {
+                      _data = data;
+                    },
+                  ),
                 ),
                 if (_data!.tindakan!.isNotEmpty)
                   DetailTindakanWidget(
@@ -299,8 +302,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                           _data!.transportTindakan! +
                           _data!.transportOjolTindakan!),
                       style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
+                          fontWeight: FontWeight.w600, fontSize: 12),
                     ),
                     type: widget.type,
                     role: widget.role,
@@ -319,7 +321,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                       });
                     },
                   ),
-                if (_data!.obatInjeksi!.isNotEmpty)
+                if (_data!.resepObatInjeksi!.isNotEmpty)
                   DetailObatInjeksiWidget(
                     data: _data!,
                     type: widget.type,
@@ -330,7 +332,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                       });
                     },
                   ),
-                if (_data!.resep!.isNotEmpty)
+                if (_data!.resepObatOral!.isNotEmpty)
                   DetailTagihanResepWidget(
                     data: _data!,
                     type: widget.type,
@@ -508,11 +510,11 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
 
 class TransportasiResepRacikan extends StatefulWidget {
   const TransportasiResepRacikan({
-    Key? key,
+    super.key,
     required this.data,
     this.reload,
     this.type = 'create',
-  }) : super(key: key);
+  });
 
   final DetailKunjungan data;
   final Function(DetailKunjungan? data)? reload;
@@ -580,6 +582,7 @@ class _TransportasiResepRacikanState extends State<TransportasiResepRacikan> {
     ).then((value) {
       var data = value as DetailKunjungan;
       Future.delayed(const Duration(milliseconds: 300), () {
+        if (!mounted) return;
         Navigator.pop(context, data);
       });
     });

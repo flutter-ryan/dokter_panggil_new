@@ -283,6 +283,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
     ).then((value) {
       if (value != null) {
         Future.delayed(const Duration(milliseconds: 600), () {
+          if (!mounted) return;
           Navigator.pop(context, _data);
         });
       }
@@ -461,7 +462,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                 ),
               ),
             ),
-          if (_data.obatInjeksi!.isNotEmpty)
+          if (_data.resepObatInjeksi!.isNotEmpty)
             Detailtagihan(
               namaTagihan: const Text('Total Obat Injeksi'),
               tarifTagihan: SizedBox(
@@ -481,7 +482,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                 ),
               ),
             ),
-          if (_data.resep!.isNotEmpty)
+          if (_data.resepObatOral!.isNotEmpty)
             Detailtagihan(
               namaTagihan: const Text('Total Resep'),
               tarifTagihan: SizedBox(

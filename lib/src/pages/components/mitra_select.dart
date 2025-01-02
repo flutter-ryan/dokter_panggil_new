@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 
 class MitraSelect extends StatefulWidget {
   const MitraSelect({
-    Key? key,
+    super.key,
     required this.jenis,
-  }) : super(key: key);
+  });
 
   final String jenis;
 

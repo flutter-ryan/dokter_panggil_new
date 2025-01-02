@@ -114,6 +114,7 @@ class _TransaksiBhpState extends State<TransaksiBhp> {
       if (value != null) {
         var data = value as DetailKunjungan;
         Future.delayed(const Duration(milliseconds: 300), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }

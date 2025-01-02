@@ -18,11 +18,11 @@ class Rotation3DTransition extends AnimatedWidget {
   ///
   /// The [turns] argument must not be null.
   const Rotation3DTransition({
-    Key? key,
+    super.key,
     required Animation<double> turns,
     this.alignment = Alignment.center,
     this.child,
-  }) : super(key: key, listenable: turns);
+  }) : super(listenable: turns);
 
   /// The animation that controls the rotation of the child.
   ///
@@ -72,11 +72,11 @@ class CustomRotationTransition extends AnimatedWidget {
   ///
   /// The [turns] argument must not be null.
   const CustomRotationTransition({
-    Key? key,
+    super.key,
     required Animation<double> turns,
     this.alignment = Alignment.center,
     this.child,
-  }) : super(key: key, listenable: turns);
+  }) : super(listenable: turns);
 
   /// The animation that controls the rotation of the child.
   ///

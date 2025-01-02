@@ -36,8 +36,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PencarianPasianpage extends StatefulWidget {
   const PencarianPasianpage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<PencarianPasianpage> createState() => _PencarianPasianpageState();
@@ -248,10 +248,10 @@ class _PencarianPasianpageState extends State<PencarianPasianpage> {
 
 class StreamShowPasien extends StatefulWidget {
   const StreamShowPasien({
-    Key? key,
+    super.key,
     required this.id,
     this.isSuperadmin = false,
-  }) : super(key: key);
+  });
 
   final int id;
   final bool isSuperadmin;
@@ -721,10 +721,10 @@ class _LayananAktifPasienState extends State<LayananAktifPasien> {
 
 class LayananFinalPasien extends StatefulWidget {
   const LayananFinalPasien({
-    Key? key,
+    super.key,
     required this.norm,
     required this.bloc,
-  }) : super(key: key);
+  });
 
   final String norm;
   final PasienKunjunganFinalBloc bloc;

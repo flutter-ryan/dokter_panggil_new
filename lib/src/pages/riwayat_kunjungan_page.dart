@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class RiwayatKunjunganPage extends StatefulWidget {
-  const RiwayatKunjunganPage({Key? key}) : super(key: key);
+  const RiwayatKunjunganPage({super.key});
 
   @override
   State<RiwayatKunjunganPage> createState() => _RiwayatKunjunganPageState();
@@ -107,10 +107,10 @@ class _RiwayatKunjunganPageState extends State<RiwayatKunjunganPage> {
 
 class ListRiwayatKunjungan extends StatefulWidget {
   const ListRiwayatKunjungan({
-    Key? key,
+    super.key,
     required this.data,
     required this.controller,
-  }) : super(key: key);
+  });
 
   final KunjunganPasienAllModel data;
   final ScrollController controller;

@@ -3,11 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MenuMaster extends StatelessWidget {
   const MenuMaster(
-      {Key? key,
+      {super.key,
       required this.title,
       this.onTap,
-      this.iconData = FontAwesomeIcons.database})
-      : super(key: key);
+      this.iconData = FontAwesomeIcons.database});
 
   final String title;
   final VoidCallback? onTap;

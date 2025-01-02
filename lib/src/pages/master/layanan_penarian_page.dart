@@ -21,7 +21,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class LayananPecarianPage extends StatefulWidget {
-  const LayananPecarianPage({Key? key}) : super(key: key);
+  const LayananPecarianPage({super.key});
 
   @override
   State<LayananPecarianPage> createState() => _LayananPecarianPageState();
@@ -224,10 +224,10 @@ class _LayananPecarianPageState extends State<LayananPecarianPage> {
 
 class StreamEditTindakan extends StatefulWidget {
   const StreamEditTindakan({
-    Key? key,
+    super.key,
     required this.id,
     this.close,
-  }) : super(key: key);
+  });
 
   final int id;
   final VoidCallback? close;

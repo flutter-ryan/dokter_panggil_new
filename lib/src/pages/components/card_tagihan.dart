@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class Cardtagihan extends StatefulWidget {
   const Cardtagihan({
-    Key? key,
+    super.key,
     this.title,
     this.tiles,
     this.subTotal,
     this.buttonDetail,
     this.transportWidget,
-  }) : super(key: key);
+  });
 
   final String? title;
   final Iterable<Widget>? tiles;
@@ -24,7 +24,7 @@ class _CardtagihanState extends State<Cardtagihan> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 12.0),
+      margin: const EdgeInsets.only(top: 8.0),
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -40,7 +40,7 @@ class _CardtagihanState extends State<Cardtagihan> {
                   child: Text(
                     '${widget.title}',
                     style: const TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -49,11 +49,12 @@ class _CardtagihanState extends State<Cardtagihan> {
               widget.buttonDetail ?? const SizedBox()
             ],
           ),
-          const SizedBox(
+          SizedBox(
             height: 12,
           ),
-          const Divider(
+          Divider(
             height: 0.0,
+            color: Colors.grey[400],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -65,13 +66,17 @@ class _CardtagihanState extends State<Cardtagihan> {
             ),
           ),
           widget.transportWidget ?? const SizedBox(),
-          const Divider(),
+          Divider(
+            color: Colors.grey[400],
+          ),
           ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 18.0),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 18.0, vertical: 0),
             dense: true,
+            visualDensity: VisualDensity.compact,
             title: const Text(
               'Sub Total',
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
             ),
             trailing: widget.subTotal,
           ),

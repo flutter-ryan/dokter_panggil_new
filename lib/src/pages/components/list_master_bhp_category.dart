@@ -12,10 +12,10 @@ import 'package:flutter/services.dart';
 
 class ListMasterBhpCategory extends StatefulWidget {
   const ListMasterBhpCategory({
-    Key? key,
+    super.key,
     this.selectedData,
     this.category,
-  }) : super(key: key);
+  });
 
   final List<MasterBhp>? selectedData;
   final int? category;
@@ -125,11 +125,11 @@ class _ListMasterBhpCategoryState extends State<ListMasterBhpCategory> {
 
 class ListBhpCategoryWidget extends StatefulWidget {
   const ListBhpCategoryWidget({
-    Key? key,
+    super.key,
     this.data,
     this.selectedData,
     this.filter,
-  }) : super(key: key);
+  });
 
   final List<MasterBhp>? data;
   final List<MasterBhp>? selectedData;

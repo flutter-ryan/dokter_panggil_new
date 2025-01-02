@@ -10,9 +10,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class StreamShowPegawai extends StatefulWidget {
   const StreamShowPegawai({
-    Key? key,
+    super.key,
     required this.id,
-  }) : super(key: key);
+  });
 
   final int id;
 

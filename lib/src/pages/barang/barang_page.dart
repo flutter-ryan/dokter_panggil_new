@@ -31,9 +31,9 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class Barangpage extends StatefulWidget {
   const Barangpage({
-    Key? key,
+    super.key,
     required this.role,
-  }) : super(key: key);
+  });
 
   final int role;
 
@@ -280,13 +280,13 @@ class _BarangpageState extends State<Barangpage> {
 
 class ListBarang extends StatefulWidget {
   const ListBarang({
-    Key? key,
+    super.key,
     required this.barang,
     this.currentPage,
     this.totalPage,
     this.reload,
     this.role,
-  }) : super(key: key);
+  });
 
   final List<Barang>? barang;
   final VoidCallback? reload;
@@ -330,6 +330,7 @@ class _ListBarangState extends State<ListBarang> {
     ).then((value) {
       if (value != null) {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
+        if (!mounted) return;
         FocusScope.of(context).requestFocus(FocusNode());
         _bhpStockBloc.idSink.add(data.id!);
         _bhpStockBloc.jumlahSink.add(_jumlah!);

@@ -12,8 +12,7 @@ class NewStokOpnamePage extends StatefulWidget {
 
 class _NewStokOpnamePageState extends State<NewStokOpnamePage> {
   final _filter = TextEditingController();
-  final _controller = ScrollController();
-  bool _showFab = true;
+  final bool _showFab = true;
 
   void _createStokOpname() {
     //

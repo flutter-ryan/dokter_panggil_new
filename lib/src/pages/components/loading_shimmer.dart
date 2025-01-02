@@ -3,10 +3,10 @@ import 'package:shimmer/shimmer.dart';
 
 class LoadingShimmer extends StatelessWidget {
   const LoadingShimmer({
-    Key? key,
+    super.key,
     required this.width,
     required this.height,
-  }) : super(key: key);
+  });
 
   final double width;
   final double height;

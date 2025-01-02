@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class SearchWidgetPage extends StatelessWidget {
   const SearchWidgetPage({
-    Key? key,
+    super.key,
     required this.filter,
     required this.hint,
-  }) : super(key: key);
+  });
 
   final TextEditingController filter;
   final String hint;

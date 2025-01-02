@@ -20,10 +20,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TransaksiResepRacikan extends StatefulWidget {
   const TransaksiResepRacikan({
-    Key? key,
+    super.key,
     required this.idKunjungan,
     required this.dataResepRacikan,
-  }) : super(key: key);
+  });
 
   final int idKunjungan;
   final List<ResepRacikan> dataResepRacikan;
@@ -148,6 +148,7 @@ class _TransaksiResepRacikanState extends State<TransaksiResepRacikan> {
       if (value != null) {
         var data = value as DetailKunjungan;
         Future.delayed(const Duration(milliseconds: 300), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }

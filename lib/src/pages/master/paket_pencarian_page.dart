@@ -31,6 +31,7 @@ class _PaketPencarianPageState extends State<PaketPencarianPage> {
     _getPaket();
     _filter.addListener(_inputListener);
     Future.delayed(const Duration(milliseconds: 500), () {
+      if (!mounted) return;
       FocusScope.of(context).requestFocus(_filterFocus);
     });
   }
@@ -56,6 +57,7 @@ class _PaketPencarianPageState extends State<PaketPencarianPage> {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     FocusScope.of(context).requestFocus(FocusNode());
     Future.delayed(const Duration(milliseconds: 400), () {
+      if (!mounted) return;
       Navigator.pop(context);
     });
   }
@@ -219,7 +221,10 @@ class _ListPaketState extends State<ListPaket> {
                   FocusScope.of(context).requestFocus(FocusNode());
                   Future.delayed(
                     const Duration(milliseconds: 200),
-                    () => Navigator.pop(context, paket),
+                    () {
+                      if (!mounted) return;
+                      Navigator.pop(context, paket);
+                    },
                   );
                 },
                 leading: const Icon(Icons.search),

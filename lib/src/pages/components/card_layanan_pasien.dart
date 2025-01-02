@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 
 class CardLayananPasien extends StatelessWidget {
   const CardLayananPasien({
-    Key? key,
+    super.key,
     required this.kunjungan,
     this.type = 'create',
-  }) : super(key: key);
+  });
 
   final KunjunganPasien kunjungan;
   final String type;
@@ -66,6 +66,27 @@ class CardLayananPasien extends StatelessWidget {
             Divider(
               height: 0.0,
               color: Colors.grey[400],
+            ),
+            const SizedBox(
+              height: 12.0,
+            ),
+            const Text(
+              'Layanan',
+              style: TextStyle(color: Colors.grey, fontSize: 11.0),
+            ),
+            const SizedBox(
+              height: 4.0,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: kunjungan.layanan!
+                  .map(
+                    (layanan) => Text(
+                      '${layanan.namaLayanan}',
+                      style: const TextStyle(fontSize: 13.0),
+                    ),
+                  )
+                  .toList(),
             ),
             const SizedBox(
               height: 12.0,

@@ -24,11 +24,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DetailTagihanRacikanWidget extends StatefulWidget {
   const DetailTagihanRacikanWidget({
-    Key? key,
+    super.key,
     required this.data,
     this.type = 'create',
     this.reload,
-  }) : super(key: key);
+  });
 
   final DetailKunjungan data;
   final String type;
@@ -127,6 +127,7 @@ class _DetailTagihanRacikanWidgetState
       animationType: DialogTransitionType.slideFromBottomFade,
     ).then((value) {
       var data = value as DetailKunjungan;
+      if (!mounted) return;
       Navigator.pop(context, data);
     });
   }
@@ -163,6 +164,7 @@ class _DetailTagihanRacikanWidgetState
     ).then((value) {
       if (value != null) {
         var data = value as DetailKunjungan;
+        if (!mounted) return;
         Navigator.pop(context, data);
       }
     });

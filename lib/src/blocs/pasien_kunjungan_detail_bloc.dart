@@ -9,8 +9,8 @@ class PasienKunjunganDetailBloc {
   final PasienKunjunganDetailRepo _repo = PasienKunjunganDetailRepo();
   StreamController<ApiResponse<PasienKunjunganDetailModel>>?
       _streamKunjunganDetail;
-  final BehaviorSubject<int> _id = BehaviorSubject();
-  StreamSink<int> get idSink => _id.sink;
+  final BehaviorSubject<int> _idKunjungan = BehaviorSubject();
+  StreamSink<int> get idKunjunganSink => _idKunjungan.sink;
   StreamSink<ApiResponse<PasienKunjunganDetailModel>> get kunjunganDetailSink =>
       _streamKunjunganDetail!.sink;
   Stream<ApiResponse<PasienKunjunganDetailModel>> get kunjunganDetailStream =>
@@ -18,10 +18,10 @@ class PasienKunjunganDetailBloc {
 
   Future<void> kunjunganDetail() async {
     _streamKunjunganDetail = StreamController();
-    final id = _id.value;
+    final idKunjungan = _idKunjungan.value;
     kunjunganDetailSink.add(ApiResponse.loading('Memuat...'));
     try {
-      final res = await _repo.detailKunjungan(id);
+      final res = await _repo.detailKunjungan(idKunjungan);
       if (_streamKunjunganDetail!.isClosed) return;
       kunjunganDetailSink.add(ApiResponse.completed(res));
     } catch (e) {
@@ -32,6 +32,6 @@ class PasienKunjunganDetailBloc {
 
   dispose() {
     _streamKunjunganDetail?.close();
-    _id.close();
+    _idKunjungan.close();
   }
 }

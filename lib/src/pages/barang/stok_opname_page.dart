@@ -30,8 +30,7 @@ class _StokOpnamePageState extends State<StokOpnamePage> {
   final _controller = ScrollController();
   final _stokOpnameBloc = StokOpnameBloc();
   final _filter = TextEditingController();
-  bool _showFab = true;
-  DateTime _selectedDate = DateTime.now();
+  final bool _showFab = true;
   final _tanggal = DateFormat('dd MMMM yyyy', 'id');
   final _periode = DateFormat('yyyy-MM-dd', 'id');
 

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class LoadingCardVertLayanan extends StatelessWidget {
   const LoadingCardVertLayanan({
-    Key? key,
+    super.key,
     this.itemCount = 3,
     this.padding = EdgeInsets.zero,
-  }) : super(key: key);
+  });
 
   final int itemCount;
   final EdgeInsetsGeometry padding;

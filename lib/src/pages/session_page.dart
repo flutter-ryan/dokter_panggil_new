@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Sessionpage extends StatefulWidget {
-  const Sessionpage({Key? key}) : super(key: key);
+  const Sessionpage({super.key});
 
   @override
   State<Sessionpage> createState() => _SessionpageState();

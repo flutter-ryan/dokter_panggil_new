@@ -3,16 +3,18 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingKit extends StatelessWidget {
   const LoadingKit({
-    Key? key,
+    super.key,
     this.color = Colors.white,
-  }) : super(key: key);
+    this.size = 52.0,
+  });
 
   final Color color;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     return SpinKitPouringHourGlass(
-      size: 52.0,
+      size: size,
       color: color,
     );
   }

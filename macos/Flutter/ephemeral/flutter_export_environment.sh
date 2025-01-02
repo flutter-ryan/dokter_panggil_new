@@ -1,11 +1,11 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/ryanachmad/.flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/ryanachmad/FlutterProject/dokter_panggil"
+export "FLUTTER_APPLICATION_PATH=/Users/ryanachmad/FlutterProject/dokter_panggil_new"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
-export "FLUTTER_BUILD_NAME=1.2.7"
-export "FLUTTER_BUILD_NUMBER=28"
+export "FLUTTER_BUILD_NAME=2.0.0"
+export "FLUTTER_BUILD_NUMBER=30"
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"

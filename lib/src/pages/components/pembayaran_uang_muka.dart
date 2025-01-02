@@ -73,11 +73,11 @@ class _PembayaranUangMukaState extends State<PembayaranUangMuka> {
 
 class FormUangMuka extends StatefulWidget {
   const FormUangMuka({
-    Key? key,
+    super.key,
     required this.id,
     required this.tindakan,
     required this.biaya,
-  }) : super(key: key);
+  });
 
   final int id;
   final List<Tindakan> tindakan;
@@ -155,6 +155,7 @@ class _FormUangMukaState extends State<FormUangMuka> {
       if (value != null) {
         var data = value as DetailKunjungan;
         Future.delayed(const Duration(milliseconds: 200), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }

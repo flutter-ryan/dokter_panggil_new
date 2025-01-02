@@ -329,6 +329,7 @@ class _FormBiayaAdminWidgetState extends State<FormBiayaAdminWidget> {
           data: data,
         );
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context, biayaMod);
         });
       }

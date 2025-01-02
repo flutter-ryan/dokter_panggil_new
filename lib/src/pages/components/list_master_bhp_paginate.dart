@@ -12,9 +12,9 @@ import 'package:flutter/services.dart';
 
 class ListMasterBhpPaginate extends StatefulWidget {
   const ListMasterBhpPaginate({
-    Key? key,
+    super.key,
     this.selectedData,
-  }) : super(key: key);
+  });
 
   final List<BarangHabisPakai>? selectedData;
 
@@ -182,12 +182,12 @@ class _ListMasterBhpPaginateState extends State<ListMasterBhpPaginate> {
 
 class ListBarangHabisPakai extends StatefulWidget {
   const ListBarangHabisPakai({
-    Key? key,
+    super.key,
     this.data,
     this.bloc,
     this.blocSearch,
     this.selectedData,
-  }) : super(key: key);
+  });
 
   final MasterBhpPaginateModel? data;
   final MasterBhpPaginateBloc? bloc;

@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DiagnosaPencarianPage extends StatefulWidget {
-  const DiagnosaPencarianPage({Key? key}) : super(key: key);
+  const DiagnosaPencarianPage({super.key});
 
   @override
   State<DiagnosaPencarianPage> createState() => _DiagnosaPencarianPageState();

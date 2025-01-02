@@ -58,6 +58,7 @@ class _ShowFarmasiState extends State<ShowFarmasi> {
     FocusScope.of(context).requestFocus(FocusNode());
     if (validateAndSave()) {
       Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
         showAnimatedDialog(
           context: context,
           builder: (context) {
@@ -72,6 +73,7 @@ class _ShowFarmasiState extends State<ShowFarmasi> {
         ).then((value) {
           if (value != null) {
             Future.delayed(const Duration(milliseconds: 500), () {
+              if (!mounted) return;
               Navigator.pop(context, _farmasi);
             });
           }

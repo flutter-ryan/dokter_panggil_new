@@ -23,7 +23,7 @@ import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class FarmasiPage extends StatefulWidget {
-  const FarmasiPage({Key? key}) : super(key: key);
+  const FarmasiPage({super.key});
 
   @override
   State<FarmasiPage> createState() => _FarmasiPageState();
@@ -175,6 +175,7 @@ class _FarmasiPageState extends State<FarmasiPage> {
                   ),
                 ).then((value) {
                   if (value != null) {
+                    if (!mounted) return;
                     FocusScope.of(context).requestFocus(FocusNode());
                     var data = value as BarangFarmasi;
                     _edit(data);

@@ -59,6 +59,7 @@ class _ShowBhpDrugsState extends State<ShowBhpDrugs> {
     FocusScope.of(context).requestFocus(FocusNode());
     if (validateAndSave()) {
       Future.delayed(const Duration(milliseconds: 400), () {
+        if (!mounted) return;
         showAnimatedDialog(
           context: context,
           builder: (context) {
@@ -73,6 +74,7 @@ class _ShowBhpDrugsState extends State<ShowBhpDrugs> {
         ).then((value) {
           if (value != null) {
             Future.delayed(const Duration(milliseconds: 500), () {
+              if (!mounted) return;
               Navigator.pop(context, _selected);
             });
           }

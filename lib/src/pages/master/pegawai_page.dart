@@ -35,7 +35,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PegawaiPage extends StatefulWidget {
-  const PegawaiPage({Key? key}) : super(key: key);
+  const PegawaiPage({super.key});
 
   @override
   State<PegawaiPage> createState() => _PegawaiPageState();
@@ -567,7 +567,7 @@ class _PegawaiPageState extends State<PegawaiPage> {
 }
 
 class PencarianPegawai extends StatefulWidget {
-  const PencarianPegawai({Key? key}) : super(key: key);
+  const PencarianPegawai({super.key});
 
   @override
   State<PencarianPegawai> createState() => _PencarianPegawaiState();
@@ -726,10 +726,10 @@ class _PencarianPegawaiState extends State<PencarianPegawai> {
 
 class StreamShowPegawai extends StatefulWidget {
   const StreamShowPegawai({
-    Key? key,
+    super.key,
     required this.id,
     this.reload,
-  }) : super(key: key);
+  });
 
   final int id;
   final Function(MasterPegawai? pegawai)? reload;
@@ -871,6 +871,7 @@ class _RoleUserState extends State<RoleUser> {
                               });
                               Future.delayed(const Duration(milliseconds: 100),
                                   () {
+                                if (!mounted) return;
                                 Navigator.pop(context, role);
                               });
                             },

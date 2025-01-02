@@ -25,7 +25,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 
 class ProfesiPage extends StatefulWidget {
-  const ProfesiPage({Key? key}) : super(key: key);
+  const ProfesiPage({super.key});
 
   @override
   State<ProfesiPage> createState() => _ProfesiPageState();
@@ -182,6 +182,7 @@ class _ProfesiPageState extends State<ProfesiPage> {
                     ),
                   ).then((value) {
                     if (value != null) {
+                      if (!mounted) return;
                       FocusScope.of(context).requestFocus(FocusNode());
                       var data = value as Profesi;
                       _edit(data);

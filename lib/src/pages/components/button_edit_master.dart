@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class ButtonEditMaster extends StatelessWidget {
   const ButtonEditMaster({
-    Key? key,
+    super.key,
     this.update,
     this.delete,
     this.batal,
-  }) : super(key: key);
+  });
 
   final VoidCallback? delete;
   final VoidCallback? update;

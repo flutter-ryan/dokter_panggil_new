@@ -1,12 +1,17 @@
 import 'package:animate_icons/animate_icons.dart';
-import 'package:dokter_panggil/src/blocs/pendaftaran_kunjungan_save_bloc.dart';
+import 'package:dokter_panggil/src/blocs/mr_kunjungan_pasien_bloc.dart';
 import 'package:dokter_panggil/src/blocs/pendaftaran_pembelian_langsung_bloc.dart';
+import 'package:dokter_panggil/src/models/master_layanan_model.dart';
 import 'package:dokter_panggil/src/models/master_tindakan_lab_all_model.dart';
+import 'package:dokter_panggil/src/models/mr_kunjungan_pasien_model.dart';
+import 'package:dokter_panggil/src/models/mr_master_skrining_model.dart';
 import 'package:dokter_panggil/src/models/pasien_show_model.dart';
 import 'package:dokter_panggil/src/models/pendaftaran_pembelian_langsug_save_model.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
 import 'package:dokter_panggil/src/pages/components/tambah_langsung_drugs_widget.dart';
+import 'package:dokter_panggil/src/pages/master/master_layanan_widget.dart';
+import 'package:dokter_panggil/src/pages/pasien/form_skrining_widget.dart';
 import 'package:dokter_panggil/src/pages/pasien/list_paket_widget.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
@@ -21,7 +26,6 @@ import 'package:dokter_panggil/src/blocs/tindakan_create_bloc.dart';
 import 'package:dokter_panggil/src/models/hubungan_fetch_model.dart';
 import 'package:dokter_panggil/src/models/pegawai_dokter_model.dart';
 import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_nonkonsul_save_model.dart';
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
 import 'package:dokter_panggil/src/models/tindakan_create_model.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
@@ -36,9 +40,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PendaftaranLayananPage extends StatefulWidget {
   const PendaftaranLayananPage({
-    Key? key,
+    super.key,
     required this.pasien,
-  }) : super(key: key);
+  });
 
   final Pasien pasien;
 
@@ -64,9 +68,9 @@ class _PendaftaranLayananPageState extends State<PendaftaranLayananPage> {
 
 class FormPendaftaranLayanan extends StatefulWidget {
   const FormPendaftaranLayanan({
-    Key? key,
+    super.key,
     required this.pasien,
-  }) : super(key: key);
+  });
 
   final Pasien pasien;
 
@@ -75,7 +79,7 @@ class FormPendaftaranLayanan extends StatefulWidget {
 }
 
 class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
-  final _pendaftaranKunjunganSaveBloc = PendaftaranKunjunganSaveBloc();
+  final _mrKunjunganPasienBloc = MrKunjunganPasienBloc();
   final _pendaftaranKunjunganNonkonsulSaveBloc =
       PendaftaranKunjunganNonkonsulSaveBloc();
   final _pendaftaranPembelianLangsungBloc = PendaftaranPembelianLangsungBloc();
@@ -97,6 +101,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   final _hubungan = TextEditingController();
   final _nomorWali = TextEditingController();
   final _paketCon = TextEditingController();
+  final _tanda = TextEditingController();
   final _perawatFocus = FocusNode();
   final _dokterFocus = FocusNode();
   List<SelectedConsume> _selectedBhp = [];
@@ -111,6 +116,8 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   int? _selectedIdPaket;
   final List<String> _tokens = [];
   List<int> groupTindakan = [];
+  int _isPerawat = 1;
+  int _isDokter = 1;
 
   void _showPegawai(int id, String title) {
     _pegawaiProfesiBloc.groupIdSink.add(id);
@@ -134,10 +141,10 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
         var data = value as PegawaiProfesi;
         if (title == 'Dokter') {
           _dokterCon.text = data.nama!;
-          _pendaftaranKunjunganSaveBloc.dokterSink.add(data.id.toString());
+          _mrKunjunganPasienBloc.dokterSink.add('${data.id}');
         } else {
           _perawatCon.text = data.nama!;
-          _pendaftaranKunjunganSaveBloc.perawatSink.add(data.id.toString());
+          _mrKunjunganPasienBloc.perawatSink.add('${data.id}');
           _perawatKonsul = data.id;
         }
         if (data.user?.tokenFcm != null) {
@@ -179,6 +186,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
       (value) {
         if (value != null) {
           var picked = value as TimeOfDay;
+          if (!mounted) return;
           _jamCon.text = picked.format(context);
           setState(() {
             _selectedTime = picked;
@@ -234,28 +242,30 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
         return Padding(
           padding: EdgeInsets.only(
               top: 28.0, bottom: MediaQuery.of(context).viewInsets.bottom + 28),
-          child: _buildStreamLayanan(),
+          child: const MasterLayananWidget(),
         );
       },
     ).then((value) {
       _animateIconTindakanCon.animateToStart();
       if (value != null) {
-        var data = value as TindakanCreate;
+        var data = value as MasterLayanan;
         _formKey.currentState!.reset();
-        _layananCon.text = data.namaTindakan!;
-        List<int> idTindakan = [data.id!];
-        List<int> jasaDokter = [data.jasaDokter!];
-        List<int> jasaDrp = [data.jasaDokterPanggil!];
-        List<int> total = [data.tarif!];
-        groupTindakan = [data.groupId!];
-        _pendaftaranKunjunganSaveBloc.tindakanSink.add(idTindakan);
-        _pendaftaranKunjunganSaveBloc.jasaDokterSink.add(jasaDokter);
-        _pendaftaranKunjunganSaveBloc.jasaDrpSink.add(jasaDrp);
-        _pendaftaranKunjunganSaveBloc.groupTindakanSink.add(groupTindakan);
-        _pendaftaranKunjunganSaveBloc.totalSink.add(total);
+        _layananCon.text = data.namaLayanan!;
         setState(() {
-          bayar = data.bayarLangsung!;
+          bayar = data.isBayarLangsung!;
+          _isDokter = data.isDokter!;
+          _isPerawat = data.isPerawat!;
         });
+        List<TindakanRequest> tindakan = [
+          TindakanRequest(
+            idTindakan: data.tindakanLayanan!.id!,
+            jasaDokter: data.tindakanLayanan!.jasaDokter!,
+            jasaDrp: data.tindakanLayanan!.jasaDokterPanggil!,
+            total: data.tindakanLayanan!.tarif!,
+          ),
+        ];
+        _mrKunjunganPasienBloc.layananSink.add(data.id!);
+        _mrKunjunganPasienBloc.tindakanSink.add(tindakan);
       }
     });
   }
@@ -274,7 +284,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
       if (value != null) {
         var data = value as Hubungan;
         _hubungan.text = data.hubungan!;
-        _pendaftaranKunjunganSaveBloc.hubunganSink.add(data.id.toString());
+        _mrKunjunganPasienBloc.hubunganSink.add(data.id.toString());
       }
     });
   }
@@ -290,17 +300,17 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
 
   void _saveKunjungan() {
     if (validateAndSave()) {
-      _pendaftaranKunjunganSaveBloc.normSink.add(widget.pasien.norm!);
-      _pendaftaranKunjunganSaveBloc.tanggalSink.add(_tanggalCon.text);
-      _pendaftaranKunjunganSaveBloc.jamSink.add(_jamCon.text);
-      _pendaftaranKunjunganSaveBloc.keluhanSink.add(_keluhanCon.text);
-      _pendaftaranKunjunganSaveBloc.namaWaliSink.add(_namaWali.text);
-      _pendaftaranKunjunganSaveBloc.nomorWaliSink.add(_nomorWali.text);
-      _pendaftaranKunjunganSaveBloc.tokenFcmSink.add(_tokens);
+      _mrKunjunganPasienBloc.normSink.add(widget.pasien.norm!);
+      _mrKunjunganPasienBloc.tanggalSink.add(_tanggalCon.text);
+      _mrKunjunganPasienBloc.jamSink.add(_jamCon.text);
+      _mrKunjunganPasienBloc.keluhanSink.add(_keluhanCon.text);
+      _mrKunjunganPasienBloc.namaWaliSink.add(_namaWali.text);
+      _mrKunjunganPasienBloc.nomorWaliSink.add(_nomorWali.text);
+      _mrKunjunganPasienBloc.tokensSink.add(_tokens);
       if (bayar == 1) {
-        _pendaftaranKunjunganSaveBloc.statusSink.add(4);
+        _mrKunjunganPasienBloc.statusSink.add(4);
       }
-      _pendaftaranKunjunganSaveBloc.saveKunjungan();
+      _mrKunjunganPasienBloc.simpanKunjungan();
       _showStreamSave();
     }
   }
@@ -399,12 +409,12 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
 
   void _savePaket() {
     if (_paketCon.text.isNotEmpty) {
-      _pendaftaranKunjunganSaveBloc.normSink.add(widget.pasien.norm!);
-      _pendaftaranKunjunganSaveBloc.tanggalSink.add(_tanggalCon.text);
-      _pendaftaranKunjunganSaveBloc.jamSink.add(_jamCon.text);
-      _pendaftaranKunjunganSaveBloc.idPaketSink.add(_selectedIdPaket!);
-      _pendaftaranKunjunganSaveBloc.tokenFcmSink.add(_tokens);
-      _pendaftaranKunjunganSaveBloc.saveKunjunganPaket();
+      _mrKunjunganPasienBloc.normSink.add(widget.pasien.norm!);
+      _mrKunjunganPasienBloc.tanggalSink.add(_tanggalCon.text);
+      _mrKunjunganPasienBloc.jamSink.add(_jamCon.text);
+      _mrKunjunganPasienBloc.idPaketSink.add(_selectedIdPaket!);
+      _mrKunjunganPasienBloc.tokensSink.add(_tokens);
+      _mrKunjunganPasienBloc.simpanKunjunganPaket();
       _showStreamSave();
     } else {
       Fluttertoast.showToast(
@@ -425,6 +435,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     ).then(
       (value) {
         if (value != null) {
+          if (!mounted) return;
           Navigator.pop(context, 'reload');
         }
       },
@@ -442,6 +453,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     ).then(
       (value) {
         if (value != null) {
+          if (!mounted) return;
           Navigator.pop(context, 'reload');
         }
       },
@@ -458,6 +470,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
       animationType: DialogTransitionType.slideFromBottomFade,
     ).then((value) {
       if (value != null) {
+        if (!mounted) return;
         Navigator.pop(context, 'reload');
       }
     });
@@ -582,7 +595,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     _namaWali.dispose();
     _hubungan.dispose();
     _nomorWali.dispose();
-    _pendaftaranKunjunganSaveBloc.dispose();
+    _mrKunjunganPasienBloc.dispose();
     _pegawaiProfesiBloc.dispose();
     _tindakanCreateBloc.dispose();
     _hubunganFetchBloc.dispose();
@@ -704,74 +717,76 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   Widget _formInputPaket(BuildContext context) {
     return Column(
       children: [
-        Input(
-          controller: _dokterCon,
-          label: 'Dokter',
-          hint: 'Pilih dokter',
-          maxLines: 1,
-          readOnly: true,
-          onTap: () => _showPegawai(1, 'Dokter'),
-          suffixIcon: _dokterCon.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    _dokterCon.clear();
-                    _pendaftaranKunjunganSaveBloc.dokterSink.add('');
-                    setState(() {});
-                  },
-                  color: Colors.red[300],
-                  icon: const Icon(Icons.cancel_outlined),
-                )
-              : AnimateIcons(
-                  startIcon: Icons.add_circle_outline,
-                  endIcon: Icons.add_circle_outline,
-                  endIconColor: Colors.grey,
-                  startIconColor: Colors.grey,
-                  onStartIconPress: () {
-                    return true;
-                  },
-                  onEndIconPress: () {
-                    return true;
-                  },
-                  controller: _animateIconDokterCon,
-                ),
-        ),
-        const SizedBox(
-          height: 22.0,
-        ),
-        Input(
-          controller: _perawatCon,
-          label: 'Perawat',
-          hint: 'Pilih perawat',
-          maxLines: 1,
-          readOnly: true,
-          onTap: () => _showPegawai(2, 'Perawat'),
-          suffixIcon: _perawatCon.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    _perawatCon.clear();
-                    _pendaftaranKunjunganSaveBloc.perawatSink.add('');
-                    setState(() {});
-                  },
-                  color: Colors.red[300],
-                  icon: const Icon(Icons.cancel_outlined),
-                )
-              : AnimateIcons(
-                  startIcon: Icons.add_circle_outline,
-                  endIcon: Icons.add_circle_outline,
-                  endIconColor: Colors.grey,
-                  startIconColor: Colors.grey,
-                  onStartIconPress: () {
-                    return true;
-                  },
-                  onEndIconPress: () {
-                    return true;
-                  },
-                  controller: animateIconPerawatCon,
-                ),
-        ),
-        const SizedBox(
-          height: 22.0,
-        ),
+        if (_isDokter == 1)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 22),
+            child: Input(
+              controller: _dokterCon,
+              label: 'Dokter',
+              hint: 'Pilih dokter',
+              maxLines: 1,
+              readOnly: true,
+              onTap: () => _showPegawai(1, 'Dokter'),
+              suffixIcon: _dokterCon.text.isNotEmpty
+                  ? IconButton(
+                      onPressed: () {
+                        _dokterCon.clear();
+                        _mrKunjunganPasienBloc.dokterSink.add('');
+                        setState(() {});
+                      },
+                      color: Colors.red[300],
+                      icon: const Icon(Icons.cancel_outlined),
+                    )
+                  : AnimateIcons(
+                      startIcon: Icons.add_circle_outline,
+                      endIcon: Icons.add_circle_outline,
+                      endIconColor: Colors.grey,
+                      startIconColor: Colors.grey,
+                      onStartIconPress: () {
+                        return true;
+                      },
+                      onEndIconPress: () {
+                        return true;
+                      },
+                      controller: _animateIconDokterCon,
+                    ),
+            ),
+          ),
+        if (_isPerawat == 1)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 22.0),
+            child: Input(
+              controller: _perawatCon,
+              label: 'Perawat',
+              hint: 'Pilih perawat',
+              maxLines: 1,
+              readOnly: true,
+              onTap: () => _showPegawai(2, 'Perawat'),
+              suffixIcon: _perawatCon.text.isNotEmpty
+                  ? IconButton(
+                      onPressed: () {
+                        _perawatCon.clear();
+                        _mrKunjunganPasienBloc.perawatSink.add('');
+                        setState(() {});
+                      },
+                      color: Colors.red[300],
+                      icon: const Icon(Icons.cancel_outlined),
+                    )
+                  : AnimateIcons(
+                      startIcon: Icons.add_circle_outline,
+                      endIcon: Icons.add_circle_outline,
+                      endIconColor: Colors.grey,
+                      startIconColor: Colors.grey,
+                      onStartIconPress: () {
+                        return true;
+                      },
+                      onEndIconPress: () {
+                        return true;
+                      },
+                      controller: animateIconPerawatCon,
+                    ),
+            ),
+          ),
         Input(
           controller: _paketCon,
           label: 'Paket',
@@ -789,7 +804,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
               ? IconButton(
                   onPressed: () {
                     _paketCon.clear();
-                    _pendaftaranKunjunganSaveBloc.perawatSink.add('');
+                    _mrKunjunganPasienBloc.perawatSink.add('');
                     _selectedIdPaket = null;
                     setState(() {});
                   },
@@ -810,105 +825,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Input(
-          controller: _keluhanCon,
-          label: 'Keluhan',
-          hint: 'Keluhan masuk pasien',
-          maxLines: 1,
-          textCap: TextCapitalization.words,
-          textInputAction: TextInputAction.next,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'Input required';
-            }
-            return null;
-          },
-        ),
-        const SizedBox(
-          height: 22.0,
-        ),
-        Input(
-          focusNode: _dokterFocus,
-          controller: _dokterCon,
-          label: 'Dokter',
-          hint: 'Pilih dokter',
-          maxLines: 1,
-          readOnly: true,
-          onTap: () => _showPegawai(1, 'Dokter'),
-          validator: (value) {
-            if (value!.isEmpty && groupTindakan.contains(1)) {
-              return 'Input required';
-            }
-            return null;
-          },
-          suffixIcon: _dokterCon.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    _dokterCon.clear();
-                    _pendaftaranKunjunganSaveBloc.dokterSink.add('');
-                    setState(() {});
-                  },
-                  color: Colors.red[300],
-                  icon: const Icon(Icons.cancel),
-                )
-              : AnimateIcons(
-                  startIcon: Icons.add_circle_outline,
-                  endIcon: Icons.add_circle_outline,
-                  endIconColor: Colors.grey,
-                  startIconColor: Colors.grey,
-                  onStartIconPress: () {
-                    return true;
-                  },
-                  onEndIconPress: () {
-                    return true;
-                  },
-                  controller: _animateIconDokterCon,
-                ),
-        ),
-        const SizedBox(
-          height: 22.0,
-        ),
-        Input(
-          focusNode: _perawatFocus,
-          controller: _perawatCon,
-          label: 'Perawat',
-          hint: 'Pilih perawat',
-          maxLines: 1,
-          readOnly: true,
-          onTap: () => _showPegawai(2, 'Perawat'),
-          validator: (value) {
-            if (value!.isEmpty && groupTindakan.contains(2)) {
-              return 'Input required';
-            }
-            return null;
-          },
-          suffixIcon: _perawatCon.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    _perawatCon.clear();
-                    _pendaftaranKunjunganSaveBloc.perawatSink.add('');
-                    setState(() {});
-                  },
-                  color: Colors.red[300],
-                  icon: const Icon(Icons.cancel_outlined),
-                )
-              : AnimateIcons(
-                  startIcon: Icons.add_circle_outline,
-                  endIcon: Icons.add_circle_outline,
-                  endIconColor: Colors.grey,
-                  startIconColor: Colors.grey,
-                  onStartIconPress: () {
-                    return true;
-                  },
-                  onEndIconPress: () {
-                    return true;
-                  },
-                  controller: animateIconPerawatCon,
-                ),
-        ),
-        const SizedBox(
-          height: 22.0,
-        ),
         Input(
           controller: _layananCon,
           label: 'Layanan',
@@ -956,6 +872,219 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
         const SizedBox(
           height: 22.0,
         ),
+        if (_isDokter == 1)
+          Input(
+            focusNode: _dokterFocus,
+            controller: _dokterCon,
+            label: 'Dokter',
+            hint: 'Pilih dokter',
+            maxLines: 1,
+            readOnly: true,
+            onTap: () => _showPegawai(1, 'Dokter'),
+            validator: (value) {
+              if (value!.isEmpty && groupTindakan.contains(1)) {
+                return 'Input required';
+              }
+              return null;
+            },
+            suffixIcon: _dokterCon.text.isNotEmpty
+                ? IconButton(
+                    onPressed: () {
+                      _dokterCon.clear();
+                      _mrKunjunganPasienBloc.dokterSink.add('');
+                      setState(() {});
+                    },
+                    color: Colors.red[300],
+                    icon: const Icon(Icons.cancel),
+                  )
+                : AnimateIcons(
+                    startIcon: Icons.add_circle_outline,
+                    endIcon: Icons.add_circle_outline,
+                    endIconColor: Colors.grey,
+                    startIconColor: Colors.grey,
+                    onStartIconPress: () {
+                      return true;
+                    },
+                    onEndIconPress: () {
+                      return true;
+                    },
+                    controller: _animateIconDokterCon,
+                  ),
+          ),
+        if (_isDokter == 1)
+          const SizedBox(
+            height: 22.0,
+          ),
+        if (_isPerawat == 1)
+          Input(
+            focusNode: _perawatFocus,
+            controller: _perawatCon,
+            label: 'Perawat',
+            hint: 'Pilih perawat',
+            maxLines: 1,
+            readOnly: true,
+            onTap: () => _showPegawai(2, 'Perawat'),
+            validator: (value) {
+              if (value!.isEmpty && groupTindakan.contains(2)) {
+                return 'Input required';
+              }
+              return null;
+            },
+            suffixIcon: _perawatCon.text.isNotEmpty
+                ? IconButton(
+                    onPressed: () {
+                      _perawatCon.clear();
+                      _mrKunjunganPasienBloc.perawatSink.add('');
+                      setState(() {});
+                    },
+                    color: Colors.red[300],
+                    icon: const Icon(Icons.cancel_outlined),
+                  )
+                : AnimateIcons(
+                    startIcon: Icons.add_circle_outline,
+                    endIcon: Icons.add_circle_outline,
+                    endIconColor: Colors.grey,
+                    startIconColor: Colors.grey,
+                    onStartIconPress: () {
+                      return true;
+                    },
+                    onEndIconPress: () {
+                      return true;
+                    },
+                    controller: animateIconPerawatCon,
+                  ),
+          ),
+        if (_isPerawat == 1)
+          const SizedBox(
+            height: 22,
+          ),
+        const Divider(),
+        const ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(
+            'Skrining Pasien',
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+          ),
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 12,
+        ),
+        Input(
+          controller: _keluhanCon,
+          label: 'Keluhan',
+          hint: 'Keluhan masuk pasien',
+          maxLines: 1,
+          textCap: TextCapitalization.words,
+          textInputAction: TextInputAction.next,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Input required';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(
+          height: 22.0,
+        ),
+        Input(
+          controller: _tanda,
+          label: 'Tanda & Gejala',
+          hint: 'Pilih tanda dan gejala masuk pasien',
+          maxLines: 1,
+          readOnly: true,
+          onTap: () {
+            showBarModalBottomSheet(
+              context: context,
+              builder: (context) => const FormSkriningWidget(),
+            ).then((value) {
+              if (value != null) {
+                var data = value as MasterSkrining;
+                _mrKunjunganPasienBloc.skriningSink.add(data.id!);
+                setState(() {
+                  _tanda.text = '${data.skrining}';
+                });
+              }
+            });
+          },
+          suffixIcon: AnimateIcons(
+            startIcon: Icons.add_circle_outline,
+            endIcon: Icons.add_circle_outline,
+            endIconColor: Colors.grey,
+            startIconColor: Colors.grey,
+            onStartIconPress: () {
+              return true;
+            },
+            onEndIconPress: () {
+              return true;
+            },
+            controller: _animateIconTindakanCon,
+          ),
+        ),
+        const SizedBox(
+          height: 22,
+        ),
+        const Text(
+          'Resiko Jatuh',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        FormField(
+          onSaved: (val) {
+            if (val != null) {
+              _mrKunjunganPasienBloc.resikoJatuh.add('$val');
+              _mrKunjunganPasienBloc.keputusanResikoJatuhSink
+                  .add('Kursi Roda/Antrian Khusus');
+            }
+          },
+          builder: (state) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RadioListTile(
+                value: 'Tidak beresiko',
+                groupValue: state.value,
+                title: const Text('Tidak Beresiko'),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                  _mrKunjunganPasienBloc.resikoJatuh.add('');
+                  _mrKunjunganPasienBloc.keputusanResikoJatuhSink.add('');
+                },
+              ),
+              RadioListTile(
+                value: 'Menggunakan Alat Bantu',
+                groupValue: state.value,
+                title: const Text('Menggunakan Alat Bantu'),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                },
+              ),
+              RadioListTile(
+                value: 'Gangguan Saat Jalan',
+                groupValue: state.value,
+                title: const Text('Gangguan Saat Jalan'),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                },
+              ),
+              RadioListTile(
+                value: 'Menggunakan Penutup Mata (Salah Satu/Keduanya)',
+                groupValue: state.value,
+                title: const Text(
+                    'Menggunakan Penutup Mata (Salah Satu/Keduanya)'),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                },
+              )
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 22.0,
+        ),
+        const Divider(),
         const ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text(
@@ -1075,43 +1204,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     );
   }
 
-  Widget _buildStreamLayanan() {
-    return StreamBuilder<ApiResponse<TindakanCreateModel>>(
-      stream: _tindakanCreateBloc.tindakanCreateStream,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          switch (snapshot.data!.status) {
-            case Status.loading:
-              return const SizedBox(
-                height: 150,
-                child: Center(
-                  child: LoadingKit(
-                    color: kPrimaryColor,
-                  ),
-                ),
-              );
-            case Status.error:
-              return SizedBox(
-                height: 280,
-                child: Center(
-                  child: ErrorResponse(
-                    message: snapshot.data!.message,
-                    onTap: () {
-                      _tindakanCreateBloc.tindakanCreate();
-                      setState(() {});
-                    },
-                  ),
-                ),
-              );
-            case Status.completed:
-              return ListTindakanWidget(data: snapshot.data!.data!.tindakan!);
-          }
-        }
-        return const SizedBox();
-      },
-    );
-  }
-
   Widget _buildStreamHubunganPasien() {
     return StreamBuilder<ApiResponse<HubunganFetchModel>>(
       stream: _hubunganFetchBloc.hubunganFetchStream,
@@ -1188,8 +1280,8 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   }
 
   Widget _buildStreamSaveKunjungan() {
-    return StreamBuilder<ApiResponse<ResponsePendaftaranKunjunganSaveModel>>(
-      stream: _pendaftaranKunjunganSaveBloc.pendaftaranSaveStream,
+    return StreamBuilder<ApiResponse<MrKunjunganPasienModel>>(
+      stream: _mrKunjunganPasienBloc.kunjunganPasienStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           switch (snapshot.data!.status) {
@@ -1294,7 +1386,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             },
             onEndIconPress: () {
               _perawatCon.clear();
-              _pendaftaranKunjunganSaveBloc.perawatSink.add('');
+              _mrKunjunganPasienBloc.perawatSink.add('');
               setState(() {});
               return true;
             },
@@ -1629,9 +1721,9 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
 
 class ListTindakanWidget extends StatefulWidget {
   const ListTindakanWidget({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   final List<TindakanCreate> data;
 
@@ -2039,4 +2131,14 @@ class _ListTindakanLabNonKonsulState extends State<ListTindakanLabNonKonsul> {
       ),
     );
   }
+}
+
+class ResikoJatuhClass {
+  String? resiko;
+  String? keputusan;
+
+  ResikoJatuhClass({
+    this.resiko,
+    this.keputusan,
+  });
 }

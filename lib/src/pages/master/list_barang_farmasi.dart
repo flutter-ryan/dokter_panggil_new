@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class ListBarangFarmasi extends StatefulWidget {
   const ListBarangFarmasi({
-    Key? key,
+    super.key,
     this.data,
     this.bloc,
-  }) : super(key: key);
+  });
 
   final MasterFarmasiPaginateModel? data;
   final MasterFarmasiPaginateBloc? bloc;

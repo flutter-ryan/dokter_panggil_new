@@ -12,10 +12,10 @@ import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 
 class DetailPetugasWidget extends StatefulWidget {
   const DetailPetugasWidget({
-    Key? key,
+    super.key,
     required this.data,
     this.reload,
-  }) : super(key: key);
+  });
 
   final DetailKunjungan data;
   final Function(DetailKunjungan? data)? reload;

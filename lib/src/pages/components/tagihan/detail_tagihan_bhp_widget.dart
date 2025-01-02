@@ -22,11 +22,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DetailTagihanBhpWidget extends StatefulWidget {
   const DetailTagihanBhpWidget({
-    Key? key,
+    super.key,
     required this.data,
     this.type = 'create',
     this.reload,
-  }) : super(key: key);
+  });
 
   final DetailKunjungan data;
   final Function(DetailKunjungan data)? reload;
@@ -102,6 +102,7 @@ class _DetailTagihanBhpWidgetState extends State<DetailTagihanBhpWidget> {
       animationType: DialogTransitionType.slideFromBottomFade,
     ).then((value) {
       var data = value as DetailKunjungan;
+      if (!mounted) return;
       Navigator.pop(context, data);
     });
   }

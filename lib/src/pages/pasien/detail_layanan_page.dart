@@ -10,11 +10,11 @@ import 'package:flutter/services.dart';
 
 class DetailLayananPage extends StatefulWidget {
   const DetailLayananPage({
-    Key? key,
+    super.key,
     required this.id,
     this.type = 'create',
     this.role,
-  }) : super(key: key);
+  });
 
   final int id;
   final String type;
@@ -30,12 +30,13 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
   @override
   void initState() {
     super.initState();
-    _pasienKunjunganDetailBloc.idSink.add(widget.id);
+    print('role: ${widget.role}');
+    _pasienKunjunganDetailBloc.idKunjunganSink.add(widget.id);
     _pasienKunjunganDetailBloc.kunjunganDetail();
   }
 
   void _reload() {
-    _pasienKunjunganDetailBloc.idSink.add(widget.id);
+    _pasienKunjunganDetailBloc.idKunjunganSink.add(widget.id);
     _pasienKunjunganDetailBloc.kunjunganDetail();
     setState(() {});
   }

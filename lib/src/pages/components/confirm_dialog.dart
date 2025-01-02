@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class ConfirmDialogWidget extends StatelessWidget {
   const ConfirmDialogWidget({
-    Key? key,
+    super.key,
     this.message = 'Anda yakin ingin menghapus data ini',
     required this.onConfirm,
     this.labelConfirm = 'Ya, Hapus',
-  }) : super(key: key);
+  });
 
   final String? message;
   final Function() onConfirm;

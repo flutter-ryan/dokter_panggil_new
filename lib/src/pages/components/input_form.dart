@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class Input extends StatelessWidget {
   const Input({
-    Key? key,
+    super.key,
     required this.label,
     required this.hint,
     this.controller,
@@ -20,7 +20,7 @@ class Input extends StatelessWidget {
     this.textInputAction = TextInputAction.done,
     this.inputFormatters,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   final TextEditingController? controller;
   final String label;

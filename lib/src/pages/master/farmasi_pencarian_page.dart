@@ -15,7 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FarmasiPencarianPage extends StatefulWidget {
-  const FarmasiPencarianPage({Key? key}) : super(key: key);
+  const FarmasiPencarianPage({super.key});
 
   @override
   State<FarmasiPencarianPage> createState() => _FarmasiPencarianPageState();

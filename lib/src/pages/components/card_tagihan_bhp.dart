@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CardTagihanBhp extends StatefulWidget {
   const CardTagihanBhp({
-    Key? key,
+    super.key,
     this.title,
     this.tiles,
     this.subTotal,
     this.buttonDetail,
     this.transportWidget,
-  }) : super(key: key);
+  });
 
   final String? title;
   final Widget? tiles;

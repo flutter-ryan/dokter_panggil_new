@@ -10,7 +10,7 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Splashpage extends StatefulWidget {
-  const Splashpage({Key? key}) : super(key: key);
+  const Splashpage({super.key});
 
   @override
   State<Splashpage> createState() => _SplashpageState();

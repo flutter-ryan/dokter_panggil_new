@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class DetailTindakan extends StatelessWidget {
   const DetailTindakan({
-    Key? key,
+    super.key,
     this.title,
     this.subtitle,
-  }) : super(key: key);
+  });
 
   final String? title;
   final Widget? subtitle;

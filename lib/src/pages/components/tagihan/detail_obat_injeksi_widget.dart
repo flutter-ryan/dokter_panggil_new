@@ -3,15 +3,18 @@ import 'package:dokter_panggil/src/blocs/kunjungan_obat_injeksi_update_bloc.dart
 import 'package:dokter_panggil/src/models/kunjungan_obat_injeksi_update_model.dart';
 import 'package:dokter_panggil/src/models/master_bhp_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_obat_injeksi.dart';
+import 'package:dokter_panggil/src/pages/components/card_tagihan.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/detail_bhp_widget.dart';
+import 'package:dokter_panggil/src/pages/components/tagihan/resep_injeksi_widget.dart';
+import 'package:dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
@@ -49,7 +52,7 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
   final _jumlah = TextEditingController();
   final _alasan = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  List<KunjunganObatInjeksi>? _data;
+  List<ResepObatInjeksi> _data = [];
   int? _selectedId;
   int _hargaModal = 0;
   int _tarifAplikasi = 0;
@@ -57,7 +60,9 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
   @override
   void initState() {
     super.initState();
-    _data = widget.data.obatInjeksi;
+    if (widget.data.resepObatInjeksi != null) {
+      _data = widget.data.resepObatInjeksi!;
+    }
   }
 
   bool validateAndSave() {
@@ -69,20 +74,20 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
     return false;
   }
 
-  void _edit(BuildContext context, KunjunganObatInjeksi obat) {
-    _kunjunganObatInjeksiUpdateBloc.idSink.add(obat.id!);
-    _selectedId = obat.barang!.id;
-    _namaBarang.text = '${obat.barang!.namaBarang}';
-    _jumlah.text = '${obat.jumlah}';
-    _tarifAplikasi = obat.tarifAplikasi!;
-    _hargaModal = obat.hargaModal!;
+  void _edit(BuildContext context, ResepObatInjeksi resep) {
+    _kunjunganObatInjeksiUpdateBloc.idSink.add(resep.id!);
+    // _selectedId = obat.barang!.id;
+    // _namaBarang.text = '${obat.barang!.namaBarang}';
+    // _jumlah.text = '${obat.jumlah}';
+    // _tarifAplikasi = obat.tarifAplikasi!;
+    // _hargaModal = obat.hargaModal!;
     showBarModalBottomSheet(
       context: context,
       builder: (context) {
         return Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: _editFormObatInjeksi(obat),
+          child: _editFormObatInjeksi(resep),
         );
       },
       duration: const Duration(milliseconds: 500),
@@ -112,11 +117,12 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
       animationType: DialogTransitionType.slideFromBottomFade,
     ).then((value) {
       if (value != null) {
-        var data = value as KunjunganObatInjeksi;
+        var data = value as ResepObatInjeksi;
         _namaBarang.clear();
         _jumlah.clear();
         _alasan.clear();
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context);
           _data![_data!.indexWhere((e) => e.id == data.id)] = data;
           setState(() {});
@@ -146,6 +152,13 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
     });
   }
 
+  void _eresepInjeksi() {
+    showBarModalBottomSheet(
+      context: context,
+      builder: (context) => _buildEresepInjeksiWidget(context),
+    );
+  }
+
   @override
   void dispose() {
     _kunjunganObatInjeksiUpdateBloc.dispose();
@@ -157,55 +170,67 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return CardObatInjeksi(
+    return Cardtagihan(
       title: 'Obat Injeksi',
       subTotal: Text(
         _rupiah.format(widget.data.totalObatInjeksi),
-        style: const TextStyle(fontWeight: FontWeight.w600),
+        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
       ),
-      tiles: Column(
-        children: ListTile.divideTiles(
-          context: context,
-          tiles: _data!
-              .map(
-                (obat) => ListTile(
-                  onTap: () => widget.type != 'view' && widget.role == 99
-                      ? _edit(context, obat)
-                      : null,
-                  dense: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
-                  horizontalTitleGap: 0,
-                  title: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(child: Text('${obat.barang!.namaBarang}')),
-                      if (widget.type != 'view' && widget.role == 99)
-                        const SizedBox(
-                          width: 12,
+      tiles: ListTile.divideTiles(
+        context: context,
+        tiles: _data
+            .map((resep) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
+                      child: Text(
+                        '${resep.tanggalShort}\n${resep.jamShort}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                  text: '${resep.dokter} |',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                  children: [
+                                    TextSpan(
+                                        text: ' E-Resep',
+                                        style:
+                                            TextStyle(color: Colors.blueAccent),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {}),
+                                  ]),
+                            ),
+                            ...resep.obatInjeksi!.map((obat) => TileObatWidget(
+                                  title: '${obat.barang!.namaBarang}',
+                                  subtitle:
+                                      '${obat.jumlah} x ${_rupiahNo.format(obat.hargaModal! + obat.tarifAplikasi!)}',
+                                  trailing: _rupiah.format(obat.tarif),
+                                ))
+                          ],
                         ),
-                      if (widget.type != 'view' && widget.role == 99)
-                        const Icon(
-                          Icons.edit_note_rounded,
-                          size: 22.0,
-                          color: Colors.blue,
-                        )
-                    ],
-                  ),
-                  subtitle: Text(
-                      '${obat.jumlah} x ${_rupiahNo.format(obat.hargaModal! + obat.tarifAplikasi!)}'),
-                  trailing: Text(
-                    _rupiah.format(obat.tarif),
-                  ),
-                ),
-              )
-              .toList(),
-        ).toList(),
-      ),
+                      ),
+                    ),
+                  ],
+                ))
+            .toList(),
+      ).toList(),
     );
   }
 
-  Widget _editFormObatInjeksi(KunjunganObatInjeksi obat) {
+  Widget _editFormObatInjeksi(ResepObatInjeksi obat) {
     return Form(
       key: _formKey,
       child: Column(
@@ -342,6 +367,69 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
         }
         return const SizedBox();
       },
+    );
+  }
+
+  Widget _buildEresepInjeksiWidget(BuildContext context) {
+    return SizedBox(
+      child: DefaultTabController(
+        length: widget.data.dokter!.length,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(22.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'E-Resep Obat Injeksi',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Colors.grey[100],
+                    foregroundColor: Colors.grey[400],
+                    child: CloseButton(
+                      color: Colors.grey[400],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            TabBar(
+              labelColor: Colors.black,
+              isScrollable: true,
+              unselectedLabelColor: Colors.grey[400],
+              indicatorColor: kPrimaryColor,
+              tabs: widget.data.dokter!
+                  .map(
+                    (dokter) => Tab(
+                      child: RichText(
+                        text: TextSpan(
+                          text: '${dokter.dokter}',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+            Expanded(
+                child: TabBarView(
+                    children: widget.data.dokter!
+                        .map(
+                          (dokter) => ResepInjeksiWidget(
+                            dokter: dokter,
+                            idKunjungan: widget.data.id,
+                          ),
+                        )
+                        .toList()))
+          ],
+        ),
+      ),
     );
   }
 }

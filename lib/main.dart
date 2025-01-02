@@ -28,7 +28,7 @@ void main() async {
 }
 
 class DokterPanggil extends StatelessWidget {
-  const DokterPanggil({Key? key}) : super(key: key);
+  const DokterPanggil({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class DokterPanggil extends StatelessWidget {
       title: 'DRP Administration',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        textTheme: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
         primarySwatch: Colors.red,
         useMaterial3: false,
       ),

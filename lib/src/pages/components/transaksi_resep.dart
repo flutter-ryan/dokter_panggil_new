@@ -20,13 +20,15 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TransaksiResep extends StatefulWidget {
   const TransaksiResep({
-    Key? key,
+    super.key,
     this.idKunjungan,
     this.dataResep,
-  }) : super(key: key);
+    this.idResep,
+  });
 
   final int? idKunjungan;
   final List<Resep>? dataResep;
+  final int? idResep;
 
   @override
   State<TransaksiResep> createState() => _TransaksiResepState();
@@ -47,13 +49,24 @@ class _TransaksiResepState extends State<TransaksiResep> {
   final List<int> _jumlahBhp = [];
 
   void _pilihApotek() {
-    showBarModalBottomSheet(
+    showMaterialModalBottomSheet(
       context: context,
       builder: (context) {
         return _pilihApotekWidget(context);
       },
       duration: const Duration(milliseconds: 500),
-    );
+    ).then((value) {
+      if (value != null) {
+        var jenis = value as String;
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (jenis == 'mitra') {
+            _listObat();
+          } else {
+            _listBhp();
+          }
+        });
+      }
+    });
   }
 
   void _listObat() {
@@ -169,6 +182,7 @@ class _TransaksiResepState extends State<TransaksiResep> {
       if (value != null) {
         var data = value as DetailKunjungan;
         Future.delayed(const Duration(milliseconds: 300), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }
@@ -231,6 +245,7 @@ class _TransaksiResepState extends State<TransaksiResep> {
         title: const Text('Transaksi resep'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: _eresep,
@@ -321,34 +336,40 @@ class _TransaksiResepState extends State<TransaksiResep> {
                 offset: Offset(0.0, -2.0),
               )
             ]),
-            child: Row(
-              children: [
-                ElevatedButton(
-                  onPressed: _pilihApotek,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0.0, 48.0),
-                    backgroundColor: Colors.grey[200],
-                    foregroundColor: Colors.black,
-                  ),
-                  child: const Icon(Icons.add_rounded),
-                ),
-                const SizedBox(
-                  width: 15.0,
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed:
-                        (_selectedData.isNotEmpty || _selectedBhp.isNotEmpty)
-                            ? _simpan
-                            : null,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom),
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: _pilihApotek,
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(0.0, 48.0),
-                      backgroundColor: kPrimaryColor,
-                    ),
-                    child: const Text('SIMPAN TRANSAKSI'),
+                        minimumSize: const Size(0.0, 48.0),
+                        backgroundColor: Colors.grey[200],
+                        foregroundColor: Colors.black,
+                        elevation: 0),
+                    child: const Icon(Icons.add_rounded),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 15.0,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed:
+                          (_selectedData.isNotEmpty || _selectedBhp.isNotEmpty)
+                              ? _simpan
+                              : null,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(0.0, 48.0),
+                        disabledBackgroundColor: Colors.grey[200],
+                        disabledForegroundColor: Colors.grey[400],
+                        backgroundColor: kPrimaryColor,
+                      ),
+                      child: const Text('SIMPAN TRANSAKSI'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           )
         ],
@@ -358,31 +379,34 @@ class _TransaksiResepState extends State<TransaksiResep> {
 
   Widget _pilihApotekWidget(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0),
+      padding: const EdgeInsets.symmetric(vertical: 22),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(22.0, 0, 22.0, 22.0),
+            child: Text(
+              'Pilih Salah Satu',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
           ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              _listObat();
-            },
+            onTap: () => Navigator.pop(context, 'mitra'),
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 22.0),
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 22.0),
             title: const Text('Apotek Mitra'),
           ),
-          const Divider(
+          Divider(
             height: 0,
+            color: Colors.grey[400],
           ),
           ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              _listBhp();
-            },
+            onTap: () => Navigator.pop(context, 'mentari'),
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 22.0),
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 22.0),
             title: const Text('Apotek Mentari'),
-          )
+          ),
         ],
       ),
     );

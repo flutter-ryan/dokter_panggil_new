@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class Searcher extends StatelessWidget {
   const Searcher({
-    Key? key,
+    super.key,
     required this.controller,
     required this.focus,
     required this.suffixIcon,
     required this.result,
     required this.hint,
-  }) : super(key: key);
+  });
 
   final TextEditingController? controller;
   final FocusNode? focus;

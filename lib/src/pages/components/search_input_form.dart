@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchInputForm extends StatelessWidget {
   const SearchInputForm({
-    Key? key,
+    super.key,
     this.controller,
     this.focusNode,
     required this.hint,
@@ -11,7 +11,7 @@ class SearchInputForm extends StatelessWidget {
     this.onTap,
     this.autofocus = false,
     this.suffixIcon,
-  }) : super(key: key);
+  });
 
   final TextEditingController? controller;
   final String hint;

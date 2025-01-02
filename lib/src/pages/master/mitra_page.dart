@@ -19,7 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 
 class MitraPage extends StatefulWidget {
-  const MitraPage({Key? key}) : super(key: key);
+  const MitraPage({super.key});
 
   @override
   State<MitraPage> createState() => _MitraPageState();

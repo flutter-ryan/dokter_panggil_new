@@ -15,6 +15,7 @@ import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:dokter_panggil/src/pages/components/tagihan/detail_card_tagihan.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
@@ -27,13 +28,13 @@ import 'package:dokter_panggil/src/pages/components/badge.dart' as badge_custom;
 
 class DetailTindakanWidget extends StatefulWidget {
   const DetailTindakanWidget({
-    Key? key,
+    super.key,
     required this.data,
     this.subtotal,
     this.reload,
     this.type = 'create',
     this.role,
-  }) : super(key: key);
+  });
 
   final DetailKunjungan data;
   final Widget? subtotal;
@@ -78,6 +79,7 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
           var data = value as DetailKunjungan;
           widget.reload!(data);
         }
+        if (!mounted) return;
         FocusScope.of(context).requestFocus(FocusNode());
       },
     );
@@ -110,6 +112,7 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
           var data = value as DetailKunjungan;
           widget.reload!(data);
         }
+        if (!mounted) return;
         FocusScope.of(context).requestFocus(FocusNode());
       },
     );
@@ -160,6 +163,7 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
         Future.delayed(
           const Duration(milliseconds: 600),
           () {
+            if (!mounted) return;
             Navigator.pop(context, data);
           },
         );
@@ -180,101 +184,101 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
       title: 'Tindakan',
       tiles: widget.data.tindakan!
           .map(
-            (tindakan) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Detailtagihan(
-                  onTap: widget.type != 'view' && widget.role == 999
-                      ? () => _editQty(tindakan)
-                      : null,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 6),
-                  namaTagihan: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(child: Text('${tindakan.namaTindakan}')),
-                      if (widget.type != 'view' && widget.role == 99)
-                        const SizedBox(
-                          width: 12.0,
-                        ),
-                      if (widget.type != 'view' && widget.role == 99)
-                        const Icon(
-                          Icons.edit_note_rounded,
-                          size: 22.0,
-                          color: Colors.blue,
-                        )
-                    ],
-                  ),
-                  subTagihan: tindakan.foc == 1
-                      ? const Align(
-                          alignment: Alignment.centerLeft,
-                          child: badge_custom.Badge(
-                            color: Colors.green,
-                            label: 'Free of Charge',
-                          ))
-                      : null,
-                  tarifTagihan: Text(
-                    _rupiah.format(tindakan.tarif),
-                  ),
-                ),
-                if (tindakan.transportasi == 1)
-                  TileTransportTindakan(
-                    onTap: widget.type != 'view'
-                        ? () => _tambahTransport(tindakan)
-                        : null,
-                    title: Row(
+            (tindakan) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                children: [
+                  DetailCardTagihan(
+                    tanggal: '${tindakan.createdAt}',
+                    deskripsi: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Transportasi'),
-                        const SizedBox(
-                          width: 8,
+                        Text(
+                          '${tindakan.namaTindakan}',
+                          style: TextStyle(fontSize: 12),
                         ),
-                        if (widget.type != 'view')
-                          const Icon(
-                            Icons.edit_note_rounded,
-                            size: 22.0,
-                            color: Colors.blue,
-                          )
+                        if (tindakan.foc == 1)
+                          const Align(
+                              alignment: Alignment.centerLeft,
+                              child: badge_custom.Badge(
+                                color: Colors.green,
+                                label: 'FOC',
+                              )),
                       ],
                     ),
-                    leading: const Icon(
-                      Icons.keyboard_arrow_right,
-                      size: 20.0,
-                    ),
-                    trailing: Text(
-                      _rupiah.format(tindakan.dataTransportasi != null
-                          ? tindakan.dataTransportasi!.biaya
-                          : 0),
-                    ),
+                    petugas: '${tindakan.petugas}',
+                    tarif: _rupiah.format(tindakan.tarif),
                   ),
-                if (tindakan.gojek == 1)
-                  TileTransportTindakan(
-                    onTap: widget.type != 'view'
-                        ? () => _tambahOjol(tindakan)
-                        : null,
-                    leading: const Icon(
-                      Icons.keyboard_arrow_right,
-                      size: 20.0,
+                  if (tindakan.transportasi == 1)
+                    TileTransportTindakan(
+                      onTap: widget.type != 'view'
+                          ? () => _tambahTransport(tindakan)
+                          : null,
+                      title: Row(
+                        children: [
+                          const Text(
+                            'Transportasi',
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.normal),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          if (widget.type != 'view')
+                            const Icon(
+                              Icons.edit_note_rounded,
+                              size: 22.0,
+                              color: Colors.blue,
+                            )
+                        ],
+                      ),
+                      trailing: Text(
+                        _rupiah.format(tindakan.dataTransportasi != null
+                            ? tindakan.dataTransportasi!.biaya
+                            : 0),
+                        style: TextStyle(fontSize: 12),
+                      ),
                     ),
-                    title: Row(
-                      children: [
-                        const Text('Transportasi Online'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        if (widget.type != 'view')
-                          const Icon(
-                            Icons.edit_note_rounded,
-                            size: 22.0,
-                            color: Colors.blue,
-                          )
-                      ],
+                  if (tindakan.gojek == 1)
+                    TileTransportTindakan(
+                      onTap: widget.type != 'view'
+                          ? () => _tambahOjol(tindakan)
+                          : null,
+                      leading: const Icon(
+                        Icons.keyboard_arrow_right,
+                        size: 20.0,
+                      ),
+                      title: Row(
+                        children: [
+                          const Text(
+                            'Transportasi Online',
+                            style: TextStyle(fontWeight: FontWeight.normal),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          if (widget.type != 'view')
+                            const Icon(
+                              Icons.edit_note_rounded,
+                              size: 22.0,
+                              color: Colors.blue,
+                            )
+                        ],
+                      ),
+                      trailing: Text(
+                        _rupiah.format(tindakan.dataOjol != null
+                            ? tindakan.dataOjol!.total
+                            : 0),
+                        style: TextStyle(fontSize: 12),
+                      ),
                     ),
-                    trailing: Text(
-                      _rupiah.format(tindakan.dataOjol != null
-                          ? tindakan.dataOjol!.total
-                          : 0),
+                  if (widget.data.tindakan!.indexOf(tindakan) !=
+                      widget.data.tindakan!.length - 1)
+                    Divider(
+                      color: Colors.grey[400],
                     ),
-                  )
-              ],
+                ],
+              ),
             ),
           )
           .toList(),
@@ -445,6 +449,7 @@ class _FormOjolState extends State<FormOjol> {
       if (value != null) {
         var data = value as DetailKunjungan;
         Future.delayed(const Duration(milliseconds: 300), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }
@@ -609,6 +614,7 @@ class _FormTransportasiState extends State<FormTransportasi> {
       if (value != null) {
         var data = value as DetailKunjungan;
         Future.delayed(const Duration(milliseconds: 300), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }
@@ -786,13 +792,17 @@ class TileTransportTindakan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        onTap: onTap,
-        dense: true,
-        horizontalTitleGap: 0.0,
-        minLeadingWidth: 25.0,
-        contentPadding: EdgeInsets.zero,
-        title: title,
-        trailing: trailing,
-        leading: leading);
+      onTap: onTap,
+      dense: true,
+      horizontalTitleGap: 0.0,
+      minLeadingWidth: 25.0,
+      contentPadding: EdgeInsets.zero,
+      style: ListTileStyle.list,
+      titleTextStyle:
+          TextStyle(fontWeight: FontWeight.normal, color: Colors.black),
+      visualDensity: VisualDensity.compact,
+      title: title,
+      trailing: trailing,
+    );
   }
 }

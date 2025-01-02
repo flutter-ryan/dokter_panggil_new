@@ -24,7 +24,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class Tambahpasienpage extends StatefulWidget {
-  const Tambahpasienpage({Key? key}) : super(key: key);
+  const Tambahpasienpage({super.key});
 
   @override
   State<Tambahpasienpage> createState() => _TambahpasienpageState();

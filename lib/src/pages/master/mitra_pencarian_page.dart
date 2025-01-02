@@ -13,7 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 
 class MitraPencarianPage extends StatefulWidget {
-  const MitraPencarianPage({Key? key}) : super(key: key);
+  const MitraPencarianPage({super.key});
 
   @override
   State<MitraPencarianPage> createState() => _MitraPencarianPageState();
