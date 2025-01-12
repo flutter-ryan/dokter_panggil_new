@@ -1,6 +1,8 @@
 import 'package:dokter_panggil/src/blocs/master_group_jabatan_bloc.dart';
+import 'package:dokter_panggil/src/blocs/master_kategori_tindakan_bloc.dart';
 import 'package:dokter_panggil/src/blocs/tindakan_bloc.dart';
 import 'package:dokter_panggil/src/models/master_group_jabatan_model.dart';
+import 'package:dokter_panggil/src/models/master_kategori_tindakan_model.dart';
 import 'package:dokter_panggil/src/models/tindakan_edit_model.dart';
 import 'package:dokter_panggil/src/models/tindakan_save_model.dart';
 import 'package:dokter_panggil/src/pages/components/button_edit_master.dart';
@@ -13,6 +15,7 @@ import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
 import 'package:dokter_panggil/src/pages/master/layanan_penarian_page.dart';
+import 'package:dokter_panggil/src/pages/master/list_kategori_tindakan_page.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
@@ -36,6 +39,7 @@ class _LayananPageState extends State<LayananPage> {
   final _layananCon = TextEditingController();
   final _tarifCon = TextEditingController();
   final _jasaCon = TextEditingController();
+  final _kategori = TextEditingController();
 
   bool _selectedBayarLangsung = false;
   bool _selectedGojek = false;
@@ -184,14 +188,30 @@ class _LayananPageState extends State<LayananPage> {
     });
   }
 
+  void _selectKategori() {
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => ListKategoriTindakanPage(),
+    ).then((value) {
+      if (value != null) {
+        final data = value as MasterKategoriTindakan;
+        _tindakanBloc.idKategoriSink.add(data.id!);
+        setState(() {
+          _kategori.text = '${data.namaKategori}';
+        });
+      }
+    });
+  }
+
   @override
   void dispose() {
+    super.dispose();
     _layananCon.dispose();
     _tarifCon.dispose();
     _jasaCon.dispose();
     _tindakanBloc.dispose();
     _masterGroupJabatanBloc.dispose();
-    super.dispose();
+    _kategori.dispose();
   }
 
   @override
@@ -219,6 +239,7 @@ class _LayananPageState extends State<LayananPage> {
                     ),
                   ).then((value) {
                     if (value != null) {
+                      if (!mounted) return;
                       FocusScope.of(context).requestFocus(FocusNode());
                       var data = value as Tindakan;
                       _edit(data);
@@ -244,6 +265,25 @@ class _LayananPageState extends State<LayananPage> {
                       },
                       onSave: (val) => _layanan = val,
                       textCap: TextCapitalization.words,
+                    ),
+                    const SizedBox(
+                      height: 32.0,
+                    ),
+                    Input(
+                      controller: _kategori,
+                      label: 'Kategori',
+                      hint: 'Pilih Kategori tindakan',
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Input required';
+                        }
+                        return null;
+                      },
+                      readOnly: true,
+                      onSave: (val) => _layanan = val,
+                      suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
+                      textCap: TextCapitalization.words,
+                      onTap: _selectKategori,
                     ),
                     const SizedBox(
                       height: 32.0,
@@ -427,34 +467,40 @@ class _LayananPageState extends State<LayananPage> {
                 ),
               );
             case Status.completed:
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(22.0),
-                    child: Text(
-                      'Pilih group tindakan',
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
+              return SafeArea(
+                top: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(22.0),
+                      child: Text(
+                        'Pilih group tindakan',
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  Column(
-                    children: ListTile.divideTiles(
-                      context: context,
-                      tiles: snapshot.data!.data!.data!
-                          .map((group) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: ListTile(
-                                  onTap: () => Navigator.pop(context, group),
-                                  title: Text('${group.groupJabatan}'),
-                                ),
-                              ))
-                          .toList(),
-                    ).toList(),
-                  )
-                ],
+                    Column(
+                      children: ListTile.divideTiles(
+                        context: context,
+                        tiles: snapshot.data!.data!.data!
+                            .map((group) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: ListTile(
+                                    onTap: () => Navigator.pop(context, group),
+                                    title: Text('${group.groupJabatan}'),
+                                  ),
+                                ))
+                            .toList(),
+                      ).toList(),
+                    ),
+                    SizedBox(
+                      height: 18,
+                    ),
+                  ],
+                ),
               );
           }
         }

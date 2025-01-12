@@ -80,7 +80,7 @@ class _EresepWidgetState extends State<EresepWidget> {
     await WhatsappShare.share(
       text: 'ERESEP dokter panggil\n\nPasien ${data.namaPasien}',
       linkUrl: Uri.parse(data.url!).toString(),
-      phone: '+6281343660768',
+      phone: '+6281280023025',
     );
   }
 

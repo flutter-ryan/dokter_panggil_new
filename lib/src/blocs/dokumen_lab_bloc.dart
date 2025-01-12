@@ -8,8 +8,8 @@ import 'package:rxdart/rxdart.dart';
 class DokumenLabBloc {
   final _repo = DokumenLabRepo();
   StreamController<ApiResponse<DokumenLabModel>>? _streamDokumenLab;
-  final BehaviorSubject<int> _idKunjungan = BehaviorSubject();
-  StreamSink<int> get idKunjunganSink => _idKunjungan.sink;
+  final BehaviorSubject<int> _idPengantar = BehaviorSubject();
+  StreamSink<int> get idPengantarSink => _idPengantar.sink;
   StreamSink<ApiResponse<DokumenLabModel>> get dokumenLabSink =>
       _streamDokumenLab!.sink;
   Stream<ApiResponse<DokumenLabModel>> get dokumenLabStream =>
@@ -17,10 +17,10 @@ class DokumenLabBloc {
 
   Future<void> getDokumenLab() async {
     _streamDokumenLab = StreamController();
-    final idKunjungan = _idKunjungan.value;
+    final idPengantar = _idPengantar.value;
     dokumenLabSink.add(ApiResponse.loading('Memuat...'));
     try {
-      final res = await _repo.getDokumen(idKunjungan);
+      final res = await _repo.getDokumen(idPengantar);
       if (_streamDokumenLab!.isClosed) return;
       dokumenLabSink.add(ApiResponse.completed(res));
     } catch (e) {
@@ -31,6 +31,6 @@ class DokumenLabBloc {
 
   dispose() {
     _streamDokumenLab?.close();
-    _idKunjungan.close();
+    _idPengantar.close();
   }
 }

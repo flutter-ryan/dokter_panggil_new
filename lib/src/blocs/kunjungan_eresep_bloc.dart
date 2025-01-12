@@ -7,9 +7,8 @@ import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class KunjunganEresepBloc {
-  final KunjunganEresepRepo _repo = KunjunganEresepRepo();
+  final _repo = KunjunganEresepRepo();
   StreamController<ApiResponse<KunjunganEresepModel>>? _streamEresep;
-
   final BehaviorSubject<int> _id = BehaviorSubject();
   final BehaviorSubject<int> _idPegawai = BehaviorSubject();
   StreamSink<int> get idSink => _id.sink;

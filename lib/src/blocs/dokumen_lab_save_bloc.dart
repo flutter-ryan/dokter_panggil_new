@@ -9,11 +9,11 @@ class DokumenLabSaveBloc {
   final _repo = DokumenLabSaveRepo();
   StreamController<ApiResponse<DokumenLabSaveModel>>? _streamDokumenLab;
   final BehaviorSubject<int> _idDokumen = BehaviorSubject();
-  final BehaviorSubject<int> _idKunjungan = BehaviorSubject();
+  final BehaviorSubject<int> _idPengantar = BehaviorSubject();
   final BehaviorSubject<String> _image = BehaviorSubject();
   final BehaviorSubject<String> _ext = BehaviorSubject();
   StreamSink<int> get idDokumenSink => _idDokumen.sink;
-  StreamSink<int> get idKunjunganSink => _idKunjungan.sink;
+  StreamSink<int> get idPengantarSink => _idPengantar.sink;
   StreamSink<String> get imageSink => _image.sink;
   StreamSink<String> get extSink => _ext.sink;
   StreamSink<ApiResponse<DokumenLabSaveModel>> get dokumenLabSink =>
@@ -23,7 +23,7 @@ class DokumenLabSaveBloc {
 
   Future<void> simpanDokumenLab() async {
     _streamDokumenLab = StreamController();
-    final idKunjungan = _idKunjungan.value;
+    final idPengantar = _idPengantar.value;
     final image = _image.value;
     final ext = _ext.value;
     dokumenLabSink.add(ApiResponse.loading('Memuat...'));
@@ -31,7 +31,7 @@ class DokumenLabSaveBloc {
         DokumenLabRequestModel(image: image, ext: ext);
     try {
       final res =
-          await _repo.saveDokumenLab(dokumenLabRequestModel, idKunjungan);
+          await _repo.saveDokumenLab(dokumenLabRequestModel, idPengantar);
       if (_streamDokumenLab!.isClosed) return;
       dokumenLabSink.add(ApiResponse.completed(res));
     } catch (e) {
@@ -57,7 +57,7 @@ class DokumenLabSaveBloc {
   dispose() {
     _streamDokumenLab?.close();
     _idDokumen.close();
-    _idKunjungan.close();
+    _idPengantar.close();
     _image.close();
     _ext.close();
   }

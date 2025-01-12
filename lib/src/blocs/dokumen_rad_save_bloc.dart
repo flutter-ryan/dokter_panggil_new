@@ -8,11 +8,11 @@ import 'package:rxdart/rxdart.dart';
 class DokumenRadSaveBloc {
   final _repo = DokumenRadSaveRepo();
   StreamController<ApiResponse<DokumenRadSaveModel>>? _streamDokumenRadSave;
-  final BehaviorSubject<int> _idKunjungan = BehaviorSubject();
+  final BehaviorSubject<int> _idPengantar = BehaviorSubject();
   final BehaviorSubject<int> _idDokumen = BehaviorSubject();
   final BehaviorSubject<String> _image = BehaviorSubject();
   final BehaviorSubject<String> _ext = BehaviorSubject();
-  StreamSink<int> get idKunjunganSink => _idKunjungan.sink;
+  StreamSink<int> get idPengantarSink => _idPengantar.sink;
   StreamSink<int> get idDokumenSink => _idDokumen.sink;
   StreamSink<String> get imageSink => _image.sink;
   StreamSink<String> get extSink => _ext.sink;
@@ -20,9 +20,10 @@ class DokumenRadSaveBloc {
       _streamDokumenRadSave!.sink;
   Stream<ApiResponse<DokumenRadSaveModel>> get dokumenRadSaveStream =>
       _streamDokumenRadSave!.stream;
+
   Future<void> uploadDokumenRad() async {
     _streamDokumenRadSave = StreamController();
-    final idKunjungan = _idKunjungan.value;
+    final idPengantar = _idPengantar.value;
     final image = _image.value;
     final ext = _ext.value;
     dokumenRadSaveSink.add(ApiResponse.loading('Memuat...'));
@@ -30,7 +31,7 @@ class DokumenRadSaveBloc {
         DokumenRadRequestModel(image: image, ext: ext);
     try {
       final res =
-          await _repo.uploadDokumenRad(dokumenRadRequestModel, idKunjungan);
+          await _repo.uploadDokumenRad(dokumenRadRequestModel, idPengantar);
       if (_streamDokumenRadSave!.isClosed) return;
       dokumenRadSaveSink.add(ApiResponse.completed(res));
     } catch (e) {
@@ -56,7 +57,7 @@ class DokumenRadSaveBloc {
   dispose() {
     _streamDokumenRadSave?.close();
     _idDokumen.close();
-    _idKunjungan.close();
+    _idPengantar.close();
     _image.close();
     _ext.close();
   }

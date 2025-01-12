@@ -1,12 +1,17 @@
+import 'package:dokter_panggil/src/blocs/kwitansi_sementara_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_biaya_admin_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_diskon_create_bloc.dart';
+import 'package:dokter_panggil/src/models/kwitansi_sementara_model.dart';
 import 'package:dokter_panggil/src/models/master_biaya_admin_model.dart';
 import 'package:dokter_panggil/src/models/master_diskon_create_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:dokter_panggil/src/pages/components/close_button_widget.dart';
 import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/detail_tagihan.dart';
+import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
@@ -15,6 +20,8 @@ import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class ListTagihanWidget extends StatefulWidget {
   const ListTagihanWidget({
@@ -129,6 +136,7 @@ class ListBiayaAdmin extends StatefulWidget {
 }
 
 class _ListBiayaAdminState extends State<ListBiayaAdmin> {
+  final _kwitansiSementaraBloc = KwitansiSementaraBloc();
   final _noRupiah =
       NumberFormat.currency(symbol: '', locale: 'id', decimalDigits: 0);
   late DetailKunjungan _data;
@@ -290,6 +298,36 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
     });
   }
 
+  void _kirimInvoiceSementara() {
+    _kwitansiSementaraBloc.idKunjungSink.add(widget.dataKunjungan!.id!);
+    _kwitansiSementaraBloc.getKwitansiSementara();
+    _showStreamKwitansiSementara();
+  }
+
+  void _showStreamKwitansiSementara() {
+    showAnimatedDialog(
+      context: context,
+      builder: (context) => _streamKwitansiSementara(context),
+      animationType: DialogTransitionType.slideFromBottomFade,
+    ).then((value) {
+      if (value != null) {
+        final data = value as KwitansiSementara;
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _share(data);
+        });
+      }
+    });
+  }
+
+  Future<void> _share(KwitansiSementara data) async {
+    await WhatsappShare.share(
+      text:
+          'Hai pasien ${data.pasien == null ? '-' : data.pasien?.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi sementara pembayaranmu',
+      linkUrl: Uri.parse(data.url!).toString(),
+      phone: '+6281280023025',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double widthBox = 100;
@@ -391,7 +429,22 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
               ),
               child: const Text('Kirim Kwitansi'),
             ),
-          ),
+          )
+        else
+          Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: ElevatedButton(
+              onPressed: _kirimInvoiceSementara,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                minimumSize: Size(double.infinity, 42),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+              ),
+              child: Text('Kirim Invoice Sementara'),
+            ),
+          )
       ],
     );
   }
@@ -407,16 +460,27 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
           const SizedBox(
             height: 22.0,
           ),
-          if (widget.dataKunjungan!.isPaket)
-            const Text(
-              'Ringkasan tagihan paket',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
-            )
-          else
-            const Text(
-              'Ringkasan tagihan',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
-            ),
+          Row(
+            children: [
+              if (widget.dataKunjungan!.isPaket)
+                Expanded(
+                  child: const Text(
+                    'Ringkasan tagihan paket',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
+                  ),
+                )
+              else
+                Expanded(
+                  child: const Text(
+                    'Ringkasan tagihan',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
+                  ),
+                ),
+              CloseButtonWidget()
+            ],
+          ),
           const SizedBox(
             height: 22.0,
           ),
@@ -462,7 +526,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                 ),
               ),
             ),
-          if (_data.resepObatInjeksi!.isNotEmpty)
+          if (_data.obatInjeksi!.isNotEmpty || _data.obatInjeksiMr!.isNotEmpty)
             Detailtagihan(
               namaTagihan: const Text('Total Obat Injeksi'),
               tarifTagihan: SizedBox(
@@ -482,7 +546,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                 ),
               ),
             ),
-          if (_data.resepObatOral!.isNotEmpty)
+          if (_data.resep!.isNotEmpty || _data.resepMr!.isNotEmpty)
             Detailtagihan(
               namaTagihan: const Text('Total Resep'),
               tarifTagihan: SizedBox(
@@ -888,6 +952,31 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
             ),
           ),
       ],
+    );
+  }
+
+  Widget _streamKwitansiSementara(BuildContext context) {
+    return StreamBuilder<ApiResponse<KwitansiSementaraModel>>(
+      stream: _kwitansiSementaraBloc.kwitansiSementaraStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          switch (snapshot.data!.status) {
+            case Status.loading:
+              return LoadingKit();
+            case Status.error:
+              return ErrorDialog(
+                message: snapshot.data!.message,
+                onTap: () => Navigator.pop(context),
+              );
+            case Status.completed:
+              return SuccessDialog(
+                message: snapshot.data!.data!.message,
+                onTap: () => Navigator.pop(context, snapshot.data!.data!.data),
+              );
+          }
+        }
+        return const SizedBox();
+      },
     );
   }
 }

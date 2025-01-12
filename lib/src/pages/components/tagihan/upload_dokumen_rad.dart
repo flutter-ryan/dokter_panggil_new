@@ -6,6 +6,7 @@ import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/deskripsi_widget.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:dokter_panggil/src/pages/components/form_dokumen_rad.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/pdfview_widget.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
@@ -22,10 +23,10 @@ import 'package:path/path.dart' as p;
 class UploadDokumenRad extends StatefulWidget {
   const UploadDokumenRad({
     super.key,
-    this.idKunjungan,
+    this.idPengantar,
   });
 
-  final int? idKunjungan;
+  final int? idPengantar;
 
   @override
   State<UploadDokumenRad> createState() => _UploadDokumenRadState();
@@ -42,8 +43,31 @@ class _UploadDokumenRadState extends State<UploadDokumenRad> {
   }
 
   void _getDokumenRad() {
-    _dokumenRadBloc.idKunjunganSink.add(widget.idKunjungan!);
+    _dokumenRadBloc.idPengantarSink.add(widget.idPengantar!);
     _dokumenRadBloc.getDokumenRad();
+  }
+
+  void _showFormDokumen() {
+    showMaterialModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => FormDokumenRad(
+        idPengantar: widget.idPengantar,
+      ),
+    ).then((value) {
+      if (value != null) {
+        var dokumen = value as DokumenRad;
+        setState(() {
+          _dokumenRad = dokumen;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _dokumenRadBloc.dispose();
   }
 
   @override
@@ -62,7 +86,7 @@ class _UploadDokumenRadState extends State<UploadDokumenRad> {
             bottom: 22,
             right: 22,
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: _showFormDokumen,
               child: Icon(Icons.add_rounded),
             ),
           )
@@ -131,8 +155,6 @@ class _DokumenRadWidgetState extends State<DokumenRadWidget> {
   void _showMore(DokumenRad? doc) {
     showMaterialModalBottomSheet(
       context: context,
-      enableDrag: false,
-      isDismissible: false,
       builder: (context) => _buildMoreDialog(context),
     ).then((value) {
       if (value != null) {

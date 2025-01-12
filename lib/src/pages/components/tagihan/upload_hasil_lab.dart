@@ -24,10 +24,10 @@ import 'package:path/path.dart' as p;
 class UploadHasilLab extends StatefulWidget {
   const UploadHasilLab({
     super.key,
-    this.idKunjungan,
+    this.idPengantar,
   });
 
-  final int? idKunjungan;
+  final int? idPengantar;
 
   @override
   State<UploadHasilLab> createState() => _UploadHasilLabState();
@@ -44,7 +44,7 @@ class _UploadHasilLabState extends State<UploadHasilLab> {
   }
 
   void _getDokumenLab() {
-    _dokumenLabBloc.idKunjunganSink.add(widget.idKunjungan!);
+    _dokumenLabBloc.idPengantarSink.add(widget.idPengantar!);
     _dokumenLabBloc.getDokumenLab();
   }
 
@@ -53,7 +53,7 @@ class _UploadHasilLabState extends State<UploadHasilLab> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => FormDokumenLab(
-        idKunjungan: widget.idKunjungan,
+        idPengantar: widget.idPengantar,
       ),
     ).then((value) {
       if (value != null) {
@@ -158,8 +158,6 @@ class _DokumenLabWidgetState extends State<DokumenLabWidget> {
   void _showMore(DokumenLab? doc) {
     showMaterialModalBottomSheet(
       context: context,
-      enableDrag: false,
-      isDismissible: false,
       builder: (context) => _buildMoreDialog(context),
     ).then((value) {
       if (value != null) {

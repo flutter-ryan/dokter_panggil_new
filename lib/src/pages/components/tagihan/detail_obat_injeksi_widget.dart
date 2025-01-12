@@ -1,15 +1,17 @@
 import 'package:animate_icons/animate_icons.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_obat_injeksi_update_bloc.dart';
+import 'package:dokter_panggil/src/blocs/mr_eresep_bloc.dart';
 import 'package:dokter_panggil/src/models/kunjungan_obat_injeksi_update_model.dart';
 import 'package:dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:dokter_panggil/src/models/mr_eresep_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:dokter_panggil/src/pages/components/card_obat_injeksi.dart';
 import 'package:dokter_panggil/src/pages/components/card_tagihan.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/detail_bhp_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/resep_injeksi_widget.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
@@ -20,6 +22,8 @@ import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class DetailObatInjeksiWidget extends StatefulWidget {
   const DetailObatInjeksiWidget({
@@ -41,6 +45,7 @@ class DetailObatInjeksiWidget extends StatefulWidget {
 }
 
 class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
+  final _mrEresepBloc = MrEresepBloc();
   final _kunjunganObatInjeksiUpdateBloc = KunjunganObatInjeksiUpdateBloc();
   final _animateIconController = AnimateIconController();
   final _scrollCon = ScrollController();
@@ -52,7 +57,8 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
   final _jumlah = TextEditingController();
   final _alasan = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  List<ResepObatInjeksi> _data = [];
+  List<KunjunganObatInjeksi> _data = [];
+  List<ObatInjeksiMr> _dataMr = [];
   int? _selectedId;
   int _hargaModal = 0;
   int _tarifAplikasi = 0;
@@ -60,8 +66,11 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
   @override
   void initState() {
     super.initState();
-    if (widget.data.resepObatInjeksi != null) {
-      _data = widget.data.resepObatInjeksi!;
+    if (widget.data.obatInjeksiMr!.isNotEmpty) {
+      _dataMr = widget.data.obatInjeksiMr!;
+    }
+    if (widget.data.obatInjeksi!.isNotEmpty) {
+      _data = widget.data.obatInjeksi!;
     }
   }
 
@@ -74,24 +83,29 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
     return false;
   }
 
-  void _edit(BuildContext context, ResepObatInjeksi resep) {
-    _kunjunganObatInjeksiUpdateBloc.idSink.add(resep.id!);
-    // _selectedId = obat.barang!.id;
-    // _namaBarang.text = '${obat.barang!.namaBarang}';
-    // _jumlah.text = '${obat.jumlah}';
-    // _tarifAplikasi = obat.tarifAplikasi!;
-    // _hargaModal = obat.hargaModal!;
-    showBarModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: _editFormObatInjeksi(resep),
-        );
-      },
-      duration: const Duration(milliseconds: 500),
-    );
+  void _edit(BuildContext context, dynamic resep) {
+    if (widget.data.isEmr == 0) {
+      final obat = resep as KunjunganObatInjeksi;
+      _kunjunganObatInjeksiUpdateBloc.idSink.add(obat.id!);
+      _selectedId = obat.id;
+      _namaBarang.text = '${obat.barang!.namaBarang}';
+      _jumlah.text = '${obat.jumlah}';
+      _tarifAplikasi = obat.tarifAplikasi!;
+      _hargaModal = obat.hargaModal!;
+      showBarModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: _editFormObatInjeksi(resep),
+          );
+        },
+        duration: const Duration(milliseconds: 500),
+      );
+    } else {
+      resep as ObatInjeksiMr;
+    }
   }
 
   void _updateKunjunganObatInjeksi() {
@@ -117,14 +131,14 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
       animationType: DialogTransitionType.slideFromBottomFade,
     ).then((value) {
       if (value != null) {
-        var data = value as ResepObatInjeksi;
+        var data = value as ObatInjeksiMr;
         _namaBarang.clear();
         _jumlah.clear();
         _alasan.clear();
         Future.delayed(const Duration(milliseconds: 500), () {
           if (!mounted) return;
           Navigator.pop(context);
-          _data![_data!.indexWhere((e) => e.id == data.id)] = data;
+          _dataMr[_dataMr.indexWhere((e) => e.id == data.id)] = data;
           setState(() {});
         });
       }
@@ -152,16 +166,43 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
     });
   }
 
-  void _eresepInjeksi() {
-    showBarModalBottomSheet(
+  void _eresep(ObatInjeksiMr? resep) {
+    showMaterialModalBottomSheet(
       context: context,
-      builder: (context) => _buildEresepInjeksiWidget(context),
-    );
+      builder: (context) {
+        return _eresepInjeksiWidget(context, resep);
+      },
+    ).then((value) {
+      if (value != null) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _mrEresepBloc.idResepSink.add(resep!.id!);
+          _mrEresepBloc.getResepInjeksi();
+          _showStreamEresep();
+        });
+      }
+    });
+  }
+
+  void _showStreamEresep() {
+    showAnimatedDialog(
+      context: context,
+      builder: (context) {
+        return _streamEresep();
+      },
+      animationType: DialogTransitionType.slideFromBottomFade,
+      duration: const Duration(milliseconds: 500),
+    ).then((value) async {
+      if (value != null) {
+        var data = value as MrEresep;
+        await launchUrl(Uri.parse(data.url!));
+      }
+    });
   }
 
   @override
   void dispose() {
     _kunjunganObatInjeksiUpdateBloc.dispose();
+    _mrEresepBloc.dispose();
     _namaBarang.dispose();
     _jumlah.dispose();
     _alasan.dispose();
@@ -170,6 +211,9 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.data.isEmr == 0) {
+      return _oldObatInjeksiWidget(context);
+    }
     return Cardtagihan(
       title: 'Obat Injeksi',
       subTotal: Text(
@@ -178,7 +222,7 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
       ),
       tiles: ListTile.divideTiles(
         context: context,
-        tiles: _data
+        tiles: _dataMr
             .map((resep) => Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -201,16 +245,18 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
                               text: TextSpan(
                                   text: '${resep.dokter} |',
                                   style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                   children: [
                                     TextSpan(
-                                        text: ' E-Resep',
-                                        style:
-                                            TextStyle(color: Colors.blueAccent),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {}),
+                                      text: ' E-Resep',
+                                      style:
+                                          TextStyle(color: Colors.blueAccent),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => _eresep(resep),
+                                    ),
                                   ]),
                             ),
                             ...resep.obatInjeksi!.map((obat) => TileObatWidget(
@@ -230,7 +276,7 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
     );
   }
 
-  Widget _editFormObatInjeksi(ResepObatInjeksi obat) {
+  Widget _editFormObatInjeksi(KunjunganObatInjeksi obat) {
     return Form(
       key: _formKey,
       child: Column(
@@ -370,66 +416,144 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
     );
   }
 
-  Widget _buildEresepInjeksiWidget(BuildContext context) {
-    return SizedBox(
-      child: DefaultTabController(
-        length: widget.data.dokter!.length,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(22.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'E-Resep Obat Injeksi',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  CircleAvatar(
-                    backgroundColor: Colors.grey[100],
-                    foregroundColor: Colors.grey[400],
-                    child: CloseButton(
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            TabBar(
-              labelColor: Colors.black,
-              isScrollable: true,
-              unselectedLabelColor: Colors.grey[400],
-              indicatorColor: kPrimaryColor,
-              tabs: widget.data.dokter!
-                  .map(
-                    (dokter) => Tab(
-                      child: RichText(
-                        text: TextSpan(
-                          text: '${dokter.dokter}',
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-            Expanded(
-                child: TabBarView(
-                    children: widget.data.dokter!
-                        .map(
-                          (dokter) => ResepInjeksiWidget(
-                            dokter: dokter,
-                            idKunjungan: widget.data.id,
-                          ),
-                        )
-                        .toList()))
-          ],
-        ),
+  Widget _oldObatInjeksiWidget(BuildContext context) {
+    return CardObatInjeksi(
+      title: 'Obat Injeksi',
+      subTotal: Text(
+        _rupiah.format(widget.data.totalObatInjeksi),
+        style: const TextStyle(fontWeight: FontWeight.w600),
       ),
+      tiles: Column(
+        children: ListTile.divideTiles(
+          context: context,
+          tiles: _data
+              .map(
+                (obat) => ListTile(
+                  onTap: () => widget.type != 'view' && widget.role == 99
+                      ? _edit(context, obat)
+                      : null,
+                  dense: true,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
+                  horizontalTitleGap: 0,
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(child: Text('${obat.barang!.namaBarang}')),
+                      if (widget.type != 'view' && widget.role == 99)
+                        const SizedBox(
+                          width: 12,
+                        ),
+                      if (widget.type != 'view' && widget.role == 99)
+                        const Icon(
+                          Icons.edit_note_rounded,
+                          size: 22.0,
+                          color: Colors.blue,
+                        )
+                    ],
+                  ),
+                  subtitle: Text(
+                      '${obat.jumlah} x ${_rupiahNo.format(obat.hargaModal! + obat.tarifAplikasi!)}'),
+                  trailing: Text(
+                    _rupiah.format(obat.tarif),
+                  ),
+                ),
+              )
+              .toList(),
+        ).toList(),
+      ),
+    );
+  }
+
+  Widget _streamEresep() {
+    return StreamBuilder<ApiResponse<MrEresepModel>>(
+      stream: _mrEresepBloc.eresepStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          switch (snapshot.data!.status) {
+            case Status.loading:
+              return const LoadingKit(
+                color: Colors.white,
+              );
+            case Status.error:
+              return ErrorDialog(
+                message: snapshot.data!.message,
+              );
+            case Status.completed:
+              return SuccessDialog(
+                message: snapshot.data!.data!.message,
+                onTap: () => Navigator.pop(context, snapshot.data!.data!.data),
+              );
+          }
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget _eresepInjeksiWidget(BuildContext context, ObatInjeksiMr? resep) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'E-Resep Obat Injeksi',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+              ),
+              CloseButton(
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              visualDensity: VisualDensity.compact,
+              title: Text(
+                'Dokter',
+                style: TextStyle(fontSize: 12, color: Colors.grey[400]),
+              ),
+              subtitle: Text('${resep!.dokter}'),
+            ),
+          ),
+        ),
+        ...resep.obatInjeksi!.map(
+          (obatInjeksi) => ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+            title: Text('${obatInjeksi.barang!.namaBarang}'),
+            subtitle: Text('${obatInjeksi.aturanPakai}'),
+            trailing: Text('${obatInjeksi.jumlah} Pcs'),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 22, vertical: 18),
+          child: ElevatedButton(
+            onPressed: () => Navigator.pop(context, resep),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32),
+              ),
+              minimumSize: Size(double.infinity, 42),
+            ),
+            child: Text('Kirim E-Resep'),
+          ),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).padding.bottom,
+        )
+      ],
     );
   }
 }

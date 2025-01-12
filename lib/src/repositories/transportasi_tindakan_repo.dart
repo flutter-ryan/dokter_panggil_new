@@ -3,16 +3,17 @@ import 'package:dokter_panggil/src/repositories/dio_helper.dart';
 
 class TransportasiTindakanRepo {
   Future<ResponseTransportasiTindakanModel> saveTransportasiTindakan(
-      TransportasiTindakanModel transportasiTindakanModel, int id) async {
-    final response = await dio.post('/v1/kunjungan/transportasi/tindakan/$id',
+      TransportasiTindakanModel transportasiTindakanModel,
+      int idKunjungan) async {
+    final response = await dio.post('/v2/mr/tindakan/transportasi/$idKunjungan',
         transportasiTindakanModelToJson(transportasiTindakanModel));
     return responseTransportasiTindakanModelFromJson(response);
   }
 
   Future<ResponseTransportasiTindakanModel> deleteTransportasiTindakan(
       int idTransportTindakan) async {
-    final response = await dio
-        .delete('/v1/kunjungan/transportasi/tindakan/$idTransportTindakan');
+    final response =
+        await dio.delete('/v2/mr/tindakan/transportasi/$idTransportTindakan');
     return responseTransportasiTindakanModelFromJson(response);
   }
 }

@@ -1,10 +1,10 @@
 import 'package:dokter_panggil/src/blocs/master_mitra_lab_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_tindakan_lab_bloc.dart';
-import 'package:dokter_panggil/src/blocs/transaksi_tindakan_lab_bloc.dart';
+import 'package:dokter_panggil/src/blocs/tagihan_tindakan_lab_save_bloc.dart';
 import 'package:dokter_panggil/src/models/master_mitra_lab_model.dart';
 import 'package:dokter_panggil/src/models/master_tindakan_lab_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/transaksi_tindakan_lab_model.dart';
+import 'package:dokter_panggil/src/models/tagihan_tindakan_lab_save_model.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
@@ -22,24 +22,25 @@ class TransaksiTindakanLab extends StatefulWidget {
   const TransaksiTindakanLab({
     super.key,
     required this.idKunjungan,
+    this.idPengantar,
     required this.dataLab,
   });
 
   final int idKunjungan;
   final List<TindakanLab> dataLab;
+  final int? idPengantar;
 
   @override
   State<TransaksiTindakanLab> createState() => _TransaksiTindakanLabState();
 }
 
 class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
-  final TransaksiTindakanLabBloc _transaksiTindakanLabBloc =
-      TransaksiTindakanLabBloc();
-  final MasterMitraLabBloc _masterMitraLabBloc = MasterMitraLabBloc();
+  final _tagihanTindakanLabSaveBloc = TagihanTindakanLabSaveBloc();
+  final _masterMitraLabBloc = MasterMitraLabBloc();
   final _rupiah =
       NumberFormat.currency(locale: 'id', symbol: 'Rp. ', decimalDigits: 0);
   List<TindakanLab> _data = [];
-  List<MasterTindakanLab> _finalSelectedData = [];
+  List<MasterTindakanLab> _selectedData = [];
 
   @override
   void initState() {
@@ -52,17 +53,16 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
     showBarModalBottomSheet(
       context: context,
       isDismissible: false,
-      enableDrag: false,
       builder: (context) {
         return _streamListMitraLab(context);
       },
-      duration: const Duration(milliseconds: 500),
     ).then((value) {
       if (value != null) {
-        var data = value as List<MasterTindakanLab>;
-        _finalSelectedData = data;
+        final data = value as List<MasterTindakanLab>;
+        setState(() {
+          _selectedData = data;
+        });
       }
-      setState(() {});
     });
   }
 
@@ -77,14 +77,19 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
   }
 
   void _simpan() {
-    if (_finalSelectedData.isNotEmpty) {
-      List<int> idSelected = [];
-      for (var dataSelected in _finalSelectedData) {
-        idSelected.add(dataSelected.id!);
+    if (_selectedData.isNotEmpty) {
+      List<TindakanLabRequest> selected = [];
+      for (final tindakanLab in _selectedData) {
+        selected.add(
+          TindakanLabRequest(
+              id: tindakanLab.id!,
+              hargaModal: tindakanLab.hargaModal!,
+              tarifAplikasi: tindakanLab.tarifAplikasi!),
+        );
       }
-      _transaksiTindakanLabBloc.idKunjunganSink.add(widget.idKunjungan);
-      _transaksiTindakanLabBloc.idTindakanSink.add(idSelected);
-      _transaksiTindakanLabBloc.saveTransaksiTindakanLab();
+      _tagihanTindakanLabSaveBloc.idPengantarSink.add(widget.idPengantar!);
+      _tagihanTindakanLabSaveBloc.tindakanLabSink.add(selected);
+      _tagihanTindakanLabSaveBloc.saveTagihanTindakanLab();
       _showStreamSimpanTransaksi();
     }
   }
@@ -95,12 +100,11 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
       builder: (context) {
         return _streamSimpanTransaksi(context);
       },
-      duration: const Duration(milliseconds: 500),
       animationType: DialogTransitionType.slideFromBottomFade,
     ).then((value) {
       if (value != null) {
         var data = value as DetailKunjungan;
-        Future.delayed(const Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 500), () {
           if (!mounted) return;
           Navigator.pop(context, data);
         });
@@ -111,7 +115,7 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
   @override
   void dispose() {
     _masterMitraLabBloc.dispose();
-    _transaksiTindakanLabBloc.dispose();
+    _tagihanTindakanLabSaveBloc.dispose();
     super.dispose();
   }
 
@@ -124,6 +128,7 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
         title: const Text('Transaksi Laboratorium'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: _detail,
@@ -141,7 +146,7 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
   Widget _formTransaksiLab(BuildContext context) {
     return Column(
       children: [
-        if (_finalSelectedData.isEmpty)
+        if (_selectedData.isEmpty)
           const Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -164,39 +169,46 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
           )
         else
           _formTransaksiTindakanLab(context),
-        Container(
+        Divider(
+          color: Colors.grey[400],
+          height: 0,
+        ),
+        Padding(
           padding: const EdgeInsets.all(18.0),
-          width: double.infinity,
-          decoration: const BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(
-                color: Colors.black12, blurRadius: 6, offset: Offset(0.0, -2.0))
-          ]),
           child: Row(
             children: [
-              ElevatedButton(
-                onPressed: _listTindakanLab,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(0.0, 48.0),
-                  backgroundColor: Colors.grey[200],
-                  foregroundColor: Colors.black,
+              CircleAvatar(
+                radius: 26,
+                backgroundColor: Colors.grey[200],
+                child: IconButton(
+                  onPressed: _listTindakanLab,
+                  iconSize: 28,
+                  color: Colors.blueAccent,
+                  icon: Icon(Icons.add_rounded),
                 ),
-                child: const Icon(Icons.add_rounded),
               ),
               const SizedBox(
                 width: 15.0,
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: _finalSelectedData.isEmpty ? null : _simpan,
+                  onPressed: _selectedData.isEmpty ? null : _simpan,
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0.0, 48.0),
-                    backgroundColor: kPrimaryColor,
-                  ),
+                      minimumSize: const Size(0.0, 48.0),
+                      backgroundColor: kPrimaryColor,
+                      disabledForegroundColor: Colors.grey[400],
+                      disabledBackgroundColor: Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
+                      )),
                   child: const Text('SIMPAN TRANSAKSI'),
                 ),
               ),
             ],
           ),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).padding.bottom,
         )
       ],
     );
@@ -204,15 +216,26 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
 
   Widget _streamListMitraLab(BuildContext context) {
     return SizedBox(
-      height: SizeConfig.blockSizeVertical * 85,
+      height: SizeConfig.blockSizeVertical * 95,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(22.0),
-            child: Text(
-              'List Tindakan Lab',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 22.0, vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'List Tindakan Lab',
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                CloseButton(
+                  onPressed: () => Navigator.pop(context),
+                  color: Colors.grey,
+                ),
+              ],
             ),
           ),
           const Divider(
@@ -248,7 +271,7 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
             case Status.completed:
               return TabMitraTindakanLab(
                 dataMitra: snapshot.data!.data!.data,
-                selectedData: _finalSelectedData,
+                selectedData: _selectedData,
               );
           }
         }
@@ -300,19 +323,26 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
   Widget _formTransaksiTindakanLab(BuildContext context) {
     return Expanded(
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 18.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 18.0),
         itemBuilder: (context, i) {
-          var data = _finalSelectedData[i];
+          var data = _selectedData[i];
           return ListTile(
             title: Text('${data.namaTindakanLab}'),
-            subtitle: Text('${data.mitra!.namaMitra}'),
-            trailing: Text(
-              _rupiah.format(data.hargaJual),
-              style: const TextStyle(fontWeight: FontWeight.w600),
+            subtitle: Text(
+                '${data.mitra!.namaMitra} | ${_rupiah.format(data.hargaJual)}'),
+            trailing: IconButton(
+              onPressed: () {
+                setState(() {
+                  _selectedData
+                      .removeWhere((selected) => selected.id == data.id);
+                });
+              },
+              color: kPrimaryColor,
+              icon: Icon(Icons.delete_outline_outlined),
             ),
           );
         },
-        itemCount: _finalSelectedData.length,
+        itemCount: _selectedData.length,
         separatorBuilder: (context, i) => const Divider(
           height: 0.0,
         ),
@@ -321,8 +351,8 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
   }
 
   Widget _streamSimpanTransaksi(BuildContext context) {
-    return StreamBuilder<ApiResponse<ResponseTransaksiTindakanLabModel>>(
-        stream: _transaksiTindakanLabBloc.transaksiTindakanLabStream,
+    return StreamBuilder<ApiResponse<TagihanTindakanLabSaveModel>>(
+        stream: _tagihanTindakanLabSaveBloc.tagihanTindakanLabStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             switch (snapshot.data!.status) {
@@ -369,7 +399,9 @@ class _TabMitraTindakanLabState extends State<TabMitraTindakanLab> {
   }
 
   void _selectData(MasterTindakanLab data) {
-    if (_selectedData.where((e) => e.id == data.id).isEmpty) {
+    if (_selectedData
+        .where((tindakanLab) => tindakanLab.id == data.id)
+        .isEmpty) {
       setState(() {
         _selectedData.add(data);
       });
@@ -404,8 +436,8 @@ class _TabMitraTindakanLabState extends State<TabMitraTindakanLab> {
             child: TabBarView(
               children: widget.dataMitra!
                   .map(
-                    (e) => StreamListTindakanLab(
-                      idMitra: e.id!,
+                    (mitra) => StreamListTindakanLab(
+                      idMitra: mitra.id!,
                       selectedData: _selectedData,
                       selectData: (MasterTindakanLab data) => _selectData(data),
                     ),
@@ -417,18 +449,19 @@ class _TabMitraTindakanLabState extends State<TabMitraTindakanLab> {
             width: double.infinity,
             padding:
                 const EdgeInsets.symmetric(horizontal: 22.0, vertical: 18.0),
-            decoration: const BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                offset: Offset(0.0, -2.0),
-                blurRadius: 4,
-              ),
-            ]),
+            decoration: BoxDecoration(
+              border:
+                  Border(top: BorderSide(color: Colors.grey[400]!, width: 0.5)),
+              color: Colors.white,
+            ),
             child: ElevatedButton(
               onPressed: () => Navigator.pop(context, _selectedData),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 45.0),
                 backgroundColor: kPrimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
               ),
               child: Text('Pilih (${_selectedData.length}) tindakan'),
             ),

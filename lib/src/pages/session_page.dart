@@ -1,8 +1,6 @@
 import 'package:dokter_panggil/src/blocs/auth_bloc.dart';
 import 'package:dokter_panggil/src/pages/login_page.dart';
 import 'package:dokter_panggil/src/pages/root_page.dart';
-import 'package:dokter_panggil/src/source/local_notification_service.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -20,13 +18,6 @@ class _SessionpageState extends State<Sessionpage> {
   initState() {
     super.initState();
     authbloc.restoreSession();
-    _getMessage();
-  }
-
-  void _getMessage() async {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      LocalNotificationService.showNotification(message);
-    });
   }
 
   Future<bool> willPop(bool didPop) {

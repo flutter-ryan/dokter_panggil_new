@@ -3,9 +3,8 @@ import 'package:dokter_panggil/src/repositories/dio_helper.dart';
 
 class DokumenLabSaveRepo {
   Future<DokumenLabSaveModel> saveDokumenLab(
-      DokumenLabRequestModel dokumenLabRequestModel, int idKunjungan) async {
-    final response = await dio.post(
-        '/v2/mr/pengkajian-dokter/tindakan-lab/hasil-lab/$idKunjungan',
+      DokumenLabRequestModel dokumenLabRequestModel, int idPengantar) async {
+    final response = await dio.post('/v2/mr/laboratorium/dokumen/$idPengantar',
         dokumenLabRequestModelToJson(dokumenLabRequestModel));
     return dokumenLabSaveModelFromJson(response);
   }

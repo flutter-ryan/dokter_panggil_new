@@ -54,8 +54,9 @@ class _CardTagihanResepState extends State<CardTagihanResep> {
           const SizedBox(
             height: 12,
           ),
-          const Divider(
+          Divider(
             height: 0.0,
+            color: Colors.grey[400],
           ),
           const SizedBox(
             height: 12,
@@ -66,7 +67,9 @@ class _CardTagihanResepState extends State<CardTagihanResep> {
             ),
             child: widget.tiles ?? const SizedBox(),
           ),
-          const Divider(),
+          Divider(
+            color: Colors.grey[400],
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 18,

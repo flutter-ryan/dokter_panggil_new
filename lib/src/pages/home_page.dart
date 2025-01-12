@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/blocs/auth_bloc.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_bloc.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_final_bloc.dart';
@@ -11,13 +13,17 @@ import 'package:dokter_panggil/src/pages/components/detail_layanan_widget.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/loading_card_vert_layanan.dart';
 import 'package:dokter_panggil/src/pages/kunjungan_page.dart';
+import 'package:dokter_panggil/src/pages/notifikasi_page.dart';
 import 'package:dokter_panggil/src/pages/pasien/detail_layanan_page.dart';
 import 'package:dokter_panggil/src/pages/pasien/pencarian_pasien_page.dart';
 import 'package:dokter_panggil/src/pages/current_user_page.dart';
 import 'package:dokter_panggil/src/pages/riwayat_kunjungan_page.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
+import 'package:dokter_panggil/src/source/local_notification_service.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
@@ -49,6 +55,90 @@ class _HomepageState extends State<Homepage> {
     super.initState();
     _kunjunganBloc.kunjunganPasien();
     _kunjunganFinalBloc.kunjunganFinal();
+    _getMessage();
+    _handleMessage();
+  }
+
+  void _getKunjungan() {
+    _kunjunganFinalBloc.kunjunganFinal();
+    _kunjunganBloc.kunjunganPasien();
+    setState(() {});
+  }
+
+  void _getMessage() async {
+    await FirebaseMessaging.instance.subscribeToTopic("pengumuman");
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (Platform.isAndroid) {
+        LocalNotificationService.showNotification(message);
+      }
+    });
+  }
+
+  void _handleMessage() async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      _messageNavigation(initialMessage);
+    }
+    FirebaseMessaging.onMessageOpenedApp.listen(_messageNavigation);
+  }
+
+  void _messageNavigation(RemoteMessage message) {
+    pushScreen(
+      context,
+      screen: DetailLayananPage(
+        id: int.parse(message.data['id']),
+        type: 'create',
+        role: widget.role,
+      ),
+      pageTransitionAnimation: PageTransitionAnimation.slideUp,
+      withNavBar: false,
+    ).then((value) {
+      if (value != null) {
+        var data = value as HomeAction;
+        _getKunjungan();
+        if (data.type == 'final') {
+          _kirimKwitansi(data.data!);
+        }
+      }
+    });
+  }
+
+  void _kirimKwitansi(KwitansiSimpan? data) {
+    showAnimatedDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmDialogWidget(
+          onConfirm: () => Navigator.pop(context, data),
+          message: 'Anda ingin mengirim kwitansi kepada pasien?',
+          labelConfirm: 'Ya, Kirim',
+        );
+      },
+      animationType: DialogTransitionType.slideFromBottomFade,
+      duration: const Duration(milliseconds: 500),
+    ).then((value) async {
+      if (value != null) {
+        var data = value as KwitansiSimpan;
+        var tlp = data.pasien!.nomorTelepon;
+        String text =
+            'Hai pasien ${data.pasien!.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu';
+        await WhatsappShare.share(
+          text: text,
+          linkUrl: Uri.parse('${data.url}').toString(),
+          phone: '$tlp',
+        );
+      }
+    });
   }
 
   Future<void> _showVersion() async {
@@ -194,6 +284,18 @@ class _HomepageState extends State<Homepage> {
                       color: Colors.white,
                       icon: const Icon(Icons.admin_panel_settings_outlined),
                     ),
+                  IconButton(
+                    onPressed: () => pushScreen(
+                      context,
+                      screen: NotifikasiPage(
+                        role: widget.role,
+                      ),
+                      pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                      withNavBar: false,
+                    ),
+                    color: Colors.white,
+                    icon: const Icon(Icons.notifications_none_rounded),
+                  ),
                 ],
               ),
             ),
@@ -420,11 +522,7 @@ class _HomepageState extends State<Homepage> {
             case Status.completed:
               return KunjunganPasien(
                 data: snapshot.data!.data!.kunjungan!,
-                reload: () {
-                  _kunjunganFinalBloc.kunjunganFinal();
-                  _kunjunganBloc.kunjunganPasien();
-                  setState(() {});
-                },
+                reload: _getKunjungan,
                 role: widget.role,
               );
           }
@@ -534,6 +632,33 @@ class _KunjunganPasienState extends State<KunjunganPasien> {
     _pasien = widget.data;
   }
 
+  void _kirimKwitansi(KwitansiSimpan? data) {
+    showAnimatedDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmDialogWidget(
+          onConfirm: () => Navigator.pop(context, data),
+          message: 'Anda ingin mengirim kwitansi kepada pasien?',
+          labelConfirm: 'Ya, Kirim',
+        );
+      },
+      animationType: DialogTransitionType.slideFromBottomFade,
+      duration: const Duration(milliseconds: 500),
+    ).then((value) async {
+      if (value != null) {
+        var data = value as KwitansiSimpan;
+        var tlp = data.pasien!.nomorTelepon;
+        String text =
+            'Hai pasien ${data.pasien!.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu';
+        await WhatsappShare.share(
+          text: text,
+          linkUrl: Uri.parse('${data.url}').toString(),
+          phone: '$tlp',
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -575,6 +700,7 @@ class _KunjunganPasienState extends State<KunjunganPasien> {
                   reload: widget.reload!,
                   type: widget.type,
                   role: widget.role,
+                  kwitansiSimpan: _kirimKwitansi,
                 );
               },
               separatorBuilder: (context, i) => const SizedBox(
@@ -595,45 +721,20 @@ class CardLayananVertPasien extends StatefulWidget {
     required this.reload,
     this.type = 'create',
     this.role,
+    this.kwitansiSimpan,
   });
 
   final Kunjungan data;
   final VoidCallback reload;
   final String type;
   final int? role;
+  final Function(KwitansiSimpan? kwitansi)? kwitansiSimpan;
 
   @override
   State<CardLayananVertPasien> createState() => _CardLayananVertPasienState();
 }
 
 class _CardLayananVertPasienState extends State<CardLayananVertPasien> {
-  void _kirimKwitansi(KwitansiSimpan data) {
-    showAnimatedDialog(
-      context: context,
-      builder: (context) {
-        return ConfirmDialogWidget(
-          onConfirm: () => Navigator.pop(context, data),
-          message: 'Anda ingin mengirim kwitansi kepada pasien?',
-          labelConfirm: 'Ya, Kirim',
-        );
-      },
-      animationType: DialogTransitionType.slideFromBottomFade,
-      duration: const Duration(milliseconds: 500),
-    ).then((value) async {
-      if (value != null) {
-        var data = value as KwitansiSimpan;
-        var tlp = data.pasien!.nomorTelepon;
-        String text =
-            'Hai pasien ${data.pasien!.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu';
-        await WhatsappShare.share(
-          text: text,
-          linkUrl: Uri.parse('${data.url}').toString(),
-          phone: '$tlp',
-        );
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -688,33 +789,32 @@ class _CardLayananVertPasienState extends State<CardLayananVertPasien> {
               ),
             ],
           ),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => pushScreen(
-                context,
-                screen: DetailLayananPage(
-                  id: widget.data.id!,
-                  type: widget.type,
-                  role: widget.role,
-                ),
-                pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                withNavBar: false,
-              ).then((value) {
-                if (value != null) {
-                  var data = value as HomeAction;
-                  widget.reload();
-                  if (data.type == 'final') {
-                    _kirimKwitansi(data.data!);
-                  }
-                }
-              }),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: kPrimaryColor,
+          ElevatedButton(
+            onPressed: () => pushScreen(
+              context,
+              screen: DetailLayananPage(
+                id: widget.data.id!,
+                type: widget.type,
+                role: widget.role,
               ),
-              child: const Text('Detail'),
+              pageTransitionAnimation: PageTransitionAnimation.slideUp,
+              withNavBar: false,
+            ).then((value) {
+              if (value != null) {
+                var data = value as HomeAction;
+                widget.reload();
+                if (data.type == 'final') {
+                  widget.kwitansiSimpan!(data.data!);
+                }
+              }
+            }),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kPrimaryColor,
+              minimumSize: Size(double.infinity, 42),
+              visualDensity: VisualDensity.compact,
             ),
-          )
+            child: const Text('Detail'),
+          ),
         ],
       ),
     );

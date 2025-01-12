@@ -310,8 +310,8 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                       _data = data;
                     }),
                   ),
-                if (_data!.bhp!.isNotEmpty)
-                  DetailBhp(
+                if (_data!.bhp!.isNotEmpty || _data!.bhpMr!.isNotEmpty)
+                  DetailBhpWidget(
                     data: _data!,
                     type: widget.type,
                     role: widget.role,
@@ -321,7 +321,8 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                       });
                     },
                   ),
-                if (_data!.resepObatInjeksi!.isNotEmpty)
+                if (_data!.obatInjeksi!.isNotEmpty ||
+                    _data!.obatInjeksiMr!.isNotEmpty)
                   DetailObatInjeksiWidget(
                     data: _data!,
                     type: widget.type,
@@ -332,7 +333,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                       });
                     },
                   ),
-                if (_data!.resepObatOral!.isNotEmpty)
+                if (_data!.resepMr!.isNotEmpty || _data!.resep!.isNotEmpty)
                   DetailTagihanResepWidget(
                     data: _data!,
                     type: widget.type,
@@ -352,7 +353,8 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                       });
                     },
                   ),
-                if (_data!.tindakanLab!.isNotEmpty)
+                if (_data!.tindakanLab!.isNotEmpty ||
+                    _data!.pengantarLabMr!.isNotEmpty)
                   NewDetailTagihanLabWidget(
                     data: _data!,
                     type: widget.type,
@@ -362,7 +364,8 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                       });
                     },
                   ),
-                if (_data!.tindakanRad!.isNotEmpty)
+                if (_data!.tindakanRad!.isNotEmpty ||
+                    _data!.pengantarRadMr!.isNotEmpty)
                   NewDetailTagihanRadWidget(
                     data: _data!,
                     type: widget.type,

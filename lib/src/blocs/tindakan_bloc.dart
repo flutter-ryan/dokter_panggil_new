@@ -20,6 +20,7 @@ class TindakanBloc {
   final BehaviorSubject<bool> _transportasi = BehaviorSubject.seeded(false);
   final BehaviorSubject<bool> _gojek = BehaviorSubject.seeded(false);
   final BehaviorSubject<int?> _idGroup = BehaviorSubject.seeded(null);
+  final BehaviorSubject<int> _idKategori = BehaviorSubject();
   StreamSink<int> get idSink => _id.sink;
   StreamSink<String> get tindakanSink => _tindakan.sink;
   StreamSink<int> get tarifTindakanSink => _tarifTindakan.sink;
@@ -28,6 +29,7 @@ class TindakanBloc {
   StreamSink<bool> get transportasiSink => _transportasi.sink;
   StreamSink<bool> get gojekSink => _gojek.sink;
   StreamSink<int?> get idGroupSink => _idGroup.sink;
+  StreamSink<int> get idKategoriSink => _idKategori.sink;
   StreamSink<ApiResponse<ResponseTindakanModel>> get masterTindakanSink =>
       _streamMasterTindakan!.sink;
   Stream<ApiResponse<ResponseTindakanModel>> get masterTindakanStream =>
@@ -43,6 +45,7 @@ class TindakanBloc {
     final transportasi = _transportasi.value;
     final gojek = _gojek.value;
     final idGroup = _idGroup.value;
+    final idKategori = _idKategori.value;
     masterTindakanSink.add(ApiResponse.loading('Memuat...'));
     TindakanModel tindakanModel = TindakanModel(
       tindakan: tindakan,
@@ -52,6 +55,7 @@ class TindakanBloc {
       transportasi: transportasi,
       gojek: gojek,
       idGroup: idGroup,
+      idKategori: idKategori,
     );
 
     try {
@@ -75,6 +79,7 @@ class TindakanBloc {
     final transportasi = _transportasi.value;
     final gojek = _gojek.value;
     final idGroup = !_idGroup.hasValue ? null : _idGroup.value;
+    final idKategori = _idKategori.value;
     masterTindakanSink.add(ApiResponse.loading('Memuat...'));
     TindakanModel tindakanModel = TindakanModel(
       tindakan: tindakan,
@@ -84,6 +89,7 @@ class TindakanBloc {
       transportasi: transportasi,
       gojek: gojek,
       idGroup: idGroup,
+      idKategori: idKategori,
     );
     try {
       final res = await _repoUpdate.updateTindakan(id, tindakanModel);
@@ -119,5 +125,6 @@ class TindakanBloc {
     _transportasi.close();
     _gojek.close();
     _id.close();
+    _idKategori.close();
   }
 }

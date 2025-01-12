@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/pages/splash_page.dart';
 import 'package:dokter_panggil/src/source/local_notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +12,9 @@ import 'package:google_fonts/google_fonts.dart';
 @pragma('vm:entry-point')
 Future<void> _messageBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  LocalNotificationService.showNotification(message);
+  if (Platform.isAndroid) {
+    LocalNotificationService.showNotification(message);
+  }
 }
 
 void main() async {

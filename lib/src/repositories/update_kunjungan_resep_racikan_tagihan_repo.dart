@@ -3,10 +3,10 @@ import 'package:dokter_panggil/src/repositories/dio_helper.dart';
 
 class UpdateKunjunganResepRacikanTagihanRepo {
   Future<ResponseUpdateKunjunganResepTagihanModel> updateTagihanResepRacikan(
-      int? id,
+      int? idTagihanRacikan,
       UpdateKunjunganResepTagihanModel updateKunjunganResepTagihanModel) async {
     final response = await dio.put(
-        '/v1/kunjungan/tagihan-resep-racikan/$id',
+        '/v2/mr/resep-racikan/tagihan/$idTagihanRacikan',
         updateKunjunganResepTagihanModelToJson(
             updateKunjunganResepTagihanModel));
     return responseUpdateKunjunganResepTagihanModelFromJson(response);

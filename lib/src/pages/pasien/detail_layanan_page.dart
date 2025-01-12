@@ -30,7 +30,6 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
   @override
   void initState() {
     super.initState();
-    print('role: ${widget.role}');
     _pasienKunjunganDetailBloc.idKunjunganSink.add(widget.id);
     _pasienKunjunganDetailBloc.kunjunganDetail();
   }

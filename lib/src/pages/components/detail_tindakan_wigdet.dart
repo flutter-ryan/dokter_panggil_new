@@ -180,6 +180,9 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.data.isEmr == 0) {
+      return _oldCardTagihan(context);
+    }
     return Cardtagihan(
       title: 'Tindakan',
       tiles: widget.data.tindakan!
@@ -394,6 +397,113 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
       },
     );
   }
+
+  Widget _oldCardTagihan(BuildContext context) {
+    return Cardtagihan(
+      title: 'Tindakan',
+      tiles: widget.data.tindakan!
+          .map(
+            (tindakan) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Detailtagihan(
+                  onTap: widget.type != 'view' && widget.role == 99
+                      ? () => _editQty(tindakan)
+                      : null,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 6),
+                  namaTagihan: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(child: Text('${tindakan.namaTindakan}')),
+                      if (widget.type != 'view' && widget.role == 99)
+                        const SizedBox(
+                          width: 12.0,
+                        ),
+                      if (widget.type != 'view' && widget.role == 99)
+                        const Icon(
+                          Icons.edit_note_rounded,
+                          size: 22.0,
+                          color: Colors.blue,
+                        )
+                    ],
+                  ),
+                  subTagihan: tindakan.foc == 1
+                      ? const Align(
+                          alignment: Alignment.centerLeft,
+                          child: badge_custom.Badge(
+                            color: Colors.green,
+                            label: 'Free of Charge',
+                          ))
+                      : null,
+                  tarifTagihan: Text(
+                    _rupiah.format(tindakan.tarif),
+                  ),
+                ),
+                if (tindakan.transportasi == 1)
+                  TileTransportTindakan(
+                    onTap: widget.type != 'view'
+                        ? () => _tambahTransport(tindakan)
+                        : null,
+                    title: Row(
+                      children: [
+                        const Text('Transportasi'),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        if (widget.type != 'view')
+                          const Icon(
+                            Icons.edit_note_rounded,
+                            size: 22.0,
+                            color: Colors.blue,
+                          )
+                      ],
+                    ),
+                    leading: const Icon(
+                      Icons.keyboard_arrow_right,
+                      size: 20.0,
+                    ),
+                    trailing: Text(
+                      _rupiah.format(tindakan.dataTransportasi != null
+                          ? tindakan.dataTransportasi!.biaya
+                          : 0),
+                    ),
+                  ),
+                if (tindakan.gojek == 1)
+                  TileTransportTindakan(
+                    onTap: widget.type != 'view'
+                        ? () => _tambahOjol(tindakan)
+                        : null,
+                    leading: const Icon(
+                      Icons.keyboard_arrow_right,
+                      size: 20.0,
+                    ),
+                    title: Row(
+                      children: [
+                        const Text('Transportasi Online'),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        if (widget.type != 'view')
+                          const Icon(
+                            Icons.edit_note_rounded,
+                            size: 22.0,
+                            color: Colors.blue,
+                          )
+                      ],
+                    ),
+                    trailing: Text(
+                      _rupiah.format(tindakan.dataOjol != null
+                          ? tindakan.dataOjol!.total
+                          : 0),
+                    ),
+                  )
+              ],
+            ),
+          )
+          .toList(),
+      subTotal: widget.subtotal,
+    );
+  }
 }
 
 class FormOjol extends StatefulWidget {
@@ -571,6 +681,7 @@ class _FormTransportasiState extends State<FormTransportasi> {
   void initState() {
     super.initState();
     if (widget.data.dataTransportasi != null) {
+      _selectedTransport = widget.data.dataTransportasi!.id;
       _jarak.text = '${widget.data.dataTransportasi!.jarak}';
     }
   }
@@ -691,7 +802,6 @@ class _FormTransportasiState extends State<FormTransportasi> {
                 return RadioListTile<int?>(
                   contentPadding: EdgeInsets.zero,
                   value: e.id,
-                  selected: _selectedTransport == e.id,
                   groupValue: _selectedTransport,
                   activeColor: kPrimaryColor,
                   onChanged: (int? value) {

@@ -10,6 +10,7 @@ class TindakanModel {
     required this.bayarLangsung,
     required this.transportasi,
     required this.gojek,
+    required this.idKategori,
     this.idGroup,
   });
 
@@ -19,6 +20,7 @@ class TindakanModel {
   bool bayarLangsung;
   bool transportasi;
   bool gojek;
+  int idKategori;
   int? idGroup;
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +31,7 @@ class TindakanModel {
         "transportasi": transportasi,
         "gojek": gojek,
         "idGroup": idGroup,
+        "idKategori": idKategori,
       };
 }
 

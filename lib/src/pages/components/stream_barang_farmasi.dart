@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dokter_panggil/src/blocs/master_farmasi_paginate_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_farmasi_pencarian_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_mitra_apotek_bloc.dart';
@@ -11,6 +13,7 @@ import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class StreamBarangFarmasi extends StatefulWidget {
   const StreamBarangFarmasi({
@@ -155,6 +158,7 @@ class _BarangFarmasiWidgetState extends State<BarangFarmasiWidget> {
   final _filter = TextEditingController();
   bool _isFilter = false;
   String? _prevFilter;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -164,20 +168,28 @@ class _BarangFarmasiWidgetState extends State<BarangFarmasiWidget> {
     _filter.addListener(_filterListener);
   }
 
-  void _filterListener() async {
+  void _filterListener() {
+    _timer?.cancel();
     if (_filter.text.isNotEmpty) {
       if (_prevFilter != _filter.text) {
-        await Future.delayed(const Duration(seconds: 1));
-        _masterFarmasiPencarianBloc.namaBarangSink.add(_filter.text);
-        _masterFarmasiPencarianBloc.getPencarianMasterFarmasi();
-        _isFilter = true;
-        _prevFilter = _filter.text;
-        setState(() {});
+        _timer = Timer.periodic(const Duration(milliseconds: 700), (timer) {
+          _masterFarmasiPencarianBloc.namaBarangSink.add(_filter.text);
+          _masterFarmasiPencarianBloc.getPencarianMasterFarmasi();
+          setState(() {
+            _isFilter = true;
+            _prevFilter = _filter.text;
+          });
+          timer.cancel();
+        });
       }
     } else {
-      _masterFarmasiBloc.getMasterFarmasiPaginate();
-      _isFilter = false;
-      setState(() {});
+      _timer = Timer.periodic(const Duration(milliseconds: 700), (timer) {
+        _masterFarmasiBloc.getMasterFarmasiPaginate();
+        setState(() {
+          _isFilter = false;
+        });
+        timer.cancel();
+      });
     }
   }
 
@@ -323,6 +335,8 @@ class _ListObatState extends State<ListObat> {
   final ScrollController _scrollController = ScrollController();
   List<BarangFarmasi>? _data;
   List<BarangFarmasi> _selectedData = [];
+  final _numberFormat =
+      NumberFormat.currency(locale: 'id', symbol: 'Rp. ', decimalDigits: 0);
 
   @override
   void initState() {
@@ -380,6 +394,7 @@ class _ListObatState extends State<ListObat> {
       children: [
         Expanded(
           child: ListView.separated(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.symmetric(vertical: 22.0),
             controller: _scrollController,
             itemBuilder: (context, i) {
@@ -407,12 +422,26 @@ class _ListObatState extends State<ListObat> {
                 onTap: () => _selectData(data),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 25.0),
                 title: Text('${data.namaBarang}'),
-                trailing: _selectedData.where((e) => e.id == data.id).isNotEmpty
-                    ? const Icon(
-                        Icons.check_circle_outline_rounded,
-                        color: Colors.green,
-                      )
-                    : null,
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(_numberFormat.format(data.hargaJual)),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    SizedBox(
+                      width: 22,
+                      child:
+                          _selectedData.where((e) => e.id == data.id).isNotEmpty
+                              ? const Icon(
+                                  Icons.check_circle_outline_rounded,
+                                  color: Colors.green,
+                                )
+                              : null,
+                    ),
+                  ],
+                ),
                 subtitle: data.mitraFarmasi != null
                     ? Text('${data.mitraFarmasi?.namaMitra}')
                     : const Text('Unknown'),
@@ -437,11 +466,12 @@ class _ListObatState extends State<ListObat> {
                   offset: Offset(0.0, -2.0))
             ],
           ),
-          child: Center(
+          child: SafeArea(
+            top: false,
             child: ElevatedButton(
               onPressed: _selectedData.isEmpty ? null : _finalSelected,
               style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 48.0)),
+                  minimumSize: const Size(double.infinity, 42.0)),
               child: _selectedData.isEmpty
                   ? const Text('PILIH BARANG')
                   : Text('PILIH BARANG (${_selectedData.length} barang)'),

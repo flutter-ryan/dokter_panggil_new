@@ -3,8 +3,8 @@ import 'package:dokter_panggil/src/repositories/dio_helper.dart';
 
 class DokumenRadSaveRepo {
   Future<DokumenRadSaveModel> uploadDokumenRad(
-      DokumenRadRequestModel dokumenRadRequestModel, int idKunjungan) async {
-    final response = await dio.post('/v2/mr/radiologi/dokumen-rad/$idKunjungan',
+      DokumenRadRequestModel dokumenRadRequestModel, int idPengantar) async {
+    final response = await dio.post('/v2/mr/radiologi/dokumen/$idPengantar',
         dokumenRadRequestModelToJson(dokumenRadRequestModel));
     return dokumenRadSaveModelFromJson(response);
   }

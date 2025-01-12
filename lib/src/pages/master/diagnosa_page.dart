@@ -144,7 +144,6 @@ class _DiagnosaPageState extends State<DiagnosaPage> {
                   ).then((value) {
                     if (value != null) {
                       if (!mounted) return;
-                      FocusScope.of(context).requestFocus(FocusNode());
                       var data = value as Diagnosa;
                       _edit(data);
                     }

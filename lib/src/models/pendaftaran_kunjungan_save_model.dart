@@ -101,6 +101,7 @@ class ResponsePendaftaranKunjunganSaveModel {
 class Kunjungan {
   Kunjungan({
     this.id,
+    this.isEmr,
     this.namaPasien,
     this.norm,
     this.normSprint,
@@ -117,6 +118,7 @@ class Kunjungan {
   });
 
   int? id;
+  int? isEmr;
   String? namaPasien;
   String? norm;
   String? normSprint;
@@ -133,6 +135,7 @@ class Kunjungan {
 
   factory Kunjungan.fromJson(Map<String, dynamic> json) => Kunjungan(
         id: json["id"],
+        isEmr: json["is_emr"],
         namaPasien: json["nama_pasien"],
         norm: json["norm"],
         normSprint: json["norm_sprint"],

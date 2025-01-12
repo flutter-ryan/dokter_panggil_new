@@ -7,13 +7,13 @@ import 'package:dokter_panggil/src/models/kunjungan_bhp_update_model.dart';
 import 'package:dokter_panggil/src/models/master_bhp_by_category_model.dart';
 import 'package:dokter_panggil/src/models/master_bhp_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_bhp.dart';
 import 'package:dokter_panggil/src/pages/components/card_tagihan.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
@@ -22,8 +22,8 @@ import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class DetailBhp extends StatefulWidget {
-  const DetailBhp({
+class DetailBhpWidget extends StatefulWidget {
+  const DetailBhpWidget({
     super.key,
     required this.data,
     this.type,
@@ -37,10 +37,10 @@ class DetailBhp extends StatefulWidget {
   final int? role;
 
   @override
-  State<DetailBhp> createState() => _DetailBhpState();
+  State<DetailBhpWidget> createState() => _DetailBhpWidgetState();
 }
 
-class _DetailBhpState extends State<DetailBhp> {
+class _DetailBhpWidgetState extends State<DetailBhpWidget> {
   final _animateIconController = AnimateIconController();
   final _kunjunganBhpUpdateBloc = KunjunganBhpUpdateBloc();
   final _scrollCon = ScrollController();
@@ -52,7 +52,8 @@ class _DetailBhpState extends State<DetailBhp> {
   final _jumlah = TextEditingController();
   final _alasan = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  List<Bhp>? _data;
+  List<Bhp> _data = [];
+  List<BhpMr> _dataMr = [];
   int? _selectedId;
   int _hargaModal = 0;
   int _tarifAplikasi = 0;
@@ -60,7 +61,8 @@ class _DetailBhpState extends State<DetailBhp> {
   @override
   void initState() {
     super.initState();
-    _data = widget.data.bhp;
+    _data = widget.data.bhp!;
+    _dataMr = widget.data.bhpMr!;
   }
 
   bool validateAndSave() {
@@ -145,10 +147,10 @@ class _DetailBhpState extends State<DetailBhp> {
   }
 
   @override
-  void didUpdateWidget(covariant DetailBhp oldWidget) {
+  void didUpdateWidget(covariant DetailBhpWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.data != widget.data) {
-      _data = widget.data.bhp;
+      _data = widget.data.bhp!;
       setState(() {});
     }
   }
@@ -161,6 +163,61 @@ class _DetailBhpState extends State<DetailBhp> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.data.isEmr == 0) {
+      return _oldBhpWidget(context);
+    }
+    return Cardtagihan(
+      title: 'Barang Habis Pakai',
+      subTotal: Text(
+        _rupiah.format(widget.data.totalBhp),
+        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+      ),
+      tiles: ListTile.divideTiles(
+        context: context,
+        tiles: _dataMr
+            .map((bhp) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
+                      child: Text(
+                        '${bhp.tanggalShort}\n${bhp.jamShort}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 12.0, 0.0, 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${bhp.namaPegawai}',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            ...bhp.kunjunganBhp!.map((barang) => TileObatWidget(
+                                  title: '${barang.barang!.namaBarang}',
+                                  subtitle:
+                                      '${barang.jumlah} x ${_rupiahNo.format(barang.hargaModal! + barang.tarifAplikasi!)}',
+                                  trailing: _rupiah.format(barang.tarif),
+                                ))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ))
+            .toList(),
+      ).toList(),
+    );
+  }
+
+  Widget _oldBhpWidget(BuildContext context) {
     return Cardtagihan(
       title: 'Barang Habis Pakai',
       subTotal: Text(
@@ -169,7 +226,7 @@ class _DetailBhpState extends State<DetailBhp> {
       ),
       tiles: ListTile.divideTiles(
         context: context,
-        tiles: _data!
+        tiles: _data
             .map(
               (bhp) => ListTile(
                 onTap: () => widget.type != 'view' && widget.role == 99

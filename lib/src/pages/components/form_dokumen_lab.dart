@@ -26,10 +26,10 @@ import 'package:path/path.dart' as p;
 class FormDokumenLab extends StatefulWidget {
   const FormDokumenLab({
     super.key,
-    this.idKunjungan,
+    this.idPengantar,
   });
 
-  final int? idKunjungan;
+  final int? idPengantar;
 
   @override
   State<FormDokumenLab> createState() => _FormDokumenLabState();
@@ -149,7 +149,7 @@ class _FormDokumenLabState extends State<FormDokumenLab> {
       doc = _image64;
       ext = '.$_extension';
     }
-    _dokumenLabSaveBloc.idKunjunganSink.add(widget.idKunjungan!);
+    _dokumenLabSaveBloc.idPengantarSink.add(widget.idPengantar!);
     _dokumenLabSaveBloc.imageSink.add(doc!);
     _dokumenLabSaveBloc.extSink.add(ext!);
     _dokumenLabSaveBloc.simpanDokumenLab();
