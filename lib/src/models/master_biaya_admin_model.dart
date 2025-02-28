@@ -24,12 +24,14 @@ class MasterBiayaAdmin {
     this.deskripsi,
     this.nilai,
     this.persen,
+    this.layanan,
   });
 
   int? id;
   String? deskripsi;
   int? nilai;
   int? persen;
+  String? layanan;
 
   factory MasterBiayaAdmin.fromJson(Map<String, dynamic> json) =>
       MasterBiayaAdmin(
@@ -37,5 +39,6 @@ class MasterBiayaAdmin {
         deskripsi: json["deskripsi"],
         nilai: json["nilai"],
         persen: json["persen"],
+        layanan: json["layanan"],
       );
 }

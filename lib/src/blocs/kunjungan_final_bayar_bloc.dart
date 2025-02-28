@@ -6,7 +6,7 @@ import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class KunjunganFinalBayarBloc {
-  final KunjunganFinalBayarRepo _repo = KunjunganFinalBayarRepo();
+  final _repo = KunjunganFinalBayarRepo();
   StreamController<ApiResponse<ResponseKunjunganFinalModel>>?
       _streamKunjunganFinal;
   final BehaviorSubject<int> _id = BehaviorSubject();

@@ -339,7 +339,7 @@ class CustomDialogWidget extends StatelessWidget {
     this.semanticLabel,
     this.shape,
     this.minWidth,
-  })  : assert(contentPadding != null);
+  }) : assert(contentPadding != null);
 
   /// The (optional) title of the dialog is displayed in a large font at the top
   /// of the dialog.
@@ -434,7 +434,7 @@ class CustomDialogWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
     final ThemeData theme = Theme.of(context);
-    final DialogTheme dialogTheme = DialogTheme.of(context);
+    final DialogThemeData dialogTheme = DialogTheme.of(context);
     final List<Widget> children = <Widget>[];
     String? label = semanticLabel;
 
@@ -621,7 +621,8 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DialogTheme dialogTheme = DialogTheme.of(context);
+    final ThemeData theme = Theme.of(context);
+    final DialogThemeData dialogTheme = DialogTheme.of(context);
     return AnimatedPadding(
       padding: MediaQuery.of(context).viewInsets +
           const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
@@ -639,7 +640,7 @@ class CustomDialog extends StatelessWidget {
             child: Material(
               color: backgroundColor ??
                   dialogTheme.backgroundColor ??
-                  Theme.of(context).dialogBackgroundColor,
+                  theme.dialogBackgroundColor,
               elevation:
                   elevation ?? dialogTheme.elevation ?? _defaultElevation,
               shape: shape ?? dialogTheme.shape ?? _defaultDialogShape,

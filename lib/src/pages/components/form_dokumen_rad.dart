@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:dokter_panggil/src/blocs/dokumen_rad_save_bloc.dart';
-import 'package:dokter_panggil/src/models/dokumen_lab_save_model.dart';
 import 'package:dokter_panggil/src/models/dokumen_rad_model.dart';
 import 'package:dokter_panggil/src/models/dokumen_rad_save_model.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
@@ -92,10 +91,18 @@ class _FormDokumenRadState extends State<FormDokumenRad> {
     );
     if (result == null) return;
     Widget thumbnail;
+    List<int> bytes;
     if (result.files.single.extension != 'pdf') {
       thumbnail = await FilePreview.getThumbnail(
         result.files.single.path!,
       );
+      Directory tempDir = await getTemporaryDirectory();
+      var image = await FlutterImageCompress.compressAndGetFile(
+        result.files.single.path!,
+        '${tempDir.path}/${p.basename(result.files.single.path!)}',
+        quality: 50,
+      );
+      bytes = File(image!.path).readAsBytesSync();
     } else {
       thumbnail = Column(
         children: [
@@ -118,14 +125,8 @@ class _FormDokumenRadState extends State<FormDokumenRad> {
           )
         ],
       );
+      bytes = File(result.files.single.path!).readAsBytesSync();
     }
-    Directory tempDir = await getTemporaryDirectory();
-    var image = await FlutterImageCompress.compressAndGetFile(
-      result.files.single.path!,
-      '${tempDir.path}/${p.basename(result.files.single.path!)}.${p.basename(result.files.single.path!)}',
-      quality: 50,
-    );
-    List<int> bytes = File(image!.path).readAsBytesSync();
     setState(() {
       _image64 = base64Encode(bytes);
       _extension = result.files.single.extension;
@@ -199,7 +200,7 @@ class _FormDokumenRadState extends State<FormDokumenRad> {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: _selectMedia,
-                      child: _pictures.isEmpty
+                      child: _pictures.isEmpty && _imagePreview == null
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

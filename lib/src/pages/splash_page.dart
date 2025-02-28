@@ -54,16 +54,16 @@ class _SplashpageState extends State<Splashpage> {
     setState(() {
       version = info.version;
     });
-    Future.delayed(
-      const Duration(seconds: 3),
-      () => Navigator.pushAndRemoveUntil(
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return;
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (_) => const Sessionpage(),
         ),
         (route) => false,
-      ),
-    );
+      );
+    });
   }
 
   @override

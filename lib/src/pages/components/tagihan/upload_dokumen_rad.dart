@@ -57,6 +57,7 @@ class _UploadDokumenRadState extends State<UploadDokumenRad> {
     ).then((value) {
       if (value != null) {
         var dokumen = value as DokumenRad;
+        _dokumenRadBloc.getDokumenRad();
         setState(() {
           _dokumenRad = dokumen;
         });
@@ -243,6 +244,16 @@ class _DokumenRadWidgetState extends State<DokumenRadWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (_dokumens.isEmpty) {
+      return Center(
+        child: ErrorResponse(
+          message: 'Data dokumen Radiologi tidak tersedia',
+          onTap: () {
+            setState(() {});
+          },
+        ),
+      );
+    }
     return ListView.separated(
         padding: EdgeInsets.all(22),
         itemBuilder: (context, i) {

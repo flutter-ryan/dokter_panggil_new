@@ -58,6 +58,7 @@ class _UploadHasilLabState extends State<UploadHasilLab> {
     ).then((value) {
       if (value != null) {
         var dokumen = value as DokumenLab;
+        _dokumenLabBloc.getDokumenLab();
         setState(() {
           _dokumenLab = dokumen;
         });
@@ -109,12 +110,14 @@ class _UploadHasilLabState extends State<UploadHasilLab> {
                 ),
               );
             case Status.error:
-              return ErrorResponse(
-                message: snapshot.data!.message,
-                onTap: () {
-                  _getDokumenLab();
-                  setState(() {});
-                },
+              return Center(
+                child: ErrorResponse(
+                  message: snapshot.data!.message,
+                  onTap: () {
+                    _getDokumenLab();
+                    setState(() {});
+                  },
+                ),
               );
             case Status.completed:
               return DokumenLabWidget(
@@ -246,6 +249,16 @@ class _DokumenLabWidgetState extends State<DokumenLabWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (_dokumens.isEmpty) {
+      return Center(
+        child: ErrorResponse(
+          message: 'Data dokumen Lab tidak tersedia',
+          onTap: () {
+            setState(() {});
+          },
+        ),
+      );
+    }
     return ListView.separated(
         padding: EdgeInsets.all(22),
         itemBuilder: (context, i) {

@@ -192,7 +192,7 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
               child: Column(
                 children: [
                   DetailCardTagihan(
-                    tanggal: '${tindakan.createdAt}',
+                    tanggal: '${tindakan.createdAt}\n${tindakan.jamAt}',
                     deskripsi: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -274,11 +274,6 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
                             : 0),
                         style: TextStyle(fontSize: 12),
                       ),
-                    ),
-                  if (widget.data.tindakan!.indexOf(tindakan) !=
-                      widget.data.tindakan!.length - 1)
-                    Divider(
-                      color: Colors.grey[400],
                     ),
                 ],
               ),

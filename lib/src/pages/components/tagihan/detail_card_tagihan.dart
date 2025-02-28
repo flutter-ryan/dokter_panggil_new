@@ -24,6 +24,7 @@ class DetailCardTagihan extends StatelessWidget {
           child: Text(
             '$tanggal',
             style: TextStyle(fontSize: 12),
+            textAlign: TextAlign.center,
           ),
         ),
         Expanded(

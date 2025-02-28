@@ -3,7 +3,7 @@ import 'package:dokter_panggil/src/pages/pasien/resume_medis_page.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
-import 'package:timelines/timelines.dart';
+import 'package:timelines_plus/timelines_plus.dart';
 
 class TimelineKunjuganResume extends StatefulWidget {
   const TimelineKunjuganResume({

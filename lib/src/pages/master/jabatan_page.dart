@@ -84,6 +84,7 @@ class _JabatanPageState extends State<JabatanPage> {
                     ),
                   ).then((value) {
                     if (value != null) {
+                      if (!mounted) return;
                       FocusScope.of(context).requestFocus(FocusNode());
                       var data = value as Jabatan;
                       _edit(data.id, data.namaJabatan);

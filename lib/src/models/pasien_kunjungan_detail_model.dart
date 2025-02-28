@@ -26,6 +26,7 @@ class DetailKunjungan {
   DetailKunjungan({
     this.id,
     this.isEmr,
+    this.jenisKunjunganMr,
     this.nomorRegistrasi,
     this.tanggal,
     this.status,
@@ -81,6 +82,7 @@ class DetailKunjungan {
 
   int? id;
   int? isEmr;
+  JenisKunjunganMr? jenisKunjunganMr;
   String? nomorRegistrasi;
   String? tanggal;
   int? status;
@@ -141,6 +143,9 @@ class DetailKunjungan {
         tanggal: json["tanggal"],
         status: json["status"],
         isTagihan: json["is_tagihan"],
+        jenisKunjunganMr: json["jenis_kunjungan_mr"] == null
+            ? null
+            : JenisKunjunganMr.fromJson(json["jenis_kunjungan_mr"]),
         dokter:
             List<Dokter>.from(json["dokter"].map((x) => Dokter.fromJson(x))),
         perawat:
@@ -503,6 +508,7 @@ class Tindakan {
     this.dataOjol,
     this.foc,
     this.createdAt,
+    this.jamAt,
   });
 
   int? id;
@@ -521,6 +527,7 @@ class Tindakan {
   OjolTindakan? dataOjol;
   int? foc;
   String? createdAt;
+  String? jamAt;
 
   factory Tindakan.fromJson(Map<String, dynamic> json) => Tindakan(
         id: json["id"],
@@ -543,6 +550,7 @@ class Tindakan {
             : OjolTindakan.fromJson(json["data_ojol"]),
         foc: json["foc"],
         createdAt: json["created_at"],
+        jamAt: json["jam_at"],
       );
 }
 
@@ -811,6 +819,7 @@ class TagihanResep {
     this.tarifAplikasi,
     this.total,
     this.tagihanMitra,
+    this.createdAt,
   });
 
   int? id;
@@ -822,6 +831,7 @@ class TagihanResep {
   int? tarifAplikasi;
   int? total;
   TagihanMitra? tagihanMitra;
+  String? createdAt;
 
   factory TagihanResep.fromJson(Map<String, dynamic> json) => TagihanResep(
         id: json["id"],
@@ -834,6 +844,7 @@ class TagihanResep {
         total: json["total"],
         tagihanMitra:
             json["mitra"] == null ? null : TagihanMitra.fromJson(json["mitra"]),
+        createdAt: json["created_at"],
       );
 }
 
@@ -1072,6 +1083,7 @@ class TagihanTindakanLab {
   int? tarifAplikasi;
   int? total;
   int? pengantarId;
+  String? createdAt;
 
   TagihanTindakanLab({
     this.id,
@@ -1080,6 +1092,7 @@ class TagihanTindakanLab {
     this.tarifAplikasi,
     this.total,
     this.pengantarId,
+    this.createdAt,
   });
 
   factory TagihanTindakanLab.fromJson(Map<String, dynamic> json) =>
@@ -1090,6 +1103,7 @@ class TagihanTindakanLab {
         tarifAplikasi: json["tarif_aplikasi"],
         total: json["total"],
         pengantarId: json["pengantar_id"],
+        createdAt: json["created_at"],
       );
 }
 
@@ -1103,6 +1117,7 @@ class TagihanTindakanRad {
   int? tarifAplikasi;
   int? total;
   int? pengantarId;
+  String? createdAt;
 
   TagihanTindakanRad({
     this.id,
@@ -1114,6 +1129,7 @@ class TagihanTindakanRad {
     this.tarifAplikasi,
     this.total,
     this.pengantarId,
+    this.createdAt,
   });
 
   factory TagihanTindakanRad.fromJson(Map<String, dynamic> json) =>
@@ -1127,6 +1143,7 @@ class TagihanTindakanRad {
         tarifAplikasi: json["tarif_aplikasi"],
         total: json["total"],
         pengantarId: json["pengantar_id"],
+        createdAt: json["created_at"],
       );
 }
 
@@ -1183,6 +1200,7 @@ class TagihanResepRacikan {
     this.tarifAplikasi,
     this.total,
     this.tagihanMitra,
+    this.createdAt,
   });
 
   int? id;
@@ -1195,6 +1213,7 @@ class TagihanResepRacikan {
   int? tarifAplikasi;
   int? total;
   TagihanMitra? tagihanMitra;
+  String? createdAt;
 
   factory TagihanResepRacikan.fromJson(Map<String, dynamic> json) =>
       TagihanResepRacikan(
@@ -1208,5 +1227,37 @@ class TagihanResepRacikan {
         total: json["total"],
         tagihanMitra:
             json["mitra"] == null ? null : TagihanMitra.fromJson(json["mitra"]),
+        createdAt: json["created_at"],
+      );
+}
+
+class JenisKunjunganMr {
+  int? id;
+  int? kunjunganId;
+  int? isTelemedicine;
+  int? isHomevisit;
+  int? isHomevisitPerawat;
+  int? isObservasi;
+  int? isRanap;
+
+  JenisKunjunganMr({
+    this.id,
+    this.kunjunganId,
+    this.isTelemedicine,
+    this.isHomevisit,
+    this.isHomevisitPerawat,
+    this.isObservasi,
+    this.isRanap,
+  });
+
+  factory JenisKunjunganMr.fromJson(Map<String, dynamic> json) =>
+      JenisKunjunganMr(
+        id: json["id"],
+        kunjunganId: json["kunjungan_id"],
+        isTelemedicine: json["is_telemedicine"],
+        isHomevisit: json["is_homevisit"],
+        isHomevisitPerawat: json["is_homevisit_perawat"],
+        isObservasi: json["is_observasi"],
+        isRanap: json["is_ranap"],
       );
 }

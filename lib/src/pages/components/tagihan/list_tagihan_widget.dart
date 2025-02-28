@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/blocs/kwitansi_sementara_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_biaya_admin_bloc.dart';
+import 'package:dokter_panggil/src/blocs/master_biaya_admin_emr_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_diskon_create_bloc.dart';
 import 'package:dokter_panggil/src/models/kwitansi_sementara_model.dart';
+import 'package:dokter_panggil/src/models/master_biaya_admin_emr_model.dart';
 import 'package:dokter_panggil/src/models/master_biaya_admin_model.dart';
 import 'package:dokter_panggil/src/models/master_diskon_create_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
@@ -12,16 +16,17 @@ import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:dokter_panggil/src/pages/components/tagihan/list_biaya_admin_emr.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class ListTagihanWidget extends StatefulWidget {
   const ListTagihanWidget({
@@ -29,11 +34,13 @@ class ListTagihanWidget extends StatefulWidget {
     this.data,
     this.finalTagihan = false,
     this.type = 'create',
+    this.isSummary = false,
   });
 
   final DetailKunjungan? data;
   final bool finalTagihan;
   final String type;
+  final bool isSummary;
 
   @override
   State<ListTagihanWidget> createState() => _ListTagihanWidgetState();
@@ -136,6 +143,7 @@ class ListBiayaAdmin extends StatefulWidget {
 }
 
 class _ListBiayaAdminState extends State<ListBiayaAdmin> {
+  final _masterBiayaAdminEmrBloc = MasterBiayaAdminEmrBloc();
   final _kwitansiSementaraBloc = KwitansiSementaraBloc();
   final _noRupiah =
       NumberFormat.currency(symbol: '', locale: 'id', decimalDigits: 0);
@@ -152,10 +160,23 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
   @override
   void initState() {
     super.initState();
+    if (widget.dataKunjungan!.isEmr == 1) _getBiayaLayananEmr();
     _data = widget.dataKunjungan!;
-    if (widget.finalTagihan) {
+    if (widget.dataKunjungan!.isEmr == 0) {
       _initBiaya();
     }
+  }
+
+  void _getBiayaLayananEmr() {
+    if (widget.dataKunjungan!.jenisKunjunganMr!.isRanap == 1) {
+      _masterBiayaAdminEmrBloc.layananSink.add('homecare');
+    } else if (widget.dataKunjungan!.jenisKunjunganMr!.isHomevisit == 1 ||
+        widget.dataKunjungan!.jenisKunjunganMr!.isHomevisitPerawat == 1) {
+      _masterBiayaAdminEmrBloc.layananSink.add('homevisit');
+    } else if (widget.dataKunjungan!.jenisKunjunganMr!.isTelemedicine == 1) {
+      _masterBiayaAdminEmrBloc.layananSink.add('telemedicine');
+    }
+    _masterBiayaAdminEmrBloc.biayaAdminEmr();
   }
 
   void _initBiaya() {
@@ -205,14 +226,45 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
     });
   }
 
-  void _onSelectedBiaya(bool? val, MasterBiayaAdmin biaya) {
+  void _onSelectedBiaya(bool? val, MasterBiayaAdmin? biaya,
+      List<MasterBiayaAdminEmr>? listAdminEmr) {
     totalBiaya = 0;
-    if (val == true) {
+    double persen = 0;
+
+    if (val == true && listAdminEmr != null) {
+      for (final adminEmr in listAdminEmr) {
+        if (adminEmr.persen == 1) {
+          persen = (adminEmr.nilai! * _data.total!) / 100;
+        }
+        _selectedBiaya.add(
+          BiayaAdminSelected(
+            id: adminEmr.id,
+            deskripsi: adminEmr.deskripsi,
+            nilai: adminEmr.persen == 1 ? persen.round() : adminEmr.nilai!,
+          ),
+        );
+        _data.dataBiayaAdmin!.add(
+          DataBiayaAdmin(
+            id: adminEmr.id,
+            kunjunganId: _data.id,
+            deskripsi: adminEmr.deskripsi,
+            nilai: adminEmr.persen == 1 ? persen.round() : adminEmr.nilai!,
+          ),
+        );
+      }
+      _selectedBiaya.asMap().forEach((key, value) {
+        totalBiaya += value.nilai;
+      });
+    }
+    if (val == true && biaya != null) {
+      if (biaya.persen == 1) {
+        persen = (biaya.nilai! * _data.total!) / 100;
+      }
       _selectedBiaya.add(
         BiayaAdminSelected(
           id: biaya.id,
           deskripsi: biaya.deskripsi,
-          nilai: biaya.nilai!,
+          nilai: biaya.persen == 1 ? persen.round() : biaya.nilai!,
         ),
       );
       _data.dataBiayaAdmin!.add(
@@ -220,19 +272,14 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
           id: biaya.id,
           kunjunganId: _data.id,
           deskripsi: biaya.deskripsi,
-          nilai: biaya.nilai,
+          nilai: biaya.persen == 1 ? persen.round() : biaya.nilai,
         ),
       );
       _selectedBiaya.asMap().forEach((key, value) {
         totalBiaya += value.nilai;
       });
-    } else {
-      _selectedBiaya.removeWhere((e) => e.id == biaya.id);
-      _data.dataBiayaAdmin!.removeWhere((e) => e.id == biaya.id);
-      _selectedBiaya.asMap().forEach((key, value) {
-        totalBiaya += value.nilai;
-      });
     }
+
     setState(() {});
   }
 
@@ -320,12 +367,27 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
   }
 
   Future<void> _share(KwitansiSementara data) async {
-    await WhatsappShare.share(
-      text:
-          'Hai pasien ${data.pasien == null ? '-' : data.pasien?.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi sementara pembayaranmu',
-      linkUrl: Uri.parse(data.url!).toString(),
-      phone: '+6281280023025',
-    );
+    var text =
+        'Hai pasien ${data.pasien == null ? '-' : data.pasien?.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi sementara pembayaranmu\n${Uri.parse(data.url!).toString()}';
+    var whatsappURlAndroid =
+        "whatsapp://send?phone=${data.pasien?.nomorTelepon}&text=$text";
+    var whatsappURLIos =
+        "https://wa.me/${data.pasien?.nomorTelepon}?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(whatsappURLIos));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    }
   }
 
   @override
@@ -344,7 +406,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
           ),
         if (widget.finalTagihan)
           Container(
-            padding: const EdgeInsets.all(22.0),
+            padding: const EdgeInsets.fromLTRB(22.0, 22, 22, 12),
             decoration: const BoxDecoration(color: Colors.white, boxShadow: [
               BoxShadow(
                 color: Colors.black12,
@@ -352,34 +414,40 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                 offset: Offset(-2.0, -2.0),
               )
             ]),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Wrap(
-                    spacing: 2,
-                    direction: Axis.vertical,
-                    children: [
-                      const Text(
-                        'Total Bayar',
-                        style: TextStyle(fontSize: 13.0),
-                      ),
-                      Text(
-                        'Rp. ${_noRupiah.format(_data.total! + totalBiaya - _totalDiskon)}',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
-                ),
-                if (widget.finalTagihan)
-                  ElevatedButton(
-                    onPressed: () => _finalTagihan(_data),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kPrimaryColor,
-                      minimumSize: const Size(140, 45),
+            child: SafeArea(
+              top: false,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Wrap(
+                      spacing: 2,
+                      direction: Axis.vertical,
+                      children: [
+                        const Text(
+                          'Total Bayar',
+                          style: TextStyle(fontSize: 13.0),
+                        ),
+                        Text(
+                          'Rp. ${_noRupiah.format(_data.total! + totalBiaya - _totalDiskon)}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
-                    child: const Text('Final Tagihan'),
                   ),
-              ],
+                  if (widget.finalTagihan)
+                    ElevatedButton(
+                      onPressed: () => _finalTagihan(_data),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kPrimaryColor,
+                        minimumSize: const Size(140, 42),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                      ),
+                      child: const Text('Final Tagihan'),
+                    ),
+                ],
+              ),
             ),
           ),
         if (widget.type == 'view' || !widget.finalTagihan)
@@ -429,8 +497,8 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
               ),
               child: const Text('Kirim Kwitansi'),
             ),
-          )
-        else
+          ),
+        if (!widget.finalTagihan)
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: ElevatedButton(
@@ -478,7 +546,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                         TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
                   ),
                 ),
-              CloseButtonWidget()
+              if (!widget.finalTagihan) CloseButtonWidget()
             ],
           ),
           const SizedBox(
@@ -546,7 +614,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                 ),
               ),
             ),
-          if (_data.resep!.isNotEmpty || _data.resepMr!.isNotEmpty)
+          if (_data.tagihanResep!.isNotEmpty)
             Detailtagihan(
               namaTagihan: const Text('Total Resep'),
               tarifTagihan: SizedBox(
@@ -566,7 +634,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                     ],
                   )),
             ),
-          if (_data.resepRacikan!.isNotEmpty)
+          if (_data.tagihanResepRacikan!.isNotEmpty)
             Detailtagihan(
               namaTagihan: const Text('Total Resep Racikan'),
               tarifTagihan: SizedBox(
@@ -587,7 +655,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                 ),
               ),
             ),
-          if (_data.tindakanLab!.isNotEmpty)
+          if (_data.tagihanTindakanLab!.isNotEmpty)
             Detailtagihan(
               namaTagihan: const Text('Total Laboratorium'),
               tarifTagihan: SizedBox(
@@ -607,7 +675,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                     ],
                   )),
             ),
-          if (_data.tindakanRad!.isNotEmpty)
+          if (_data.tagihanTindakanRad!.isNotEmpty)
             Detailtagihan(
               namaTagihan: const Text('Total Radiologi'),
               tarifTagihan: SizedBox(
@@ -647,10 +715,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                   )),
             ),
           if (_data.isPaket) _listPaket(context, widthBox),
-          if (widget.finalTagihan)
-            _listBiayaAdmin(context)
-          else
-            _listBiayaAdminFinal(context),
+          _listBiayaAdmin(context),
           const Divider(
             color: Colors.grey,
           ),
@@ -829,6 +894,9 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
 
   Widget _listBiayaAdmin(BuildContext context) {
     double widthBox = 100;
+    if (!widget.finalTagihan) {
+      return _listBiayaAdminFinal(context);
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -846,47 +914,50 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
         const SizedBox(
           height: 12.0,
         ),
-        Column(
-          children: _biaya.map((e) {
-            return CheckboxListTile(
-              contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
-              value: _checked[_biaya.indexOf(e)],
-              dense: true,
-              onChanged: _biaya.indexOf(e) == _indexDisable
-                  ? null
-                  : (value) {
-                      _onSelectedBiaya(value, e);
-                      setState(() {
-                        _checked[_biaya.indexOf(e)] = value!;
-                      });
-                    },
-              selectedTileColor: Colors.green,
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Text('${e.deskripsi}'),
-                  ),
-                  SizedBox(
-                    width: widthBox,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Rp. '),
-                        Flexible(
-                          child: Text(
-                            _noRupiah.format(e.nilai),
-                          ),
-                        ),
-                      ],
+        if (widget.dataKunjungan!.isEmr == 1)
+          _streamBiayaAdminEmr(context)
+        else
+          Column(
+            children: _biaya.map((e) {
+              return CheckboxListTile(
+                contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
+                value: _checked[_biaya.indexOf(e)],
+                dense: true,
+                onChanged: _biaya.indexOf(e) == _indexDisable
+                    ? null
+                    : (value) {
+                        _onSelectedBiaya(value, e, null);
+                        setState(() {
+                          _checked[_biaya.indexOf(e)] = value!;
+                        });
+                      },
+                selectedTileColor: Colors.green,
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text('${e.deskripsi}'),
                     ),
-                  ),
-                ],
-              ),
-              controlAffinity: ListTileControlAffinity.leading,
-              activeColor: Colors.green,
-            );
-          }).toList(),
-        ),
+                    SizedBox(
+                      width: widthBox,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Rp. '),
+                          Flexible(
+                            child: Text(
+                              _noRupiah.format(e.nilai),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                controlAffinity: ListTileControlAffinity.leading,
+                activeColor: Colors.green,
+              );
+            }).toList(),
+          ),
       ],
     );
   }
@@ -976,6 +1047,43 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
           }
         }
         return const SizedBox();
+      },
+    );
+  }
+
+  Widget _streamBiayaAdminEmr(BuildContext context) {
+    return StreamBuilder<ApiResponse<MasterBiayaAdminEmrModel>>(
+      stream: _masterBiayaAdminEmrBloc.biayaAdminEmrStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          switch (snapshot.data!.status) {
+            case Status.loading:
+              return SizedBox(
+                height: 62,
+                child: Center(
+                  child: LoadingKit(
+                    size: 32,
+                    color: kPrimaryColor,
+                  ),
+                ),
+              );
+            case Status.error:
+              return Padding(
+                padding: EdgeInsets.all(22),
+                child: Center(child: Text(snapshot.data!.message)),
+              );
+            case Status.completed:
+              return ListBiayaAdminEmr(
+                subtotal: _data.total,
+                listBiaya: snapshot.data!.data!.data,
+                onSelected: (List<MasterBiayaAdminEmr>? listBiayaEmr) =>
+                    _onSelectedBiaya(true, null, listBiayaEmr),
+              );
+          }
+        }
+        return const SizedBox(
+          height: 52,
+        );
       },
     );
   }

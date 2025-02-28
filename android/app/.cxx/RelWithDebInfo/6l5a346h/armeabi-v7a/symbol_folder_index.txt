@@ -1,0 +1,1 @@
+/Users/ryanachmad/FlutterProject/dokter_panggil_new/build/app/intermediates/cxx/RelWithDebInfo/6l5a346h/obj/armeabi-v7a

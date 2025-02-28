@@ -170,7 +170,7 @@ class _DetailBhpWidgetState extends State<DetailBhpWidget> {
       title: 'Barang Habis Pakai',
       subTotal: Text(
         _rupiah.format(widget.data.totalBhp),
-        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       tiles: ListTile.divideTiles(
         context: context,

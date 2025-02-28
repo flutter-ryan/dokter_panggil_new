@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/blocs/delete_tagihan_tindakan_lab_bloc.dart';
 import 'package:dokter_panggil/src/blocs/dokumen_pengantar_lab_bloc.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_tindakan_lab_save_bloc.dart';
@@ -31,10 +33,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class NewDetailTagihanLabWidget extends StatefulWidget {
   const NewDetailTagihanLabWidget({
@@ -158,12 +160,26 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
   }
 
   Future<void> _shareDokumenPengantarLab(DokumenPengantarLab data) async {
-    await WhatsappShare.share(
-      text:
-          'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Laboratorium',
-      linkUrl: Uri.parse(data.linkDoc!).toString(),
-      phone: '${data.pasien!.nomorTelepon}',
-    );
+    var phone = data.pasien?.nomorTelepon ?? '+6281280023025';
+    var text =
+        'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Laboratorium\n${Uri.parse(data.linkDoc!).toString()}';
+    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
+    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(whatsappURLIos));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    }
   }
 
   void _showTindakanLab() {
@@ -311,7 +327,7 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
     SizeConfig().init(context);
     if (widget.data.isEmr == 0) return _oldTagihanLabWidget(context);
     return CardTagihanLab(
-      title: 'Laboratorium',
+      title: 'Tindakan Laboratorium',
       subTotal: Text(
         _rupiah.format(_data!.totalTindakanLab! + _data!.transportLab!),
         style: const TextStyle(fontWeight: FontWeight.w600),
@@ -319,25 +335,26 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
       tiles: Column(
         children: _data!.pengantarLabMr!
             .map(
-              (pengantar) => Row(
+              (pengantar) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
-                    child: Text(
-                      '${pengantar.tanggalShort}\n${pengantar.jamShort}',
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
+                        child: Text(
+                          '${pengantar.tanggalShort}\n${pengantar.jamShort}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
+                          child: RichText(
                             text: TextSpan(
                                 text: '${pengantar.dokter} |',
                                 style: TextStyle(
@@ -395,62 +412,66 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
                                             () => _uploadDokumen(pengantar)),
                                 ]),
                           ),
-                          ..._data!.tagihanTindakanLab!
-                              .where((tagihan) =>
-                                  tagihan.pengantarId == pengantar.id)
-                              .map((tagihanLab) => TileObatWidget(
-                                    onTap: widget.type != 'view'
-                                        ? () =>
-                                            _deleteTindakanLab(tagihanLab.id)
-                                        : null,
-                                    isEdit: widget.type != 'view',
-                                    title:
-                                        '${tagihanLab.tindakanLab!.namaTindakanLab}',
-                                    trailing: _rupiah.format(tagihanLab.total),
-                                    iconData: Icons.delete_rounded,
-                                  )),
-                          if (pengantar.status == 1)
-                            SizedBox(
-                              height: 12,
-                            ),
-                          if (pengantar.status == 1 &&
-                              pengantar.isBersedia == 1 &&
-                              widget.type == 'create')
-                            ElevatedButton.icon(
-                              onPressed: () => Navigator.push(
-                                context,
-                                SlideBottomRoute(
-                                  page: TransaksiTindakanLab(
-                                    idKunjungan: _data!.id!,
-                                    dataLab: pengantar.tindakanLab!,
-                                    idPengantar: pengantar.id,
-                                  ),
-                                ),
-                              ).then((value) {
-                                if (value != null) {
-                                  var data = value as DetailKunjungan;
-                                  widget.reload!(data);
-                                }
-                              }),
-                              icon: Icon(
-                                Icons.add_circle_outline_rounded,
-                                size: 18,
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  visualDensity: VisualDensity.compact,
-                                  backgroundColor: Colors.grey[100],
-                                  elevation: 0,
-                                  foregroundColor: Colors.blueAccent,
-                                  textStyle: TextStyle(fontSize: 12),
-                                  minimumSize: Size(double.infinity, 40)),
-                              label: Text(
-                                'Transaksi Tindakan Laboratorium',
-                              ),
-                            )
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+                  ..._data!.tagihanTindakanLab!
+                      .where((tagihan) => tagihan.pengantarId == pengantar.id)
+                      .map((tagihanLab) => TileObatWidget(
+                            onTap: widget.type != 'view'
+                                ? () => _deleteTindakanLab(tagihanLab.id)
+                                : null,
+                            isEdit: widget.type != 'view',
+                            title: '${tagihanLab.tindakanLab!.namaTindakanLab}',
+                            leading: Padding(
+                              padding: const EdgeInsets.only(top: 0.0),
+                              child: Text(
+                                '${tagihanLab.createdAt}',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            trailing: _rupiah.format(tagihanLab.total),
+                            iconData: Icons.delete_rounded,
+                          )),
+                  if (pengantar.status == 1)
+                    SizedBox(
+                      height: 12,
+                    ),
+                  if (pengantar.status == 1 &&
+                      pengantar.isBersedia == 1 &&
+                      widget.type == 'create')
+                    ElevatedButton.icon(
+                      onPressed: () => Navigator.push(
+                        context,
+                        SlideBottomRoute(
+                          page: TransaksiTindakanLab(
+                            idKunjungan: _data!.id!,
+                            dataLab: pengantar.tindakanLab!,
+                            idPengantar: pengantar.id,
+                          ),
+                        ),
+                      ).then((value) {
+                        if (value != null) {
+                          var data = value as DetailKunjungan;
+                          widget.reload!(data);
+                        }
+                      }),
+                      icon: Icon(
+                        Icons.add_circle_outline_rounded,
+                        size: 18,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          visualDensity: VisualDensity.compact,
+                          backgroundColor: Colors.grey[100],
+                          elevation: 0,
+                          foregroundColor: Colors.blueAccent,
+                          textStyle: TextStyle(fontSize: 12),
+                          minimumSize: Size(double.infinity, 40)),
+                      label: Text(
+                        'Transaksi Tindakan Laboratorium',
+                      ),
+                    )
                 ],
               ),
             )

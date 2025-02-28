@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/blocs/kunjungan_eresep_bloc.dart';
 import 'package:dokter_panggil/src/models/kunjungan_eresep_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
@@ -9,7 +11,8 @@ import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EresepWidget extends StatefulWidget {
   const EresepWidget({
@@ -28,7 +31,7 @@ class EresepWidget extends StatefulWidget {
 }
 
 class _EresepWidgetState extends State<EresepWidget> {
-  final KunjunganEresepBloc _kunjunganEresepBloc = KunjunganEresepBloc();
+  final _kunjunganEresepBloc = KunjunganEresepBloc();
   final _scrollCon = ScrollController();
   List<Resep> _data = [];
 
@@ -77,11 +80,26 @@ class _EresepWidgetState extends State<EresepWidget> {
   }
 
   Future<void> _share(Eresep data) async {
-    await WhatsappShare.share(
-      text: 'ERESEP dokter panggil\n\nPasien ${data.namaPasien}',
-      linkUrl: Uri.parse(data.url!).toString(),
-      phone: '+6281280023025',
-    );
+    var phone = '+6281280023025';
+    var text =
+        'ERESEP dokter panggil\n\nPasien ${data.namaPasien}\n${Uri.parse(data.url!).toString()}';
+    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
+    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(whatsappURLIos));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    }
   }
 
   @override

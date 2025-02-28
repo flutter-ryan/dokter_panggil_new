@@ -1,5 +1,7 @@
 import 'package:dokter_panggil/src/blocs/notifikasi_admin_bloc.dart';
+import 'package:dokter_panggil/src/blocs/notifikasi_admin_save_bloc.dart';
 import 'package:dokter_panggil/src/models/notifikasi_admin_model.dart';
+import 'package:dokter_panggil/src/models/notifikasi_admin_save_model.dart';
 import 'package:dokter_panggil/src/pages/components/close_button.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/header.dart';
@@ -25,11 +27,28 @@ class NotifikasiPage extends StatefulWidget {
 
 class _NotifikasiPageState extends State<NotifikasiPage> {
   final _notifikasiAdminBloc = NotifikasiAdminBloc();
+  final _notifikasiAdminSaveBloc = NotifikasiAdminSaveBloc();
+  bool _isStream = false;
 
   @override
   void initState() {
     super.initState();
     _notifikasiAdminBloc.getNotifikasi();
+  }
+
+  void _konfirmasi(NotifikasiAdmin? notifikasi) {
+    _notifikasiAdminSaveBloc.idNotifikasiSink.add(notifikasi!.id!);
+    _notifikasiAdminSaveBloc.updateNotifikasi();
+    setState(() {
+      _isStream = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _notifikasiAdminBloc.dispose();
+    _notifikasiAdminSaveBloc.dispose();
   }
 
   @override
@@ -47,7 +66,17 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
               title: 'Pemberitahuan Masuk',
               closeButton: const ClosedButton(),
             ),
-            Expanded(child: _buildStreamNotifikasiAdmin(context)),
+            Expanded(
+              child: Stack(
+                children: [
+                  _buildStreamNotifikasiAdmin(context),
+                  if (_isStream)
+                    Container(
+                        color: Colors.black54,
+                        child: _buildStreamSaveNotifikasiAdmin(context)),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -74,41 +103,74 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
               );
             case Status.completed:
               return ListView.separated(
-                  padding: EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+                  padding: EdgeInsets.symmetric(vertical: 22),
                   itemBuilder: (context, i) {
                     final data = snapshot.data!.data!.data![i];
                     return ListTile(
-                      onTap: () => Navigator.push(
-                        context,
-                        SlideLeftRoute(
-                          page: DetailLayananPage(
-                            id: data.kunjunganId!,
-                            type: data.finaltagihan == 0 ? 'create' : 'view',
-                            role: widget.role,
-                          ),
-                        ),
-                      ),
+                      onTap: () => _konfirmasi(data),
                       dense: true,
-                      contentPadding: EdgeInsets.zero,
                       visualDensity: VisualDensity.compact,
                       title: Text('${data.body}'),
+                      tileColor: data.isRead == 0 ? Colors.green[100] : null,
                       leading: CircleAvatar(
                         backgroundColor: kPrimaryColor.withOpacity(0.1),
                         foregroundColor: kPrimaryColor,
                         child: Icon(Icons.campaign_rounded),
                       ),
                       subtitle: Text('${data.createdAt}'),
-                      trailing: Icon(
-                        Icons.circle_rounded,
-                        color: Colors.red,
-                        size: 12,
-                      ),
                     );
                   },
                   separatorBuilder: (context, i) => Divider(
-                        height: 18,
+                        height: 0,
                       ),
                   itemCount: snapshot.data!.data!.data!.length);
+          }
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget _buildStreamSaveNotifikasiAdmin(
+    BuildContext context,
+  ) {
+    return StreamBuilder<ApiResponse<NotifikasiAdminSaveModel>>(
+      stream: _notifikasiAdminSaveBloc.notifikasiSaveStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          switch (snapshot.data!.status) {
+            case Status.loading:
+              return Center(child: LoadingKit());
+            case Status.error:
+              return Center(
+                child: ErrorResponse(
+                  message: snapshot.data!.message,
+                  onTap: () {
+                    _isStream = false;
+                  },
+                ),
+              );
+            case Status.completed:
+              final notifikasi = snapshot.data!.data!.data;
+              Future.delayed(const Duration(milliseconds: 500), () {
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  SlideLeftRoute(
+                    page: DetailLayananPage(
+                      id: notifikasi!.kunjunganId!,
+                      type: notifikasi.finaltagihan == 0 ? 'create' : 'view',
+                      role: widget.role,
+                      notifikasi: notifikasi,
+                    ),
+                  ),
+                ).then((value) {
+                  _notifikasiAdminBloc.getNotifikasi();
+                  setState(() {
+                    _isStream = false;
+                  });
+                });
+              });
           }
         }
         return const SizedBox();

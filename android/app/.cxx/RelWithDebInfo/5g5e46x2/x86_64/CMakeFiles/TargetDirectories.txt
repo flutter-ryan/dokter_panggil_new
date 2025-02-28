@@ -1,0 +1,2 @@
+/Users/ryanachmad/FlutterProject/dokter_panggil_new/android/app/.cxx/RelWithDebInfo/5g5e46x2/x86_64/CMakeFiles/edit_cache.dir
+/Users/ryanachmad/FlutterProject/dokter_panggil_new/android/app/.cxx/RelWithDebInfo/5g5e46x2/x86_64/CMakeFiles/rebuild_cache.dir

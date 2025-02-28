@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/blocs/download_kwitansi_bloc.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_final_bayar_bloc.dart';
 import 'package:dokter_panggil/src/blocs/tranportasi_resep_racikan_bloc.dart';
@@ -30,9 +32,10 @@ import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailLayananWidget extends StatefulWidget {
   const DetailLayananWidget({
@@ -82,6 +85,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
               data: _data,
               finalTagihan: finalTagihan,
               type: widget.type,
+              isSummary: true,
             ),
           ),
         );
@@ -230,21 +234,51 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
   }
 
   Future<void> _shareDeposit(DetailKunjungan data) async {
-    await WhatsappShare.share(
-      text:
-          'Hai pasien ${data.pasien!.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu',
-      linkUrl: Uri.parse(data.urlDeposit!).toString(),
-      phone: '${data.pasien!.nomorTelepon}',
-    );
+    var text =
+        'Hai pasien ${data.pasien!.namaPasien}, Tap tautan berikut untuk mengunduh kwitansi pembayaranmu ${Uri.parse(data.urlDeposit!).toString()}';
+    var whatsappURlAndroid =
+        "whatsapp://send?phone=${data.pasien!.nomorTelepon}&text=$text";
+    var whatsappURLIos =
+        "https://wa.me/${data.pasien!.nomorTelepon}?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(whatsappURLIos));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    }
   }
 
   Future<void> _shareKwitansi(DownloadKwitansiModel data) async {
-    await WhatsappShare.share(
-      text:
-          'Hai pasien ${data.data!.nama}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu',
-      linkUrl: Uri.parse(data.data!.url!).toString(),
-      phone: '${data.data!.nomor}',
-    );
+    var text =
+        'Hai pasien ${data.data!.nama}, Tap tautan ini untuk mengunduh kwitansi pembayaranmu ${Uri.parse(data.data!.url!).toString()}';
+    var whatsappURlAndroid =
+        "whatsapp://send?phone=${data.data!.nomor}&text=$text";
+    var whatsappURLIos =
+        "https://wa.me/${data.data!.nomor}?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(whatsappURLIos));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    }
   }
 
   @override
@@ -301,8 +335,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                       _rupiah.format(_data!.totalTindakan! +
                           _data!.transportTindakan! +
                           _data!.transportOjolTindakan!),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 12),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     type: widget.type,
                     role: widget.role,
@@ -389,7 +422,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 22.0),
+          padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 12.0),
           decoration: const BoxDecoration(color: Colors.white, boxShadow: [
             BoxShadow(
               color: Colors.black12,
@@ -397,64 +430,70 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
               offset: Offset(-2.0, 1.0),
             )
           ]),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Total Tagihan',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  InkWell(
-                    onTap: () => _detailTagihan(false),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _rupiah.format(
-                            _data!.total!,
-                          ),
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                        const SizedBox(
-                          width: 4.0,
-                        ),
-                        Icon(
-                          Icons.keyboard_arrow_up,
-                          color: Colors.grey[600],
-                        )
-                      ],
+          child: SafeArea(
+            top: false,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Total Tagihan',
+                      style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                  )
-                ],
-              ),
-              if (_data!.status == 5)
-                ElevatedButton(
-                  onPressed: _kwitansi,
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  child: const Text('Kirim Kwitansi'),
-                )
-              else if (_data!.status == 4)
-                ElevatedButton(
-                  onPressed: () => _uangMuka(_data!.id),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
-                  child: const Text('Konfirmasi Bayar'),
-                )
-              else
-                ElevatedButton(
-                  onPressed: () => _finalTagihan(true),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: kPrimaryColor,
-                  ),
-                  child: const Text('Final Tagihan'),
+                    InkWell(
+                      onTap: () => _detailTagihan(false),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _rupiah.format(
+                              _data!.total!,
+                            ),
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                          const SizedBox(
+                            width: 4.0,
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_up,
+                            color: Colors.grey[600],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-            ],
+                if (_data!.status == 5)
+                  ElevatedButton(
+                    onPressed: _kwitansi,
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                    child: const Text('Kirim Kwitansi'),
+                  )
+                else if (_data!.status == 4)
+                  ElevatedButton(
+                    onPressed: () => _uangMuka(_data!.id),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                    child: const Text('Konfirmasi Bayar'),
+                  )
+                else
+                  ElevatedButton(
+                    onPressed: () => _finalTagihan(true),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: kPrimaryColor,
+                        minimumSize: Size(120, 42),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        )),
+                    child: const Text('Final Tagihan'),
+                  ),
+              ],
+            ),
           ),
         ),
       ],

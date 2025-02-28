@@ -199,6 +199,7 @@ class _TindakanLabPageState extends State<TindakanLabPage> {
                 ),
               ).then((value) {
                 if (value != null) {
+                  if (!mounted) return;
                   FocusScope.of(context).requestFocus(FocusNode());
                   var data = value as MasterTindakanLabAll;
                   _edit(data);

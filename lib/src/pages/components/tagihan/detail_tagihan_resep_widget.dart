@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/blocs/file_eresep_oral_bloc.dart';
 import 'package:dokter_panggil/src/blocs/mr_eresep_bloc.dart';
 import 'package:dokter_panggil/src/blocs/resep_oral_proses_bloc.dart';
@@ -26,9 +28,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailTagihanResepWidget extends StatefulWidget {
   const DetailTagihanResepWidget({
@@ -228,11 +231,26 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
   }
 
   Future<void> _share(MrEresepOral? data) async {
-    await WhatsappShare.share(
-      text: 'ERESEP dokter panggil\n\nPasien ${data!.pasien}',
-      linkUrl: Uri.parse(data.url!).toString(),
-      phone: '+6281280023025',
-    );
+    var phone = '+6281280023025';
+    var text =
+        'ERESEP dokter panggil\n\nPasien ${data!.pasien}\n${Uri.parse(data.url!).toString()}';
+    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
+    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(whatsappURLIos));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    }
   }
 
   @override
@@ -276,117 +294,118 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
                           child: Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RichText(
-                                  text: TextSpan(
-                                      text: '${resepOral.dokter} |',
+                            child: RichText(
+                              text: TextSpan(
+                                  text: '${resepOral.dokter} |',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                  children: [
+                                    TextSpan(
+                                      text: ' E-Resep ',
+                                      style:
+                                          TextStyle(color: Colors.blueAccent),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => _eresepOral(resepOral),
+                                    ),
+                                    TextSpan(
+                                      text: '|',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    TextSpan(
+                                      text: resepOral.status == 0
+                                          ? ' Belum diproses'
+                                          : ' Sudah diproses',
                                       style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                      children: [
-                                        TextSpan(
-                                          text: ' E-Resep ',
-                                          style: TextStyle(
-                                              color: Colors.blueAccent),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap =
-                                                () => _eresepOral(resepOral),
-                                        ),
-                                        TextSpan(
-                                          text: '|',
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        TextSpan(
-                                          text: resepOral.status == 0
-                                              ? ' Belum diproses'
-                                              : ' Sudah diproses',
-                                          style: TextStyle(
-                                              color: resepOral.status == 0
-                                                  ? Colors.red
-                                                  : Colors.green),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = widget.type == 'create'
-                                                ? () => _prosesResep(resepOral)
-                                                : null,
-                                        ),
-                                        if (resepOral.status == 1)
-                                          TextSpan(
-                                            text: ' |',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        if (resepOral.status == 1)
-                                          TextSpan(
-                                            text: resepOral.isBersedia == 0
-                                                ? ' Tidak bersedia'
-                                                : ' Bersedia',
-                                            style: TextStyle(
-                                                color: resepOral.isBersedia == 0
-                                                    ? Colors.red
-                                                    : Colors.green),
-                                          ),
-                                      ]),
-                                ),
-                                ..._data!.tagihanResep!
-                                    .where((tagihan) =>
-                                        tagihan.resepOralId == resepOral.id)
-                                    .map((oral) => TileObatWidget(
-                                          onTap: widget.type != 'view'
-                                              ? () => _edit(context, oral)
-                                              : null,
-                                          isEdit: widget.type != 'view',
-                                          title: '${oral.namaBarang}',
-                                          subtitle:
-                                              '${oral.jumlah} x ${_rupiahNo.format(oral.hargaModal! + oral.tarifAplikasi!)}',
-                                          trailing: _rupiah.format(oral.total),
-                                        )),
-                                if (resepOral.status == 1)
-                                  SizedBox(
-                                    height: 12,
-                                  ),
-                                if (resepOral.status == 1 &&
-                                    resepOral.isBersedia == 1 &&
-                                    widget.type == 'create')
-                                  ElevatedButton.icon(
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      SlideBottomRoute(
-                                        page: TransaksiResepMr(
-                                          idKunjungan: _data!.id,
-                                          dataResep: resepOral.obatOral,
-                                          idResep: resepOral.id,
-                                        ),
+                                          color: resepOral.status == 0
+                                              ? Colors.red
+                                              : Colors.green),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = widget.type == 'create'
+                                            ? () => _prosesResep(resepOral)
+                                            : null,
+                                    ),
+                                    if (resepOral.status == 1)
+                                      TextSpan(
+                                        text: ' |',
+                                        style: TextStyle(color: Colors.black),
                                       ),
-                                    ).then((value) {
-                                      if (value != null) {
-                                        var data = value as DetailKunjungan;
-                                        widget.reload!(data);
-                                      }
-                                    }),
-                                    icon: Icon(
-                                      Icons.add_circle_outline_rounded,
-                                      size: 18,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        visualDensity: VisualDensity.compact,
-                                        backgroundColor: Colors.grey[100],
-                                        elevation: 0,
-                                        foregroundColor: Colors.blueAccent,
-                                        textStyle: TextStyle(fontSize: 12),
-                                        minimumSize: Size(double.infinity, 40)),
-                                    label: Text(
-                                      'Transaksi Barang/Obat',
-                                    ),
-                                  )
-                              ],
+                                    if (resepOral.status == 1)
+                                      TextSpan(
+                                        text: resepOral.isBersedia == 0
+                                            ? ' Tidak bersedia'
+                                            : ' Bersedia',
+                                        style: TextStyle(
+                                            color: resepOral.isBersedia == 0
+                                                ? Colors.red
+                                                : Colors.green),
+                                      ),
+                                  ]),
                             ),
                           ),
                         ),
                       ],
                     ),
+                    ..._data!.tagihanResep!
+                        .where((tagihan) => tagihan.resepOralId == resepOral.id)
+                        .map(
+                          (oral) => TileObatWidget(
+                            onTap: widget.type != 'view'
+                                ? () => _edit(context, oral)
+                                : null,
+                            isEdit: widget.type != 'view',
+                            leading: Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: Text(
+                                '${oral.createdAt}',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            title: '${oral.namaBarang}',
+                            subtitle:
+                                '${oral.jumlah} x ${_rupiahNo.format(oral.hargaModal! + oral.tarifAplikasi!)}',
+                            trailing: _rupiah.format(oral.total),
+                          ),
+                        ),
+                    if (resepOral.status == 1)
+                      SizedBox(
+                        height: 12,
+                      ),
+                    if (resepOral.status == 1 &&
+                        resepOral.isBersedia == 1 &&
+                        widget.type == 'create')
+                      ElevatedButton.icon(
+                        onPressed: () => Navigator.push(
+                          context,
+                          SlideBottomRoute(
+                            page: TransaksiResepMr(
+                              idKunjungan: _data!.id,
+                              dataResep: resepOral.obatOral,
+                              idResep: resepOral.id,
+                            ),
+                          ),
+                        ).then((value) {
+                          if (value != null) {
+                            var data = value as DetailKunjungan;
+                            widget.reload!(data);
+                          }
+                        }),
+                        icon: Icon(
+                          Icons.add_circle_outline_rounded,
+                          size: 18,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            backgroundColor: Colors.grey[100],
+                            elevation: 0,
+                            foregroundColor: Colors.blueAccent,
+                            textStyle: TextStyle(fontSize: 12),
+                            minimumSize: Size(double.infinity, 40)),
+                        label: Text(
+                          'Transaksi Barang/Obat',
+                        ),
+                      )
                   ],
                 ),
               )

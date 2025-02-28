@@ -50,7 +50,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+    <string>DRP Administration need access to camera to take photo document</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>DRP Administration need access to microphone to access camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>DRP Healthworkers need access to photo library to upload file</string>
+	<string>DRP Administration need access to photo library to upload file</string>
 </dict>
 </plist>

@@ -354,6 +354,7 @@ class _EditUserState extends State<EditUser> {
       if (value != null) {
         var data = value as MasterPegawai;
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }
@@ -608,6 +609,7 @@ class _EditSipState extends State<EditSip> {
       if (value != null) {
         var data = value as MasterPegawai;
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }
@@ -855,6 +857,7 @@ class _EditDataPegawaiState extends State<EditDataPegawai> {
       if (value != null) {
         var data = value as MasterPegawai;
         Future.delayed(const Duration(milliseconds: 500), () {
+          if (!mounted) return;
           Navigator.pop(context, data);
         });
       }

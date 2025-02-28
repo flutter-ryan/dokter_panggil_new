@@ -20,7 +20,7 @@ class _SessionpageState extends State<Sessionpage> {
     authbloc.restoreSession();
   }
 
-  Future<bool> willPop(bool didPop) {
+  Future<bool> willPop(bool didPop, dynamic result) {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime!) > const Duration(seconds: 1)) {
@@ -45,7 +45,7 @@ class _SessionpageState extends State<Sessionpage> {
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data!) {
           return PopScope(
-            onPopInvoked: willPop,
+            onPopInvokedWithResult: willPop,
             child: const Rootpage(),
           );
         }

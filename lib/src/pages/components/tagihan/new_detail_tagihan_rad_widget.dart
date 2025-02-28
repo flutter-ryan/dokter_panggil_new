@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/blocs/delete_tagihan_tindakan_rad_bloc.dart';
 import 'package:dokter_panggil/src/blocs/dokumen_pengantar_rad_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_tindakan_rad_create_bloc.dart';
@@ -27,10 +29,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewDetailTagihanRadWidget extends StatefulWidget {
   const NewDetailTagihanRadWidget({
@@ -135,12 +138,26 @@ class _NewDetailTagihanRadWidgetState extends State<NewDetailTagihanRadWidget> {
   }
 
   Future<void> _shareDokumenPengantarRad(DokumenPengantarRad data) async {
-    await WhatsappShare.share(
-      text:
-          'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Laboratorium',
-      linkUrl: Uri.parse(data.linkDoc!).toString(),
-      phone: '${data.pasien!.nomorTelepon}',
-    );
+    var phone = data.pasien?.nomorTelepon ?? '+6281280023025';
+    var text =
+        'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Radiologi\n${Uri.parse(data.linkDoc!).toString()}';
+    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
+    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(whatsappURLIos));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    }
   }
 
   void _showTindakanRad() {
@@ -291,144 +308,156 @@ class _NewDetailTagihanRadWidgetState extends State<NewDetailTagihanRadWidget> {
       tiles: Column(
           children: _data.pengantarRadMr!
               .map(
-                (pengantar) => Row(
+                (pengantar) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
-                      child: Text(
-                        '${pengantar.tanggalShort}\n${pengantar.jamShort}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                  text: '${pengantar.dokter} |',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  children: [
-                                    TextSpan(
-                                      text: ' E-Pengantar ',
-                                      style:
-                                          TextStyle(color: Colors.blueAccent),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap =
-                                            () => _ePengantarRad(pengantar),
-                                    ),
-                                    TextSpan(
-                                      text: '|',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    TextSpan(
-                                      text: pengantar.status == 0
-                                          ? ' Belum diproses'
-                                          : ' Sudah diproses',
-                                      style: TextStyle(
-                                          color: pengantar.status == 0
-                                              ? Colors.red
-                                              : Colors.green),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = widget.type == 'create'
-                                            ? () => _prosesRad(pengantar)
-                                            : null,
-                                    ),
-                                    if (pengantar.status == 1)
-                                      TextSpan(
-                                        text: ' |',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    if (pengantar.status == 1)
-                                      TextSpan(
-                                        text: pengantar.isBersedia == 0
-                                            ? ' Tidak bersedia'
-                                            : ' Bersedia',
-                                        style: TextStyle(
-                                            color: pengantar.isBersedia == 0
-                                                ? Colors.red
-                                                : Colors.green),
-                                      ),
-                                    TextSpan(
-                                      text: ' |',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    TextSpan(
-                                      text: ' Upload Hasil',
-                                      style:
-                                          TextStyle(color: Colors.blueAccent),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = widget.type == 'create'
-                                            ? () => _uploadDokumenRad(pengantar)
-                                            : null,
-                                    )
-                                  ]),
-                            ),
-                            ..._data.tagihanTindakanRad!
-                                .where((tagihan) =>
-                                    tagihan.pengantarId == pengantar.id)
-                                .map((tagihanRad) => TileObatWidget(
-                                      onTap: widget.type != 'view'
-                                          ? () =>
-                                              _deleteTindakanRad(tagihanRad.id)
-                                          : null,
-                                      isEdit: widget.type != 'view',
-                                      title:
-                                          '${tagihanRad.tindakanRad!.namaTindakan}',
-                                      trailing:
-                                          _rupiah.format(tagihanRad.total),
-                                      iconData: Icons.delete_rounded,
-                                    )),
-                            if (pengantar.status == 1)
-                              SizedBox(
-                                height: 12,
-                              ),
-                            if (pengantar.status == 1 &&
-                                pengantar.isBersedia == 1 &&
-                                widget.type == 'create')
-                              ElevatedButton.icon(
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  SlideBottomRoute(
-                                    page: TransaksiTindakanRad(
-                                      idKunjungan: _data.id!,
-                                      dataRad: pengantar.tindakanRad!,
-                                      idPengantar: pengantar.id,
-                                    ),
-                                  ),
-                                ).then((value) {
-                                  if (value != null) {
-                                    var data = value as DetailKunjungan;
-                                    widget.reload!(data);
-                                  }
-                                }),
-                                icon: Icon(
-                                  Icons.add_circle_outline_rounded,
-                                  size: 18,
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    visualDensity: VisualDensity.compact,
-                                    backgroundColor: Colors.grey[100],
-                                    elevation: 0,
-                                    foregroundColor: Colors.blueAccent,
-                                    textStyle: TextStyle(fontSize: 12),
-                                    minimumSize: Size(double.infinity, 40)),
-                                label: Text(
-                                  'Transaksi Tindakan Radiologi',
-                                ),
-                              )
-                          ],
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
+                          child: Text(
+                            '${pengantar.tanggalShort}\n${pengantar.jamShort}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                      text: '${pengantar.dokter} |',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                      children: [
+                                        TextSpan(
+                                          text: ' E-Pengantar ',
+                                          style: TextStyle(
+                                              color: Colors.blueAccent),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap =
+                                                () => _ePengantarRad(pengantar),
+                                        ),
+                                        TextSpan(
+                                          text: '|',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        TextSpan(
+                                          text: pengantar.status == 0
+                                              ? ' Belum diproses'
+                                              : ' Sudah diproses',
+                                          style: TextStyle(
+                                              color: pengantar.status == 0
+                                                  ? Colors.red
+                                                  : Colors.green),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = widget.type == 'create'
+                                                ? () => _prosesRad(pengantar)
+                                                : null,
+                                        ),
+                                        if (pengantar.status == 1)
+                                          TextSpan(
+                                            text: ' |',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        if (pengantar.status == 1)
+                                          TextSpan(
+                                            text: pengantar.isBersedia == 0
+                                                ? ' Tidak bersedia'
+                                                : ' Bersedia',
+                                            style: TextStyle(
+                                                color: pengantar.isBersedia == 0
+                                                    ? Colors.red
+                                                    : Colors.green),
+                                          ),
+                                        TextSpan(
+                                          text: ' |',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        TextSpan(
+                                          text: ' Upload Hasil',
+                                          style: TextStyle(
+                                              color: Colors.blueAccent),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = widget.type == 'create'
+                                                ? () =>
+                                                    _uploadDokumenRad(pengantar)
+                                                : null,
+                                        )
+                                      ]),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    ..._data.tagihanTindakanRad!
+                        .where((tagihan) => tagihan.pengantarId == pengantar.id)
+                        .map((tagihanRad) => TileObatWidget(
+                              onTap: widget.type != 'view'
+                                  ? () => _deleteTindakanRad(tagihanRad.id)
+                                  : null,
+                              isEdit: widget.type != 'view',
+                              title: '${tagihanRad.tindakanRad!.namaTindakan}',
+                              leading: Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: Text(
+                                  '${tagihanRad.createdAt}',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              trailing: _rupiah.format(tagihanRad.total),
+                              iconData: Icons.delete_rounded,
+                            )),
+                    if (pengantar.status == 1)
+                      SizedBox(
+                        height: 12,
+                      ),
+                    if (pengantar.status == 1 &&
+                        pengantar.isBersedia == 1 &&
+                        widget.type == 'create')
+                      ElevatedButton.icon(
+                        onPressed: () => Navigator.push(
+                          context,
+                          SlideBottomRoute(
+                            page: TransaksiTindakanRad(
+                              idKunjungan: _data.id!,
+                              dataRad: pengantar.tindakanRad!,
+                              idPengantar: pengantar.id,
+                            ),
+                          ),
+                        ).then((value) {
+                          if (value != null) {
+                            var data = value as DetailKunjungan;
+                            widget.reload!(data);
+                          }
+                        }),
+                        icon: Icon(
+                          Icons.add_circle_outline_rounded,
+                          size: 18,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            backgroundColor: Colors.grey[100],
+                            elevation: 0,
+                            foregroundColor: Colors.blueAccent,
+                            textStyle: TextStyle(fontSize: 12),
+                            minimumSize: Size(double.infinity, 40)),
+                        label: Text(
+                          'Transaksi Tindakan Radiologi',
+                        ),
+                      )
                   ],
                 ),
               )

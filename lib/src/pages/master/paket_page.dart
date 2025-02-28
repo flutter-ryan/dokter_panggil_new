@@ -115,6 +115,7 @@ class _PaketPageState extends State<PaketPage> {
       duration: const Duration(milliseconds: 500),
     ).then((value) {
       if (value != null) {
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
           SlideBottomRoute(page: super.widget),

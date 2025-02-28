@@ -1,4 +1,5 @@
 import 'package:dokter_panggil/src/blocs/pasien_kunjungan_detail_bloc.dart';
+import 'package:dokter_panggil/src/models/notifikasi_admin_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
 import 'package:dokter_panggil/src/pages/components/detail_layanan_widget.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
@@ -14,11 +15,13 @@ class DetailLayananPage extends StatefulWidget {
     required this.id,
     this.type = 'create',
     this.role,
+    this.notifikasi,
   });
 
   final int id;
   final String type;
   final int? role;
+  final NotifikasiAdmin? notifikasi;
 
   @override
   State<DetailLayananPage> createState() => _DetailLayananPageState();

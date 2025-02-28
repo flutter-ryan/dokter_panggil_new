@@ -76,7 +76,7 @@ class _CardtagihanState extends State<Cardtagihan> {
             visualDensity: VisualDensity.compact,
             title: const Text(
               'Sub Total',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
             trailing: widget.subTotal,
           ),

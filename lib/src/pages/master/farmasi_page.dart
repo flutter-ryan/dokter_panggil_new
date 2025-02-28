@@ -176,6 +176,7 @@ class _FarmasiPageState extends State<FarmasiPage> {
                 ).then((value) {
                   if (!mounted) return;
                   if (value != null) {
+                    if (!mounted) return;
                     FocusScope.of(context).requestFocus(FocusNode());
                     var data = value as BarangFarmasi;
                     _edit(data);

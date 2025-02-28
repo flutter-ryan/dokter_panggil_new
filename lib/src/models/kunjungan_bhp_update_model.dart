@@ -39,12 +39,12 @@ class ResponseKunjunganBhpUpdateModel {
     this.message,
   });
 
-  Bhp? data;
+  DetailKunjungan? data;
   String? message;
 
   factory ResponseKunjunganBhpUpdateModel.fromJson(Map<String, dynamic> json) =>
       ResponseKunjunganBhpUpdateModel(
-        data: Bhp.fromJson(json["data"]),
+        data: DetailKunjungan.fromJson(json["data"]),
         message: json["message"],
       );
 }

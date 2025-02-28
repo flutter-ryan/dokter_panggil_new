@@ -22,15 +22,15 @@ import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/local_notification_service.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({
@@ -56,7 +56,6 @@ class _HomepageState extends State<Homepage> {
     _kunjunganBloc.kunjunganPasien();
     _kunjunganFinalBloc.kunjunganFinal();
     _getMessage();
-    _handleMessage();
   }
 
   void _getKunjungan() {
@@ -82,6 +81,7 @@ class _HomepageState extends State<Homepage> {
         LocalNotificationService.showNotification(message);
       }
     });
+    _handleMessage();
   }
 
   void _handleMessage() async {
@@ -129,14 +129,26 @@ class _HomepageState extends State<Homepage> {
     ).then((value) async {
       if (value != null) {
         var data = value as KwitansiSimpan;
-        var tlp = data.pasien!.nomorTelepon;
-        String text =
-            'Hai pasien ${data.pasien!.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu';
-        await WhatsappShare.share(
-          text: text,
-          linkUrl: Uri.parse('${data.url}').toString(),
-          phone: '$tlp',
-        );
+        var tlp = data.pasien?.nomorTelepon ?? '+6281280023025';
+        var text =
+            'Hai pasien ${data.pasien!.namaPasien},\nTap tautan ini untuk mengunduh kwitansi pembayaranmu\n${Uri.parse(data.url!).toString()}';
+        var whatsappURlAndroid = "whatsapp://send?phone=$tlp&text=$text";
+        var whatsappURLIos = "https://wa.me/$tlp?text=${Uri.tryParse(text)}";
+        if (Platform.isIOS) {
+          if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+            await launchUrl(Uri.parse(whatsappURLIos));
+          } else {
+            Fluttertoast.showToast(
+                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+          }
+        } else {
+          if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+            await launchUrl(Uri.parse(whatsappURlAndroid));
+          } else {
+            Fluttertoast.showToast(
+                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+          }
+        }
       }
     });
   }
@@ -648,13 +660,25 @@ class _KunjunganPasienState extends State<KunjunganPasien> {
       if (value != null) {
         var data = value as KwitansiSimpan;
         var tlp = data.pasien!.nomorTelepon;
-        String text =
-            'Hai pasien ${data.pasien!.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu';
-        await WhatsappShare.share(
-          text: text,
-          linkUrl: Uri.parse('${data.url}').toString(),
-          phone: '$tlp',
-        );
+        var text =
+            'Hai pasien ${data.pasien!.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu\n${Uri.parse(data.url!).toString()}';
+        var whatsappURlAndroid = "whatsapp://send?phone=$tlp&text=$text";
+        var whatsappURLIos = "https://wa.me/$tlp?text=${Uri.tryParse(text)}";
+        if (Platform.isIOS) {
+          if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+            await launchUrl(Uri.parse(whatsappURLIos));
+          } else {
+            Fluttertoast.showToast(
+                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+          }
+        } else {
+          if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+            await launchUrl(Uri.parse(whatsappURlAndroid));
+          } else {
+            Fluttertoast.showToast(
+                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+          }
+        }
       }
     });
   }

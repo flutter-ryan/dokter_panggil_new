@@ -9,6 +9,7 @@ class TileObatWidget extends StatelessWidget {
     this.onTap,
     this.isEdit = false,
     this.iconData,
+    this.leading,
   });
 
   final String? title;
@@ -17,27 +18,30 @@ class TileObatWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isEdit;
   final IconData? iconData;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
-      style: ListTileStyle.list,
-      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      visualDensity: VisualDensity.compact,
       titleTextStyle: TextStyle(
         fontWeight: FontWeight.normal,
         color: Colors.black,
       ),
       minLeadingWidth: 0,
-      horizontalTitleGap: 2,
+      horizontalTitleGap: 18,
+      leading: leading,
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            '$title',
-            style: TextStyle(
-              fontSize: 12,
+          Flexible(
+            child: Text(
+              '$title',
+              style: TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
           if (isEdit)

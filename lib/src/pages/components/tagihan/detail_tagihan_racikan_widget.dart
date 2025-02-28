@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dokter_panggil/src/blocs/delete_tagihan_resep_racikan_bloc.dart';
 import 'package:dokter_panggil/src/blocs/file_eresep_racikan_bloc.dart';
 import 'package:dokter_panggil/src/blocs/resep_racikan_proses_bloc.dart';
@@ -24,12 +26,11 @@ import 'package:dokter_panggil/src/source/size_config.dart';
 import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 class DetailTagihanRacikanWidget extends StatefulWidget {
   const DetailTagihanRacikanWidget({
@@ -252,11 +253,26 @@ class _DetailTagihanRacikanWidgetState
   }
 
   Future<void> _shareResepRacikan(FileEresepRacikan resep) async {
-    await WhatsappShare.share(
-      text: 'ERESEP dokter panggil\n\nPasien ${resep.pasien}',
-      linkUrl: Uri.parse(resep.url!).toString(),
-      phone: '+6281280023025',
-    );
+    var phone = '+6281280023025';
+    var text =
+        'ERESEP dokter panggil\n\nPasien ${resep.pasien} ${Uri.parse(resep.url!).toString()}';
+    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
+    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(whatsappURLIos));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
+      }
+    }
   }
 
   @override
@@ -280,25 +296,26 @@ class _DetailTagihanRacikanWidgetState
         color: Colors.grey[400],
         tiles: _data!.resepRacikan!
             .map(
-              (resepRacikan) => Row(
+              (resepRacikan) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
-                    child: Text(
-                      '${resepRacikan.tanggalShort}\n${resepRacikan.jamShort}',
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
+                        child: Text(
+                          '${resepRacikan.tanggalShort}\n${resepRacikan.jamShort}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
+                          child: RichText(
                             text: TextSpan(
                                 text: '${resepRacikan.dokter} |',
                                 style: TextStyle(
@@ -347,60 +364,67 @@ class _DetailTagihanRacikanWidgetState
                                     ),
                                 ]),
                           ),
-                          ..._data!.tagihanResepRacikan!
-                              .where((tagihan) =>
-                                  tagihan.kunjunganRacikanId == resepRacikan.id)
-                              .map((obatRacikan) => TileObatWidget(
-                                    onTap: widget.type != 'view'
-                                        ? () => _edit(context, obatRacikan)
-                                        : null,
-                                    isEdit: widget.type != 'view',
-                                    title: '${obatRacikan.namaBarang}',
-                                    subtitle:
-                                        '${obatRacikan.jumlah} x ${_rupiahNo.format(obatRacikan.hargaModal! + obatRacikan.tarifAplikasi!)}',
-                                    trailing: _rupiah.format(obatRacikan.total),
-                                  )),
-                          if (resepRacikan.status == 1)
-                            SizedBox(
-                              height: 12,
-                            ),
-                          if (resepRacikan.status == 1 &&
-                              resepRacikan.isBersedia == 1 &&
-                              widget.type == 'create')
-                            ElevatedButton.icon(
-                              onPressed: () => Navigator.push(
-                                context,
-                                SlideBottomRoute(
-                                  page: TransaksiResepRacikanMr(
-                                    idKunjungan: _data!.id!,
-                                    dataResepRacikan: resepRacikan,
-                                  ),
-                                ),
-                              ).then((value) {
-                                if (value != null) {
-                                  var data = value as DetailKunjungan;
-                                  widget.reload!(data);
-                                }
-                              }),
-                              icon: Icon(
-                                Icons.add_circle_outline_rounded,
-                                size: 18,
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  visualDensity: VisualDensity.compact,
-                                  backgroundColor: Colors.grey[100],
-                                  elevation: 0,
-                                  foregroundColor: Colors.blueAccent,
-                                  textStyle: TextStyle(fontSize: 12),
-                                  minimumSize: Size(double.infinity, 40)),
-                              label: Text(
-                                'Transaksi Barang/Obat',
-                              ),
-                            )
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+                  ..._data!.tagihanResepRacikan!
+                      .where((tagihan) =>
+                          tagihan.kunjunganRacikanId == resepRacikan.id)
+                      .map((obatRacikan) => TileObatWidget(
+                            onTap: widget.type != 'view'
+                                ? () => _edit(context, obatRacikan)
+                                : null,
+                            isEdit: widget.type != 'view',
+                            leading: Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: Text(
+                                '${obatRacikan.createdAt}',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            title: '${obatRacikan.namaBarang}',
+                            subtitle:
+                                '${obatRacikan.jumlah} x ${_rupiahNo.format(obatRacikan.hargaModal! + obatRacikan.tarifAplikasi!)}',
+                            trailing: _rupiah.format(obatRacikan.total),
+                          )),
+                  if (resepRacikan.status == 1)
+                    SizedBox(
+                      height: 12,
+                    ),
+                  if (resepRacikan.status == 1 &&
+                      resepRacikan.isBersedia == 1 &&
+                      widget.type == 'create')
+                    ElevatedButton.icon(
+                      onPressed: () => Navigator.push(
+                        context,
+                        SlideBottomRoute(
+                          page: TransaksiResepRacikanMr(
+                            idKunjungan: _data!.id!,
+                            dataResepRacikan: resepRacikan,
+                          ),
+                        ),
+                      ).then((value) {
+                        if (value != null) {
+                          var data = value as DetailKunjungan;
+                          widget.reload!(data);
+                        }
+                      }),
+                      icon: Icon(
+                        Icons.add_circle_outline_rounded,
+                        size: 18,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          visualDensity: VisualDensity.compact,
+                          backgroundColor: Colors.grey[100],
+                          elevation: 0,
+                          foregroundColor: Colors.blueAccent,
+                          textStyle: TextStyle(fontSize: 12),
+                          minimumSize: Size(double.infinity, 40)),
+                      label: Text(
+                        'Transaksi Barang/Obat',
+                      ),
+                    )
                 ],
               ),
             )

@@ -90,10 +90,18 @@ class _FormDokumenLabState extends State<FormDokumenLab> {
     );
     if (result == null) return;
     Widget thumbnail;
+    List<int> bytes;
     if (result.files.single.extension != 'pdf') {
       thumbnail = await FilePreview.getThumbnail(
         result.files.single.path!,
       );
+      Directory tempDir = await getTemporaryDirectory();
+      var image = await FlutterImageCompress.compressAndGetFile(
+        result.files.single.path!,
+        '${tempDir.path}/${p.basename(result.files.single.path!)}',
+        quality: 50,
+      );
+      bytes = File(image!.path).readAsBytesSync();
     } else {
       thumbnail = Column(
         children: [
@@ -102,8 +110,8 @@ class _FormDokumenLabState extends State<FormDokumenLab> {
               filePath: result.files.single.path,
               enableSwipe: true,
               swipeHorizontal: true,
-              autoSpacing: false,
-              pageFling: false,
+              autoSpacing: true,
+              pageFling: true,
             ),
           ),
           Align(
@@ -116,14 +124,8 @@ class _FormDokumenLabState extends State<FormDokumenLab> {
           )
         ],
       );
+      bytes = File(result.files.single.path!).readAsBytesSync();
     }
-    Directory tempDir = await getTemporaryDirectory();
-    var image = await FlutterImageCompress.compressAndGetFile(
-      result.files.single.path!,
-      '${tempDir.path}/${p.basename(result.files.single.path!)}.${p.basename(result.files.single.path!)}',
-      quality: 50,
-    );
-    List<int> bytes = File(image!.path).readAsBytesSync();
     setState(() {
       _image64 = base64Encode(bytes);
       _extension = result.files.single.extension;
@@ -149,11 +151,15 @@ class _FormDokumenLabState extends State<FormDokumenLab> {
       doc = _image64;
       ext = '.$_extension';
     }
-    _dokumenLabSaveBloc.idPengantarSink.add(widget.idPengantar!);
-    _dokumenLabSaveBloc.imageSink.add(doc!);
-    _dokumenLabSaveBloc.extSink.add(ext!);
-    _dokumenLabSaveBloc.simpanDokumenLab();
-    _showStreamSimpanDokumenLab();
+    if (doc != null) {
+      _dokumenLabSaveBloc.idPengantarSink.add(widget.idPengantar!);
+      _dokumenLabSaveBloc.imageSink.add(doc!);
+      _dokumenLabSaveBloc.extSink.add(ext!);
+      _dokumenLabSaveBloc.simpanDokumenLab();
+      _showStreamSimpanDokumenLab();
+    } else {
+      Fluttertoast.showToast(msg: 'Anda belum memilih dokumen');
+    }
   }
 
   void _showStreamSimpanDokumenLab() {
@@ -199,7 +205,7 @@ class _FormDokumenLabState extends State<FormDokumenLab> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: _selectMedia,
-                        child: _pictures.isEmpty
+                        child: _pictures.isEmpty && _imagePreview == null
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

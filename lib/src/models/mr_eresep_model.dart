@@ -20,17 +20,20 @@ class MrEresepModel {
 class MrEresep {
   int? id;
   String? namaPasien;
+  String? nomor;
   String? url;
 
   MrEresep({
     this.id,
     this.namaPasien,
     this.url,
+    this.nomor,
   });
 
   factory MrEresep.fromJson(Map<String, dynamic> json) => MrEresep(
         id: json["id"],
         namaPasien: json["nama_pasien"],
+        nomor: json["nomor"],
         url: json["url"],
       );
 }
