@@ -1,12 +1,8 @@
-import 'dart:io';
-
 import 'package:dokter_panggil/src/blocs/download_kwitansi_bloc.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_final_bayar_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tranportasi_resep_racikan_bloc.dart';
 import 'package:dokter_panggil/src/models/download_kwitansi_model.dart';
 import 'package:dokter_panggil/src/models/kunjungan_final_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/transportasi_resep_racikan_model.dart';
 import 'package:dokter_panggil/src/pages/components/detail_biaya_lainnya_wigdet.dart';
 import 'package:dokter_panggil/src/pages/components/detail_paket_widget.dart';
 import 'package:dokter_panggil/src/pages/components/final_tagihan_page.dart';
@@ -16,7 +12,6 @@ import 'package:dokter_panggil/src/pages/components/detail_identitas_widget.dart
 import 'package:dokter_panggil/src/pages/components/detail_petugas_widget.dart';
 import 'package:dokter_panggil/src/pages/components/detail_tindakan_wigdet.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/detail_obat_injeksi_widget.dart';
@@ -31,11 +26,9 @@ import 'package:dokter_panggil/src/source/size_config.dart';
 import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailLayananWidget extends StatefulWidget {
   const DetailLayananWidget({
@@ -234,51 +227,15 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
   }
 
   Future<void> _shareDeposit(DetailKunjungan data) async {
-    var text =
-        'Hai pasien ${data.pasien!.namaPasien}, Tap tautan berikut untuk mengunduh kwitansi pembayaranmu ${Uri.parse(data.urlDeposit!).toString()}';
-    var whatsappURlAndroid =
-        "whatsapp://send?phone=${data.pasien!.nomorTelepon}&text=$text";
-    var whatsappURLIos =
-        "https://wa.me/${data.pasien!.nomorTelepon}?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(whatsappURLIos));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    }
+    Share.share(
+        'Hai pasien ${data.pasien!.namaPasien}, Tap tautan berikut untuk mengunduh kwitansi pembayaranmu ${Uri.parse(data.urlDeposit!).toString()}',
+        subject: 'Deposit ${data.pasien!.namaPasien}');
   }
 
   Future<void> _shareKwitansi(DownloadKwitansiModel data) async {
-    var text =
-        'Hai pasien ${data.data!.nama}, Tap tautan ini untuk mengunduh kwitansi pembayaranmu ${Uri.parse(data.data!.url!).toString()}';
-    var whatsappURlAndroid =
-        "whatsapp://send?phone=${data.data!.nomor}&text=$text";
-    var whatsappURLIos =
-        "https://wa.me/${data.data!.nomor}?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(whatsappURLIos));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    }
+    Share.share(
+        'Hai pasien ${data.data!.nama},\nTap tautan ini untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.data!.url!).toString()}',
+        subject: 'Kwitansi ${data.data!.nama}');
   }
 
   @override
@@ -313,12 +270,18 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                   id: widget.id,
                   type: widget.type,
                 ),
-                if (_data!.dokter!.isNotEmpty || _data!.perawat!.isNotEmpty)
-                  DetailPetugasWidget(
-                    data: _data!,
-                    reload: (DetailKunjungan? data) =>
-                        setState(() => _data = data),
-                  ),
+                DetailPetugasWidget(
+                  data: _data!,
+                  isDokter: true,
+                  reload: (DetailKunjungan? data) =>
+                      setState(() => _data = data),
+                ),
+                DetailPetugasWidget(
+                  data: _data!,
+                  isDokter: false,
+                  reload: (DetailKunjungan? data) =>
+                      setState(() => _data = data),
+                ),
                 DetailPaketWidget(
                   data: _data!,
                   type: widget.type,
@@ -536,188 +499,6 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
               return ErrorDialog(
                 message: snapshot.data!.message,
                 onTap: () => Navigator.pop(context),
-              );
-            case Status.completed:
-              return SuccessDialog(
-                message: snapshot.data!.data!.message,
-                onTap: () => Navigator.pop(context, snapshot.data!.data!.data),
-              );
-          }
-        }
-        return const SizedBox();
-      },
-    );
-  }
-}
-
-class TransportasiResepRacikan extends StatefulWidget {
-  const TransportasiResepRacikan({
-    super.key,
-    required this.data,
-    this.reload,
-    this.type = 'create',
-  });
-
-  final DetailKunjungan data;
-  final Function(DetailKunjungan? data)? reload;
-  final String type;
-
-  @override
-  State<TransportasiResepRacikan> createState() =>
-      _TransportasiResepRacikanState();
-}
-
-class _TransportasiResepRacikanState extends State<TransportasiResepRacikan> {
-  final TransportasiResepRacikanBloc _transportasiResepRacikanBloc =
-      TransportasiResepRacikanBloc();
-  final _rupiah =
-      NumberFormat.currency(locale: 'id', symbol: 'Rp. ', decimalDigits: 0);
-  final _formKey = GlobalKey<FormState>();
-  final _biaya = TextEditingController();
-
-  bool validateAndSave() {
-    var formState = _formKey.currentState;
-    if (formState!.validate()) {
-      return true;
-    }
-    return false;
-  }
-
-  void _tambahTransport() {
-    _biaya.text = '${widget.data.transportResepRacikan}';
-    showBarModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom + 22),
-          child: _formTransportasi(),
-        );
-      },
-    ).then((value) {
-      if (value != null) {
-        var data = value as DetailKunjungan;
-        widget.reload!(data);
-      }
-    });
-  }
-
-  void _simpan() {
-    if (validateAndSave()) {
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
-      FocusScope.of(context).unfocus();
-      _transportasiResepRacikanBloc.idKunjunganSink.add(widget.data.id!);
-      _transportasiResepRacikanBloc.biayaSink.add(int.parse(_biaya.text));
-      _transportasiResepRacikanBloc.saveTransportasiResepRacikan();
-      _showStreamTransportasi();
-    }
-  }
-
-  void _showStreamTransportasi() {
-    showAnimatedDialog(
-      context: context,
-      builder: (context) {
-        return _streamTransportResep();
-      },
-      animationType: DialogTransitionType.slideFromBottomFade,
-      duration: const Duration(milliseconds: 500),
-    ).then((value) {
-      var data = value as DetailKunjungan;
-      Future.delayed(const Duration(milliseconds: 300), () {
-        if (!mounted) return;
-        Navigator.pop(context, data);
-      });
-    });
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-    _transportasiResepRacikanBloc.dispose();
-    _biaya.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: widget.type != 'view' ? _tambahTransport : null,
-      dense: true,
-      contentPadding: EdgeInsets.zero,
-      title: Row(
-        children: [
-          const Text('Transportasi'),
-          const SizedBox(
-            width: 8.0,
-          ),
-          if (widget.type != 'view')
-            const Icon(
-              Icons.edit_note_rounded,
-              size: 22.0,
-              color: Colors.blue,
-            )
-        ],
-      ),
-      trailing: Text(_rupiah.format(widget.data.transportResepRacikan)),
-    );
-  }
-
-  Widget _formTransportasi() {
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(28.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Transportasi Resep',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(
-              height: 32.0,
-            ),
-            Input(
-              controller: _biaya,
-              label: 'Biaya Ojek Online',
-              hint: 'Input biaya ojek online',
-              maxLines: 1,
-              validator: (val) {
-                if (val!.isEmpty) {
-                  return 'Input required';
-                }
-                return null;
-              },
-              keyType: TextInputType.number,
-            ),
-            const SizedBox(
-              height: 22.0,
-            ),
-            ElevatedButton(
-              onPressed: _simpan,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: kPrimaryColor,
-                minimumSize: const Size(double.infinity, 48),
-              ),
-              child: const Text('Simpan'),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _streamTransportResep() {
-    return StreamBuilder<ApiResponse<ResponseTransportasiResepRacikanModel>>(
-      stream: _transportasiResepRacikanBloc.transportasiResepRacikanStream,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          switch (snapshot.data!.status) {
-            case Status.loading:
-              return const LoadingKit();
-            case Status.error:
-              return ErrorDialog(
-                message: snapshot.data!.message,
               );
             case Status.completed:
               return SuccessDialog(

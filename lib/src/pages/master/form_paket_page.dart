@@ -195,9 +195,7 @@ class _FormPaketPageState extends State<FormPaketPage> {
   Widget _streamListBhp(BuildContext context) {
     return SizedBox(
       height: SizeConfig.blockSizeVertical * 80,
-      child: ListMasterBhpPaginate(
-        selectedData: _bhp,
-      ),
+      child: ListMasterBhpPaginate(),
     );
   }
 

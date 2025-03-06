@@ -13,10 +13,7 @@ import 'package:flutter/services.dart';
 class ListMasterBhpPaginate extends StatefulWidget {
   const ListMasterBhpPaginate({
     super.key,
-    this.selectedData,
   });
-
-  final List<BarangHabisPakai>? selectedData;
 
   @override
   State<ListMasterBhpPaginate> createState() => _ListMasterBhpPaginateState();
@@ -135,7 +132,6 @@ class _ListMasterBhpPaginateState extends State<ListMasterBhpPaginate> {
               return ListBarangHabisPakai(
                 data: snapshot.data!.data,
                 bloc: _masterBhpBloc,
-                selectedData: widget.selectedData,
               );
           }
         }
@@ -168,7 +164,6 @@ class _ListMasterBhpPaginateState extends State<ListMasterBhpPaginate> {
               return ListBarangHabisPakai(
                 data: snapshot.data!.data,
                 blocSearch: _masterBhpPencarianBloc,
-                selectedData: widget.selectedData,
               );
           }
         }

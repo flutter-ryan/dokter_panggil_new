@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:animate_icons/animate_icons.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_obat_injeksi_update_bloc.dart';
@@ -22,10 +21,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailObatInjeksiWidget extends StatefulWidget {
   const DetailObatInjeksiWidget({
@@ -195,27 +193,10 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
       duration: const Duration(milliseconds: 500),
     ).then((value) async {
       if (value != null) {
-        var data = value as MrEresep;
-        var phone = '+6281280023025';
-        var text =
-            'ERESEP dokter panggil\n\nPasien ${data.namaPasien}\n${Uri.parse(data.url!).toString()}';
-        var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
-        var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
-        if (Platform.isIOS) {
-          if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-            await launchUrl(Uri.parse(whatsappURLIos));
-          } else {
-            Fluttertoast.showToast(
-                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-          }
-        } else {
-          if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-            await launchUrl(Uri.parse(whatsappURlAndroid));
-          } else {
-            Fluttertoast.showToast(
-                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-          }
-        }
+        final data = value as MrEresep;
+        Share.share(
+            'ERESEP dokter panggil\n\nPasien ${data.namaPasien}\n${Uri.parse(data.url!).toString()}',
+            subject: 'E-Reseo ${data.namaPasien}');
       }
     });
   }

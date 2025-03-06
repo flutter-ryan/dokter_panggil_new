@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dokter_panggil/src/blocs/file_eresep_oral_bloc.dart';
 import 'package:dokter_panggil/src/blocs/mr_eresep_bloc.dart';
 import 'package:dokter_panggil/src/blocs/resep_oral_proses_bloc.dart';
@@ -28,10 +26,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailTagihanResepWidget extends StatefulWidget {
   const DetailTagihanResepWidget({
@@ -231,26 +228,9 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
   }
 
   Future<void> _share(MrEresepOral? data) async {
-    var phone = '+6281280023025';
-    var text =
-        'ERESEP dokter panggil\n\nPasien ${data!.pasien}\n${Uri.parse(data.url!).toString()}';
-    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
-    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(whatsappURLIos));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    }
+    Share.share(
+        'ERESEP dokter panggil\n\nPasien ${data!.pasien}\n${Uri.parse(data.url!).toString()}',
+        subject: 'E-Resep Pasien ${data.pasien}');
   }
 
   @override
@@ -368,6 +348,13 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
                             trailing: _rupiah.format(oral.total),
                           ),
                         ),
+                    if (resepOral.status == 1 && resepOral.isBersedia == 1)
+                      TransportasiResepNon(
+                        data: _data!,
+                        idResep: resepOral.id,
+                        reload: (DetailKunjungan? data) => widget.reload!(data),
+                        type: widget.type,
+                      ),
                     if (resepOral.status == 1)
                       SizedBox(
                         height: 12,
@@ -396,23 +383,28 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
                           size: 18,
                         ),
                         style: ElevatedButton.styleFrom(
-                            visualDensity: VisualDensity.compact,
-                            backgroundColor: Colors.grey[100],
-                            elevation: 0,
-                            foregroundColor: Colors.blueAccent,
-                            textStyle: TextStyle(fontSize: 12),
-                            minimumSize: Size(double.infinity, 40)),
+                          visualDensity: VisualDensity.compact,
+                          backgroundColor: Colors.grey[100],
+                          elevation: 0,
+                          foregroundColor: Colors.blueAccent,
+                          textStyle: TextStyle(fontSize: 12),
+                          minimumSize: Size(double.infinity, 40),
+                        ),
                         label: Text(
                           'Transaksi Barang/Obat',
                         ),
-                      )
+                      ),
+                    SizedBox(
+                      height: 8,
+                    ),
                   ],
                 ),
               )
               .toList(),
         ).toList(),
       ),
-      subTotal: _data!.tagihanResep!.isNotEmpty
+      subTotal: _data!.tagihanResep!.isNotEmpty ||
+              _data!.transportasiResepMr!.isNotEmpty
           ? Text(
               _rupiah.format(_data!.totalResep! + _data!.transportResep!),
               style: const TextStyle(fontWeight: FontWeight.w600),
@@ -916,10 +908,12 @@ class TransportasiResepNon extends StatefulWidget {
     super.key,
     required this.data,
     this.reload,
+    this.idResep,
     this.type = 'create',
   });
 
   final DetailKunjungan data;
+  final int? idResep;
   final Function(DetailKunjungan? data)? reload;
   final String type;
 
@@ -943,7 +937,12 @@ class _TransportasiResepNonState extends State<TransportasiResepNon> {
   }
 
   void _tambahTransport() {
-    _biaya.text = '${widget.data.transportResep}';
+    if (widget.data.transportasiResepMr!
+        .where((transport) => transport.resepOralId == widget.idResep)
+        .isNotEmpty) {
+      _biaya.text =
+          '${widget.data.transportasiResepMr!.where((transport) => transport.resepOralId == widget.idResep).first.biaya}';
+    }
     showBarModalBottomSheet(
       context: context,
       builder: (context) {
@@ -966,6 +965,9 @@ class _TransportasiResepNonState extends State<TransportasiResepNon> {
     if (validateAndSave()) {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
       FocusScope.of(context).unfocus();
+      if (widget.idResep != null) {
+        _transportasiResepBloc.idResepSink.add('${widget.idResep}');
+      }
       _transportasiResepBloc.idKunjunganSink.add(widget.data.id!);
       _transportasiResepBloc.biayaSink.add(int.parse(_biaya.text));
       _transportasiResepBloc.saveTransportasiResep();
@@ -982,11 +984,13 @@ class _TransportasiResepNonState extends State<TransportasiResepNon> {
       animationType: DialogTransitionType.slideFromBottomFade,
       duration: const Duration(milliseconds: 500),
     ).then((value) {
-      var data = value as DetailKunjungan;
-      Future.delayed(const Duration(milliseconds: 300), () {
-        if (!mounted) return;
-        Navigator.pop(context, data);
-      });
+      if (value != null) {
+        var data = value as DetailKunjungan;
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (!mounted) return;
+          Navigator.pop(context, data);
+        });
+      }
     });
   }
 
@@ -1001,6 +1005,7 @@ class _TransportasiResepNonState extends State<TransportasiResepNon> {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: widget.type != 'view' ? _tambahTransport : null,
+      visualDensity: VisualDensity.compact,
       dense: true,
       contentPadding: EdgeInsets.zero,
       title: Row(
@@ -1017,7 +1022,18 @@ class _TransportasiResepNonState extends State<TransportasiResepNon> {
             )
         ],
       ),
-      trailing: Text(_rupiah.format(widget.data.transportResep)),
+      trailing: Text(
+        _rupiah.format(widget.data.transportasiResepMr!
+                .where(
+                    (transportMr) => transportMr.resepOralId == widget.idResep)
+                .isEmpty
+            ? 0
+            : widget.data.transportasiResepMr!
+                .where(
+                    (transportMr) => transportMr.resepOralId == widget.idResep)
+                .first
+                .biaya),
+      ),
     );
   }
 

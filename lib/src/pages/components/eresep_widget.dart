@@ -1,9 +1,8 @@
-import 'dart:io';
 
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class EresepWidget extends StatefulWidget {
   const EresepWidget({
@@ -23,35 +22,8 @@ class _EresepWidgetState extends State<EresepWidget> {
   final _nomor = TextEditingController();
 
   void _kirimResep(String url) async {
-    if (validateAndSave()) {
-      String text = 'Hai $_namaApotek, E-RESEP\n${Uri.parse(url)}';
-      String whatsappURlAndroid = "whatsapp://send?phone=$_nomor&text=$text";
-      String whatappURLIos = "https://wa.me/$_nomor?text=$text";
-
-      Uri toLaunchIos = Uri.parse(whatappURLIos);
-      Uri toLaunchAndroid = Uri.parse(whatsappURlAndroid);
-      if (Platform.isIOS) {
-        if (await canLaunchUrl(toLaunchIos)) {
-          await launchUrl(toLaunchIos);
-        } else {
-          _snakeBar('message');
-        }
-      } else {
-        if (await canLaunchUrl(toLaunchAndroid)) {
-          await launchUrl(toLaunchAndroid);
-        } else {
-          _snakeBar('Whatsapp is not installed');
-        }
-      }
-    }
-  }
-
-  void _snakeBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
+    Share.share('Hai $_namaApotek, E-RESEP\n${Uri.parse(url)}',
+        subject: 'E-Resep $_namaApotek');
   }
 
   bool validateAndSave() {

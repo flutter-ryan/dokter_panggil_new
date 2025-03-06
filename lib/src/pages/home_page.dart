@@ -26,11 +26,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({
@@ -129,26 +128,9 @@ class _HomepageState extends State<Homepage> {
     ).then((value) async {
       if (value != null) {
         var data = value as KwitansiSimpan;
-        var tlp = data.pasien?.nomorTelepon ?? '+6281280023025';
-        var text =
-            'Hai pasien ${data.pasien!.namaPasien},\nTap tautan ini untuk mengunduh kwitansi pembayaranmu\n${Uri.parse(data.url!).toString()}';
-        var whatsappURlAndroid = "whatsapp://send?phone=$tlp&text=$text";
-        var whatsappURLIos = "https://wa.me/$tlp?text=${Uri.tryParse(text)}";
-        if (Platform.isIOS) {
-          if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-            await launchUrl(Uri.parse(whatsappURLIos));
-          } else {
-            Fluttertoast.showToast(
-                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-          }
-        } else {
-          if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-            await launchUrl(Uri.parse(whatsappURlAndroid));
-          } else {
-            Fluttertoast.showToast(
-                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-          }
-        }
+        Share.share(
+            'Hai pasien ${data.pasien!.namaPasien},\nTap tautan ini untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
+            subject: 'Kwitansi ${data.pasien!.namaPasien}');
       }
     });
   }
@@ -659,26 +641,11 @@ class _KunjunganPasienState extends State<KunjunganPasien> {
     ).then((value) async {
       if (value != null) {
         var data = value as KwitansiSimpan;
-        var tlp = data.pasien!.nomorTelepon;
-        var text =
-            'Hai pasien ${data.pasien!.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi pembayaranmu\n${Uri.parse(data.url!).toString()}';
-        var whatsappURlAndroid = "whatsapp://send?phone=$tlp&text=$text";
-        var whatsappURLIos = "https://wa.me/$tlp?text=${Uri.tryParse(text)}";
-        if (Platform.isIOS) {
-          if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-            await launchUrl(Uri.parse(whatsappURLIos));
-          } else {
-            Fluttertoast.showToast(
-                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-          }
-        } else {
-          if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-            await launchUrl(Uri.parse(whatsappURlAndroid));
-          } else {
-            Fluttertoast.showToast(
-                msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-          }
-        }
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Share.share(
+              'Hai pasien ${data.pasien!.namaPasien},\nTap tautan dibawah untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
+              subject: 'Kwitansi ${data.pasien!.namaPasien}');
+        });
       }
     });
   }

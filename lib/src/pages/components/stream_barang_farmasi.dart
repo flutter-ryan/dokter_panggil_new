@@ -5,6 +5,7 @@ import 'package:dokter_panggil/src/blocs/master_farmasi_pencarian_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_mitra_apotek_bloc.dart';
 import 'package:dokter_panggil/src/models/master_farmasi_paginate_model.dart';
 import 'package:dokter_panggil/src/models/master_mitra_apotek_model.dart';
+import 'package:dokter_panggil/src/pages/components/close_button_widget.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
@@ -18,10 +19,7 @@ import 'package:intl/intl.dart';
 class StreamBarangFarmasi extends StatefulWidget {
   const StreamBarangFarmasi({
     super.key,
-    this.selectedData,
   });
-
-  final List<BarangFarmasi>? selectedData;
 
   @override
   State<StreamBarangFarmasi> createState() => _StreamBarangFarmasiState();
@@ -52,9 +50,17 @@ class _StreamBarangFarmasiState extends State<StreamBarangFarmasi> {
         children: [
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 25.0),
-            child: Text(
-              'Daftar Obat/Barang Mitra',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Daftar Obat/Barang Mitra',
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                CloseButtonWidget()
+              ],
             ),
           ),
           Expanded(
@@ -120,7 +126,6 @@ class _StreamBarangFarmasiState extends State<StreamBarangFarmasi> {
                             .map(
                               (mitra) => BarangFarmasiWidget(
                                 idMitra: mitra.id,
-                                selectedData: widget.selectedData,
                               ),
                             )
                             .toList(),
@@ -142,10 +147,9 @@ class _StreamBarangFarmasiState extends State<StreamBarangFarmasi> {
 class BarangFarmasiWidget extends StatefulWidget {
   const BarangFarmasiWidget({
     super.key,
-    this.selectedData,
     this.idMitra,
   });
-  final List<BarangFarmasi>? selectedData;
+
   final int? idMitra;
 
   @override
@@ -187,6 +191,7 @@ class _BarangFarmasiWidgetState extends State<BarangFarmasiWidget> {
         _masterFarmasiBloc.getMasterFarmasiPaginate();
         setState(() {
           _isFilter = false;
+          _prevFilter = null;
         });
         timer.cancel();
       });
@@ -263,7 +268,6 @@ class _BarangFarmasiWidgetState extends State<BarangFarmasiWidget> {
               return ListObat(
                 data: snapshot.data!.data,
                 bloc: _masterFarmasiBloc,
-                selectedData: widget.selectedData,
               );
           }
         }
@@ -301,7 +305,6 @@ class _BarangFarmasiWidgetState extends State<BarangFarmasiWidget> {
               return ListObat(
                 data: snapshot.data!.data,
                 blocSearch: _masterFarmasiPencarianBloc,
-                selectedData: widget.selectedData,
               );
           }
         }
@@ -319,13 +322,11 @@ class ListObat extends StatefulWidget {
     this.data,
     this.bloc,
     this.blocSearch,
-    this.selectedData,
   });
 
   final MasterFarmasiPaginateModel? data;
   final MasterFarmasiPaginateBloc? bloc;
   final MasterFarmasiPencarianBloc? blocSearch;
-  final List<BarangFarmasi>? selectedData;
 
   @override
   State<ListObat> createState() => _ListObatState();
@@ -334,7 +335,7 @@ class ListObat extends StatefulWidget {
 class _ListObatState extends State<ListObat> {
   final ScrollController _scrollController = ScrollController();
   List<BarangFarmasi>? _data;
-  List<BarangFarmasi> _selectedData = [];
+  final List<BarangFarmasi> _selectedData = [];
   final _numberFormat =
       NumberFormat.currency(locale: 'id', symbol: 'Rp. ', decimalDigits: 0);
 
@@ -342,9 +343,6 @@ class _ListObatState extends State<ListObat> {
   void initState() {
     super.initState();
     _data = widget.data!.barangFarmasi!;
-    if (widget.selectedData!.isNotEmpty) {
-      _selectedData = widget.selectedData!;
-    }
     _scrollController.addListener(_scrollListen);
   }
 

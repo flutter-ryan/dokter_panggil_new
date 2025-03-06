@@ -39,12 +39,10 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
   final _formKey = GlobalKey<FormState>();
   final _rupiah =
       NumberFormat.currency(locale: 'id', symbol: 'Rp. ', decimalDigits: 0);
-  final List<TextEditingController> _jumlah = [];
-  final List<TextEditingController> _jumlahHabisPakai = [];
-  List<BarangFarmasi> _selectedData = [];
-  List<BarangHabisPakai> _selectedBhp = [];
-  final List<BarangRequest> _barangMitra = [];
-  final List<BarangRequest> _barangMentari = [];
+  final List<ListTextEditingController> _jumlah = [];
+  final List<ListTextEditingController> _jumlahHabisPakai = [];
+  final List<BarangFarmasi> _selectedMitra = [];
+  final List<BarangHabisPakai> _selectedMentari = [];
 
   void _pilihApotek() {
     showMaterialModalBottomSheet(
@@ -74,9 +72,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
         return Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: StreamBarangFarmasi(
-            selectedData: _selectedData,
-          ),
+          child: StreamBarangFarmasi(),
         );
       },
       duration: const Duration(milliseconds: 500),
@@ -84,18 +80,17 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
       if (value != null) {
         final barangs = value as List<BarangFarmasi>;
         for (final barang in barangs) {
-          _barangMitra.add(
-            BarangRequest(
-              id: barang.id!,
-              namaBarang: barang.namaBarang!,
-              jumlah: 1,
-              tarif: barang.hargaJual,
-            ),
-          );
+          _jumlah.add(ListTextEditingController(
+            id: barang.id,
+            controller: TextEditingController(),
+          ));
+          if (_selectedMitra
+              .where((selected) => selected.id == barang.id)
+              .isEmpty) {
+            _selectedMitra.add(barang);
+          }
         }
-        setState(() {
-          _selectedData = barangs;
-        });
+        setState(() {});
       }
     });
   }
@@ -107,9 +102,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
         return Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: ListMasterBhpPaginate(
-            selectedData: _selectedBhp,
-          ),
+          child: ListMasterBhpPaginate(),
         );
       },
       duration: const Duration(milliseconds: 500),
@@ -117,18 +110,19 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
       if (value != null) {
         final barangs = value as List<BarangHabisPakai>;
         for (final barang in barangs) {
-          _barangMentari.add(
-            BarangRequest(
-              id: barang.id!,
-              namaBarang: barang.namaBarang!,
-              jumlah: 1,
-              tarif: barang.hargaJual,
+          _jumlahHabisPakai.add(
+            ListTextEditingController(
+              id: barang.id,
+              controller: TextEditingController(),
             ),
           );
+          if (_selectedMentari
+              .where((selected) => selected.id == barang.id)
+              .isEmpty) {
+            _selectedMentari.add(barang);
+          }
         }
-        setState(() {
-          _selectedBhp = barangs;
-        });
+        setState(() {});
       }
     });
   }
@@ -146,9 +140,37 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
     if (validateAndSave()) {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
       FocusScope.of(context).requestFocus(FocusNode());
+      final List<BarangRequest> barangMitra = [];
+      final List<BarangRequest> barangMentari = [];
+      _selectedMitra.asMap().forEach((i, selected) {
+        barangMitra.add(
+          BarangRequest(
+            id: selected.id!,
+            namaBarang: '${selected.namaBarang}',
+            jumlah: int.parse(
+              _jumlah[_jumlah
+                      .indexWhere((controller) => controller.id == selected.id)]
+                  .controller!
+                  .text,
+            ),
+          ),
+        );
+      });
+      _selectedMentari.asMap().forEach((i, selected) {
+        barangMentari.add(
+          BarangRequest(
+            id: selected.id!,
+            namaBarang: '${selected.namaBarang}',
+            jumlah: int.parse(_jumlahHabisPakai[_jumlahHabisPakai
+                    .indexWhere((controller) => controller.id == selected.id)]
+                .controller!
+                .text),
+          ),
+        );
+      });
       _tagihanResepOralSaveBloc.idResepOralSink.add(widget.idResep!);
-      _tagihanResepOralSaveBloc.barangMentariSink.add(_barangMentari);
-      _tagihanResepOralSaveBloc.barangMitraSink.add(_barangMitra);
+      _tagihanResepOralSaveBloc.barangMentariSink.add(barangMentari);
+      _tagihanResepOralSaveBloc.barangMitraSink.add(barangMitra);
       _tagihanResepOralSaveBloc.saveTagihanResepOral();
       _showStreamTransaksiResep();
     }
@@ -186,13 +208,14 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
 
   void _removeList(int? id, String list) {
     if (list == 'mitra') {
-      _selectedData.removeWhere((e) => e.id == id);
-      _barangMitra.removeWhere((e) => e.id == id);
+      setState(() {
+        _selectedMitra.removeWhere((e) => e.id == id);
+      });
     } else {
-      _selectedBhp.removeWhere((e) => e.id == id);
-      _barangMentari.removeWhere((e) => e.id == id);
+      setState(() {
+        _selectedMentari.removeWhere((e) => e.id == id);
+      });
     }
-    setState(() {});
   }
 
   void _editBarangMitra(BarangFarmasi data) {
@@ -208,9 +231,11 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
       duration: const Duration(milliseconds: 500),
     ).then((value) {
       if (value != null) {
-        var data = value as BarangFarmasi;
-        _selectedData[_selectedData.indexWhere((e) => e.id == data.id)] = data;
-        setState(() {});
+        final data = value as BarangFarmasi;
+        setState(() {
+          _selectedMitra[_selectedMitra.indexWhere((e) => e.id == data.id)] =
+              data;
+        });
       }
     });
   }
@@ -229,6 +254,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
         title: const Text('Transaksi resep'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        centerTitle: false,
         elevation: 0,
         actions: [
           IconButton(
@@ -249,7 +275,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
       key: _formKey,
       child: Column(
         children: [
-          if (_selectedData.isNotEmpty || _selectedBhp.isNotEmpty)
+          if (_selectedMitra.isNotEmpty || _selectedMentari.isNotEmpty)
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(
@@ -258,35 +284,35 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
                   const SizedBox(
                     height: 12.0,
                   ),
-                  if (_selectedData.isNotEmpty)
+                  if (_selectedMitra.isNotEmpty)
                     const Text(
                       'Apotek Mitra',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                  if (_selectedData.isNotEmpty)
+                  if (_selectedMitra.isNotEmpty)
                     const Divider(
                       thickness: 1.5,
                     ),
-                  if (_selectedData.isNotEmpty) _formApotekMitra(context),
+                  if (_selectedMitra.isNotEmpty) _formApotekMitra(context),
                   const SizedBox(
                     height: 18.0,
                   ),
-                  if (_selectedBhp.isNotEmpty && _selectedData.isNotEmpty)
+                  if (_selectedMentari.isNotEmpty && _selectedMitra.isNotEmpty)
                     const SizedBox(
                       height: 22.0,
                     ),
-                  if (_selectedBhp.isNotEmpty)
+                  if (_selectedMentari.isNotEmpty)
                     const Text(
                       'Apotek Mentari',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                  if (_selectedBhp.isNotEmpty)
+                  if (_selectedMentari.isNotEmpty)
                     const Divider(
                       thickness: 1.5,
                     ),
-                  if (_selectedBhp.isNotEmpty) _formApotekMentari(context),
+                  if (_selectedMentari.isNotEmpty) _formApotekMentari(context),
                 ],
               ),
             )
@@ -343,10 +369,10 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed:
-                          (_selectedData.isNotEmpty || _selectedBhp.isNotEmpty)
-                              ? _simpan
-                              : null,
+                      onPressed: (_selectedMitra.isNotEmpty ||
+                              _selectedMentari.isNotEmpty)
+                          ? _simpan
+                          : null,
                       style: ElevatedButton.styleFrom(
                           minimumSize: const Size(0.0, 42.0),
                           disabledBackgroundColor: Colors.grey[200],
@@ -407,21 +433,19 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, i) {
-        var data = _barangMitra[i];
-        var barangMitra = _selectedData[i];
-        _jumlah.add(TextEditingController());
+        final selected = _selectedMitra[i];
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                onTap: () => _editBarangMitra(barangMitra),
+                onTap: () => _editBarangMitra(selected),
                 contentPadding: EdgeInsets.zero,
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(child: Text(data.namaBarang)),
+                    Flexible(child: Text('${selected.namaBarang}')),
                     const SizedBox(
                       width: 12.0,
                     ),
@@ -431,13 +455,15 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
                     )
                   ],
                 ),
-                trailing: Text(_rupiah.format(data.tarif)),
+                trailing: Text(_rupiah.format(selected.hargaJual)),
               ),
               Row(
                 children: [
                   Expanded(
                     child: TextFormField(
-                      controller: _jumlah[i],
+                      controller: _jumlah[_jumlah.indexWhere(
+                              (controller) => controller.id == selected.id)]
+                          .controller,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 0.0, horizontal: 12.0),
@@ -451,7 +477,6 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
                         }
                         return null;
                       },
-                      onSaved: (val) => data.jumlah = int.parse('$val'),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -461,7 +486,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
                   CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: IconButton(
-                      onPressed: () => _removeList(data.id, 'mitra'),
+                      onPressed: () => _removeList(selected.id, 'mitra'),
                       color: Colors.red,
                       icon: const Icon(
                         Icons.delete_outline_rounded,
@@ -477,7 +502,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
       separatorBuilder: (context, i) => const SizedBox(
         height: 12.0,
       ),
-      itemCount: _selectedData.length,
+      itemCount: _selectedMitra.length,
     );
   }
 
@@ -487,8 +512,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, i) {
-        var data = _selectedBhp[i];
-        _jumlahHabisPakai.add(TextEditingController());
+        var selected = _selectedMentari[i];
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
@@ -496,14 +520,17 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
             children: [
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: Text('${data.namaBarang}'),
-                trailing: Text(_rupiah.format(data.hargaJual)),
+                title: Text('${selected.namaBarang}'),
+                trailing: Text(_rupiah.format(selected.hargaJual)),
               ),
               Row(
                 children: [
                   Expanded(
                     child: TextFormField(
-                      controller: _jumlahHabisPakai[i],
+                      controller: _jumlahHabisPakai[
+                              _jumlahHabisPakai.indexWhere(
+                                  (controller) => controller.id == selected.id)]
+                          .controller,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 0.0, horizontal: 12.0),
@@ -517,7 +544,6 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
                         }
                         return null;
                       },
-                      onSaved: (val) {},
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -527,7 +553,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
                   CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: IconButton(
-                      onPressed: () => _removeList(data.id, 'mentari'),
+                      onPressed: () => _removeList(selected.id, 'mentari'),
                       color: Colors.red,
                       icon: const Icon(Icons.delete_outline_rounded),
                     ),
@@ -539,7 +565,7 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
         );
       },
       separatorBuilder: (context, i) => const Divider(),
-      itemCount: _selectedBhp.length,
+      itemCount: _selectedMentari.length,
     );
   }
 
@@ -566,4 +592,14 @@ class _TransaksiResepMrState extends State<TransaksiResepMr> {
       },
     );
   }
+}
+
+class ListTextEditingController {
+  ListTextEditingController({
+    this.id,
+    this.controller,
+  });
+
+  int? id;
+  TextEditingController? controller;
 }

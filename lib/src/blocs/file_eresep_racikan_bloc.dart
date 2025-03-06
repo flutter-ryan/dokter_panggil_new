@@ -15,6 +15,7 @@ class FileEresepRacikanBloc {
       _streamFileEresepRacikan!.sink;
   Stream<ApiResponse<FileEresepRacikanModel>> get fileEresepRacikanStream =>
       _streamFileEresepRacikan!.stream;
+
   Future<void> eresepRacikan() async {
     _streamFileEresepRacikan = StreamController();
     final idResep = _idResep.value;

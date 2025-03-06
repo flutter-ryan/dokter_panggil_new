@@ -4,7 +4,7 @@ import 'package:dokter_panggil/src/repositories/dio_helper.dart';
 class TransportasiResepRepo {
   Future<ResponseTransportasiResepModel> saveTransportResep(
       TransportasiResepModel transportasiResepModel) async {
-    final response = await dio.post('/v1/kunjungan/transportasi/resep',
+    final response = await dio.post('/v2/mr/resep-oral/transportasi',
         transportasiResepModelToJson(transportasiResepModel));
     return responseTransportasiResepModelFromJson(response);
   }

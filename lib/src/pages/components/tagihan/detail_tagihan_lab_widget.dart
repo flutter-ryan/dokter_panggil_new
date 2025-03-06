@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:dokter_panggil/src/blocs/delete_tagihan_tindakan_lab_bloc.dart';
 import 'package:dokter_panggil/src/blocs/dokumen_pengantar_lab_bloc.dart';
@@ -25,10 +24,9 @@ import 'package:dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailTagihanLabWidget extends StatefulWidget {
   const DetailTagihanLabWidget({
@@ -212,27 +210,9 @@ class _DetailTagihanLabWidgetState extends State<DetailTagihanLabWidget> {
   }
 
   Future<void> _shareDokumenPengantarLab(DokumenPengantarLab data) async {
-    var text =
-        'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Laboratorium ${Uri.parse(data.linkDoc!).toString()}';
-    var whatsappURlAndroid =
-        "whatsapp://send?phone=${data.pasien!.nomorTelepon}&text=$text";
-    var whatsappURLIos =
-        "https://wa.me/${data.pasien!.nomorTelepon}?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(whatsappURLIos));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    }
+    Share.share(
+        'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Laboratorium\n\n${Uri.parse(data.linkDoc!).toString()}',
+        subject: 'E-Pengantar ${data.pasien!.namaPasien}');
   }
 
   @override

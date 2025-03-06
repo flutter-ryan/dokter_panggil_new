@@ -78,6 +78,8 @@ class DetailKunjungan {
     this.totalBiayaLain,
     this.urlDeposit,
     this.paket,
+    this.transportasiResepMr,
+    this.transportasiResepRacikanMr,
   });
 
   int? id;
@@ -134,6 +136,8 @@ class DetailKunjungan {
   int? totalBiayaLain;
   String? urlDeposit;
   KunjunganPaket? paket;
+  List<TransportResepMr>? transportasiResepMr;
+  List<TransportResepRacikanMr>? transportasiResepRacikanMr;
 
   factory DetailKunjungan.fromJson(Map<String, dynamic> json) =>
       DetailKunjungan(
@@ -219,6 +223,15 @@ class DetailKunjungan {
         paket: json["paket"] != null
             ? KunjunganPaket.fromJson(json["paket"])
             : null,
+        transportasiResepMr: json["transport_resep_mr"] == null
+            ? []
+            : List<TransportResepMr>.from(json["transport_resep_mr"]
+                .map((x) => TransportResepMr.fromJson(x))),
+        transportasiResepRacikanMr: json["transport_resep_racikan_mr"] == null
+            ? []
+            : List<TransportResepRacikanMr>.from(
+                json["transport_resep_racikan_mr"]
+                    .map((x) => TransportResepRacikanMr.fromJson(x))),
       );
 }
 
@@ -744,6 +757,7 @@ class Perawat {
     this.perawat,
     this.status,
     this.profesi,
+    this.isAdminAdd,
   });
 
   int? id;
@@ -752,6 +766,7 @@ class Perawat {
   String? perawat;
   int? status;
   String? profesi;
+  int? isAdminAdd;
 
   factory Perawat.fromJson(Map<String, dynamic> json) => Perawat(
         id: json["id"],
@@ -760,6 +775,7 @@ class Perawat {
         perawat: json["perawat"],
         status: json["status"],
         profesi: json["profesi"],
+        isAdminAdd: json["is_admin_add"],
       );
 }
 
@@ -1057,6 +1073,50 @@ class BiayaLain {
         pegawai: MasterPegawai.fromJson(json["pegawai"]),
         deskripsi: json["deskripsi"],
         nilai: json["nilai"],
+      );
+}
+
+class TransportResepMr {
+  int? id;
+  int? kunjunganId;
+  int? resepOralId;
+  int? biaya;
+
+  TransportResepMr({
+    this.id,
+    this.kunjunganId,
+    this.resepOralId,
+    this.biaya,
+  });
+
+  factory TransportResepMr.fromJson(Map<String, dynamic> json) =>
+      TransportResepMr(
+        id: json["id"],
+        kunjunganId: json["kunjungan_id"],
+        resepOralId: json["resep_oral_id"],
+        biaya: json["biaya"],
+      );
+}
+
+class TransportResepRacikanMr {
+  int? id;
+  int? kunjunganId;
+  int? resepRacikanId;
+  int? biaya;
+
+  TransportResepRacikanMr({
+    this.id,
+    this.kunjunganId,
+    this.resepRacikanId,
+    this.biaya,
+  });
+
+  factory TransportResepRacikanMr.fromJson(Map<String, dynamic> json) =>
+      TransportResepRacikanMr(
+        id: json["id"],
+        kunjunganId: json["kunjungan_id"],
+        resepRacikanId: json["resep_racikan_id"],
+        biaya: json["biaya"],
       );
 }
 

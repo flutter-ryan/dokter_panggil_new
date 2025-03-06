@@ -63,9 +63,7 @@ class _TransaksiBhpState extends State<TransaksiBhp> {
         return Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: ListMasterBhpPaginate(
-            selectedData: _selectedBhp,
-          ),
+          child: ListMasterBhpPaginate(),
         );
       },
       duration: const Duration(milliseconds: 500),

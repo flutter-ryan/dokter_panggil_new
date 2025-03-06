@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:dokter_panggil/src/blocs/kwitansi_sementara_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_biaya_admin_bloc.dart';
@@ -22,11 +21,10 @@ import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ListTagihanWidget extends StatefulWidget {
   const ListTagihanWidget({
@@ -367,27 +365,9 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
   }
 
   Future<void> _share(KwitansiSementara data) async {
-    var text =
-        'Hai pasien ${data.pasien == null ? '-' : data.pasien?.namaPasien}, Tap tautan dibawah untuk mengunduh kwitansi sementara pembayaranmu\n${Uri.parse(data.url!).toString()}';
-    var whatsappURlAndroid =
-        "whatsapp://send?phone=${data.pasien?.nomorTelepon}&text=$text";
-    var whatsappURLIos =
-        "https://wa.me/${data.pasien?.nomorTelepon}?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(whatsappURLIos));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    }
+    Share.share(
+        'Hai pasien ${data.pasien == null ? '-' : data.pasien?.namaPasien},\nTap tautan dibawah untuk mengunduh kwitansi sementara pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
+        subject: 'Kwitansi Sementara ${data.pasien?.namaPasien}');
   }
 
   @override

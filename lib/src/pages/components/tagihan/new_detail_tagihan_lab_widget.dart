@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dokter_panggil/src/blocs/delete_tagihan_tindakan_lab_bloc.dart';
 import 'package:dokter_panggil/src/blocs/dokumen_pengantar_lab_bloc.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_tindakan_lab_save_bloc.dart';
@@ -33,10 +31,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NewDetailTagihanLabWidget extends StatefulWidget {
   const NewDetailTagihanLabWidget({
@@ -149,37 +146,17 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
     ).then((value) async {
       if (value != null) {
         var data = value as DokumenPengantarLab;
-        if (await canLaunchUrl(Uri.parse('${data.linkDoc}'))) {
-          await launchUrl(Uri.parse('${data.linkDoc}'));
-        } else {
-          // _snakeBar('Whatsapp is not installed');
-        }
-        _shareDokumenPengantarLab(data);
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _shareDokumenPengantarLab(data);
+        });
       }
     });
   }
 
   Future<void> _shareDokumenPengantarLab(DokumenPengantarLab data) async {
-    var phone = data.pasien?.nomorTelepon ?? '+6281280023025';
-    var text =
-        'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Laboratorium\n${Uri.parse(data.linkDoc!).toString()}';
-    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
-    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(whatsappURLIos));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    }
+    Share.share(
+        'Hai, ${data.pasien!.namaPasien}.\n\nDokumen ini adalah Pengantar Laboratorium\n${Uri.parse(data.linkDoc!).toString()}',
+        subject: 'E-Pengantar ${data.pasien!.namaPasien}');
   }
 
   void _showTindakanLab() {

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dokter_panggil/src/blocs/delete_tagihan_tindakan_rad_bloc.dart';
 import 'package:dokter_panggil/src/blocs/dokumen_pengantar_rad_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_tindakan_rad_create_bloc.dart';
@@ -29,11 +27,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NewDetailTagihanRadWidget extends StatefulWidget {
   const NewDetailTagihanRadWidget({
@@ -132,32 +129,17 @@ class _NewDetailTagihanRadWidgetState extends State<NewDetailTagihanRadWidget> {
     ).then((value) {
       if (value != null) {
         var data = value as DokumenPengantarRad;
-        _shareDokumenPengantarRad(data);
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _shareDokumenPengantarRad(data);
+        });
       }
     });
   }
 
   Future<void> _shareDokumenPengantarRad(DokumenPengantarRad data) async {
-    var phone = data.pasien?.nomorTelepon ?? '+6281280023025';
-    var text =
-        'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Radiologi\n${Uri.parse(data.linkDoc!).toString()}';
-    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
-    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(whatsappURLIos));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    }
+    Share.share(
+        'Hai, ${data.pasien!.namaPasien}.\n\nDokumen ini adalah Pengantar Radiologi\n${Uri.parse(data.linkDoc!).toString()}',
+        subject: 'E-Pengantar ${data.pasien!.namaPasien}');
   }
 
   void _showTindakanRad() {

@@ -128,6 +128,7 @@ class _TransaksiTindakanLabState extends State<TransaksiTindakanLab> {
         title: const Text('Transaksi Laboratorium'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        centerTitle: false,
         elevation: 0,
         actions: [
           IconButton(

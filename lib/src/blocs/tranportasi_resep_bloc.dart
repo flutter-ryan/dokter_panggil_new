@@ -9,9 +9,10 @@ class TransportasiResepBloc {
   final _repo = TransportasiResepRepo();
   StreamController<ApiResponse<ResponseTransportasiResepModel>>?
       _streamTransportasiResep;
-
+  final BehaviorSubject<String> _idResep = BehaviorSubject.seeded('');
   final BehaviorSubject<int> _idKunjungan = BehaviorSubject();
   final BehaviorSubject<int> _biaya = BehaviorSubject();
+  StreamSink<String> get idResepSink => _idResep.sink;
   StreamSink<int> get idKunjunganSink => _idKunjungan.sink;
   StreamSink<int> get biayaSink => _biaya.sink;
   StreamSink<ApiResponse<ResponseTransportasiResepModel>>
@@ -23,9 +24,10 @@ class TransportasiResepBloc {
     _streamTransportasiResep = StreamController();
     final idKunjungan = _idKunjungan.value;
     final biaya = _biaya.value;
+    final idResep = _idResep.value;
     transportasiResepSink.add(ApiResponse.loading('Memuat...'));
-    TransportasiResepModel transportasiResepModel =
-        TransportasiResepModel(idKunjungan: idKunjungan, biaya: biaya);
+    TransportasiResepModel transportasiResepModel = TransportasiResepModel(
+        idKunjungan: idKunjungan, biaya: biaya, idResep: idResep);
     try {
       final res = await _repo.saveTransportResep(transportasiResepModel);
       if (_streamTransportasiResep!.isClosed) return;
@@ -40,5 +42,6 @@ class TransportasiResepBloc {
     _streamTransportasiResep?.close();
     _idKunjungan.close();
     _biaya.close();
+    _idResep.close();
   }
 }

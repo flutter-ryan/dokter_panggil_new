@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dokter_panggil/src/blocs/kunjungan_eresep_bloc.dart';
 import 'package:dokter_panggil/src/models/kunjungan_eresep_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
@@ -11,8 +9,7 @@ import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class EresepRacikanWidget extends StatefulWidget {
   const EresepRacikanWidget({
@@ -80,26 +77,9 @@ class _EresepRacikanWidgetState extends State<EresepRacikanWidget> {
   }
 
   Future<void> _share(Eresep data) async {
-    var phone = '+6281280023025';
-    var text =
-        'ERESEP dokter panggil\n\nPasien ${data.namaPasien}\n${Uri.parse(data.url!).toString()}';
-    var whatsappURlAndroid = "whatsapp://send?phone=$phone&text=$text";
-    var whatsappURLIos = "https://wa.me/$phone?text=${Uri.tryParse(text)}";
-    if (Platform.isIOS) {
-      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
-        await launchUrl(Uri.parse(whatsappURLIos));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
-        await launchUrl(Uri.parse(whatsappURlAndroid));
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Whatsapp not installed', toastLength: Toast.LENGTH_LONG);
-      }
-    }
+    Share.share(
+        'ERESEP dokter panggil\nPasien ${data.namaPasien}\n\n${Uri.parse(data.url!).toString()}',
+        subject: 'E-Resep ${data.namaPasien}');
   }
 
   @override

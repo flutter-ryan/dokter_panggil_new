@@ -13,6 +13,7 @@ import 'package:dokter_panggil/src/pages/components/tambah_langsung_drugs_widget
 import 'package:dokter_panggil/src/pages/master/master_layanan_widget.dart';
 import 'package:dokter_panggil/src/pages/pasien/form_skrining_widget.dart';
 import 'package:dokter_panggil/src/pages/pasien/list_paket_widget.dart';
+import 'package:dokter_panggil/src/pages/pasien/pilih_petugas_page.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:dokter_panggil/src/source/size_config.dart';
@@ -20,7 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/blocs/hubungan_fetch_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_tindakan_lab_all_bloc.dart';
-import 'package:dokter_panggil/src/blocs/pegawai_profesi_bloc.dart';
 import 'package:dokter_panggil/src/blocs/pendaftaran_kunjungan_nonkonsul_save_bloc.dart';
 import 'package:dokter_panggil/src/blocs/tindakan_create_bloc.dart';
 import 'package:dokter_panggil/src/models/hubungan_fetch_model.dart';
@@ -87,7 +87,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   final _animateIconDokterCon = AnimateIconController();
   final _animateIconTindakanCon = AnimateIconController();
   final _tindakanCreateBloc = TindakanCreateBloc();
-  final _pegawaiProfesiBloc = PegawaiProfesiBloc();
   final _hubunganFetchBloc = HubunganFetchBloc();
   final _dateFormat = DateFormat('yyyy-MM-dd');
   final _formKey = GlobalKey<FormState>();
@@ -120,8 +119,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   int _isDokter = 1;
 
   void _showPegawai(int id, String title) {
-    _pegawaiProfesiBloc.groupIdSink.add(id);
-    _pegawaiProfesiBloc.pegawaiProfesi();
     if (title == 'Dokter') {
       _animateIconDokterCon.animateToEnd();
     } else {
@@ -130,15 +127,17 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     showBarModalBottomSheet(
       context: context,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 28.0),
-          child: _buildStreamProfesiPegawai(title),
+        return PilihPetugasPage(
+          idGroup: id,
         );
       },
       duration: const Duration(milliseconds: 500),
     ).then((value) {
       if (value != null) {
         var data = value as PegawaiProfesi;
+        if (_layananCon.text.isEmpty) {
+          //
+        }
         if (title == 'Dokter') {
           _dokterCon.text = data.nama!;
           _mrKunjunganPasienBloc.dokterSink.add('${data.id}');
@@ -249,13 +248,9 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
       _animateIconTindakanCon.animateToStart();
       if (value != null) {
         var data = value as MasterLayanan;
+        _dokterCon.clear();
         _formKey.currentState!.reset();
         _layananCon.text = data.namaLayanan!;
-        setState(() {
-          bayar = data.isBayarLangsung!;
-          _isDokter = data.isDokter!;
-          _isPerawat = data.isPerawat!;
-        });
         List<TindakanRequest> tindakan = [
           TindakanRequest(
             idTindakan: data.tindakanLayanan!.id!,
@@ -264,8 +259,14 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             total: data.tindakanLayanan!.tarif!,
           ),
         ];
-        _mrKunjunganPasienBloc.layananSink.add(data.id!);
         _mrKunjunganPasienBloc.tindakanSink.add(tindakan);
+        setState(() {
+          bayar = data.isBayarLangsung!;
+          _isDokter = data.isDokter!;
+          _isPerawat = data.isPerawat!;
+        });
+
+        _mrKunjunganPasienBloc.layananSink.add(data.id!);
       }
     });
   }
@@ -596,7 +597,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     _hubungan.dispose();
     _nomorWali.dispose();
     _mrKunjunganPasienBloc.dispose();
-    _pegawaiProfesiBloc.dispose();
     _tindakanCreateBloc.dispose();
     _hubunganFetchBloc.dispose();
     _paketCon.dispose();
@@ -1130,77 +1130,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
           textInputAction: TextInputAction.done,
         ),
       ],
-    );
-  }
-
-  Widget _buildStreamProfesiPegawai(String title) {
-    return StreamBuilder<ApiResponse<PegawaiProfesiModel>>(
-      stream: _pegawaiProfesiBloc.pegawaiProfesiStream,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          switch (snapshot.data!.status) {
-            case Status.loading:
-              return const SizedBox(
-                height: 150,
-                child: Center(
-                  child: LoadingKit(
-                    color: kPrimaryColor,
-                  ),
-                ),
-              );
-            case Status.error:
-              return SizedBox(
-                height: 250,
-                child: Center(
-                  child: ErrorResponse(
-                    message: snapshot.data!.message,
-                    onTap: () {
-                      _pegawaiProfesiBloc.pegawaiProfesi();
-                      setState(() {});
-                    },
-                  ),
-                ),
-              );
-            case Status.completed:
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                    child: Text(
-                      'Pilih $title',
-                      style: const TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 22.0,
-                  ),
-                  Flexible(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                      shrinkWrap: true,
-                      itemBuilder: (context, i) {
-                        var data = snapshot.data!.data!.profesi![i];
-                        return ListTile(
-                          onTap: () => Navigator.pop(context, data),
-                          contentPadding: EdgeInsets.zero,
-                          title: Text('${data.nama}'),
-                        );
-                      },
-                      separatorBuilder: (context, i) => const Divider(
-                        height: 0,
-                      ),
-                      itemCount: snapshot.data!.data!.profesi!.length,
-                    ),
-                  ),
-                ],
-              );
-          }
-        }
-        return const SizedBox();
-      },
     );
   }
 

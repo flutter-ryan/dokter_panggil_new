@@ -10,14 +10,17 @@ class TransportasiResepRacikanModel {
   TransportasiResepRacikanModel({
     required this.idKunjungan,
     required this.biaya,
+    required this.idResep,
   });
 
   int idKunjungan;
   int biaya;
+  String idResep;
 
   Map<String, dynamic> toJson() => {
         "idKunjungan": idKunjungan,
         "biaya": biaya,
+        "idResep": idResep,
       };
 }
 

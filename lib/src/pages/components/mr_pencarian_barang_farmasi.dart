@@ -14,10 +14,7 @@ import 'package:intl/intl.dart';
 class MrPencarianBarangFarmasi extends StatefulWidget {
   const MrPencarianBarangFarmasi({
     super.key,
-    this.selectedData,
   });
-
-  final List<MrBarangFarmasi>? selectedData;
 
   @override
   State<MrPencarianBarangFarmasi> createState() =>
