@@ -299,7 +299,9 @@ class _DetailTagihanRacikanWidgetState
                               const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
                           child: RichText(
                             text: TextSpan(
-                                text: '${resepRacikan.dokter} |',
+                                text: resepRacikan.petugasSbar == null
+                                    ? '${resepRacikan.dokter} |'
+                                    : '${resepRacikan.petugasSbar!.namaPetugas} |',
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.black,

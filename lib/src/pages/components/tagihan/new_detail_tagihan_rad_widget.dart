@@ -315,7 +315,9 @@ class _NewDetailTagihanRadWidgetState extends State<NewDetailTagihanRadWidget> {
                               children: [
                                 RichText(
                                   text: TextSpan(
-                                      text: '${pengantar.dokter} |',
+                                      text: pengantar.petugasSbar == null
+                                          ? '${pengantar.dokter} |'
+                                          : '${pengantar.petugasSbar!.namaPetugas}',
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black,

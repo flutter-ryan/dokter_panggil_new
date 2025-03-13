@@ -126,16 +126,22 @@ class DioHelper {
             '${response.statusCode} - Unauthorized\n${errorData.messages}');
       case 404:
         throw FetchDataException('${errorData.messages}');
-      case 422:
-        throw InvalidInputException(
-            '${response.statusCode} - Validation Error\n${errorData.messages}');
+      case 406:
+        throw UnauthorisedException(
+            '${response.statusCode} - Not Acceptable\n${errorData.messages}');
       case 429:
+        throw UnauthorisedException(
+            '${response.statusCode} - Too Many Request\n${errorData.messages}');
+      case 422:
+        throw BadRequestException(
+            '${response.statusCode} - Unprocessable Entity\n${errorData.messages}');
+      case 412:
         throw InvalidInputException(
-            '${response.statusCode} - Server Error\n${errorData.messages}');
+            '${response.statusCode} - Precondition Failed\n${errorData.messages}');
       case 500:
       default:
         throw FetchDataException(
-            '${response.statusCode} - Internal Server Error\nTerjadi kesalahan pada server.');
+            '${response.statusCode} - Internal Server Error\nTerjadi kesalahan pada server.\nSilahkan menghubungi Administrator melalui email:\nrhean.achmad@gmail.com');
     }
   }
 }

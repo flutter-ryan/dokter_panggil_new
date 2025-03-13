@@ -209,7 +209,9 @@ class _DetailTindakanWidgetState extends State<DetailTindakanWidget> {
                               )),
                       ],
                     ),
-                    petugas: '${tindakan.petugas}',
+                    petugas: tindakan.petugasSbar == null
+                        ? '${tindakan.petugas}'
+                        : '${tindakan.petugasSbar!.namaPetugas}',
                     tarif: _rupiah.format(tindakan.tarif),
                   ),
                   if (tindakan.transportasi == 1)

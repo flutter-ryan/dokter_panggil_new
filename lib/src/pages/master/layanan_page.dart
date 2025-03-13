@@ -94,6 +94,7 @@ class _LayananPageState extends State<LayananPage> {
       _selectedGojek = false;
       _selectedTransportasi = false;
       _selectedGroup = null;
+      _kategori.clear();
     });
   }
 
@@ -111,10 +112,13 @@ class _LayananPageState extends State<LayananPage> {
   }
 
   void _edit(Tindakan tindakan) {
+    FocusScope.of(context).requestFocus(FocusNode());
     _tindakanBloc.idSink.add(tindakan.id!);
+    _tindakanBloc.idKategoriSink.add(tindakan.kategoriId!);
     _layananCon.text = tindakan.namaTindakan!;
     _tarifCon.text = tindakan.tarif.toString();
     _jasaCon.text = tindakan.jasaDokter.toString();
+    _kategori.text = '${tindakan.namaKategori}';
     if (tindakan.groupId != null) {
       _selectedGroup = SelectedGroup(
         id: tindakan.groupId,
@@ -238,10 +242,10 @@ class _LayananPageState extends State<LayananPage> {
                     ),
                   ).then((value) {
                     if (value != null) {
-                      if (!mounted) return;
-                      FocusScope.of(context).requestFocus(FocusNode());
                       var data = value as Tindakan;
                       _edit(data);
+                    } else {
+                      _batal();
                     }
                   }),
                 ),

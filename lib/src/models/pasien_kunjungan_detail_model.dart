@@ -49,6 +49,7 @@ class DetailKunjungan {
     this.tagihanTindakanRad,
     this.bhp,
     this.bhpMr,
+    this.bhpLabMr,
     this.obatInjeksi,
     this.obatInjeksiMr,
     this.tagihanBhp,
@@ -107,6 +108,7 @@ class DetailKunjungan {
   List<TagihanResepRacikan>? tagihanResepRacikan;
   List<Bhp>? bhp;
   List<BhpMr>? bhpMr;
+  List<BhpLabMr>? bhpLabMr;
   List<KunjunganObatInjeksi>? obatInjeksi;
   List<ObatInjeksiMr>? obatInjeksiMr;
   List<TagihanBhp>? tagihanBhp;
@@ -150,10 +152,13 @@ class DetailKunjungan {
         jenisKunjunganMr: json["jenis_kunjungan_mr"] == null
             ? null
             : JenisKunjunganMr.fromJson(json["jenis_kunjungan_mr"]),
-        dokter:
-            List<Dokter>.from(json["dokter"].map((x) => Dokter.fromJson(x))),
-        perawat:
-            List<Perawat>.from(json["perawat"].map((x) => Perawat.fromJson(x))),
+        dokter: json["dokter"] == null
+            ? []
+            : List<Dokter>.from(json["dokter"].map((x) => Dokter.fromJson(x))),
+        perawat: json["perawat"] == null
+            ? []
+            : List<Perawat>.from(
+                json["perawat"].map((x) => Perawat.fromJson(x))),
         pegawai: List<Pegawaikunjungan>.from(
             json["pegawai"].map((x) => Pegawaikunjungan.fromJson(x))),
         pasien: Pasien.fromJson(json["pasien"]),
@@ -189,6 +194,10 @@ class DetailKunjungan {
             json["obat_injeksi_mr"].map((x) => ObatInjeksiMr.fromJson(x))),
         bhp: List<Bhp>.from(json["bhp"].map((x) => Bhp.fromJson(x))),
         bhpMr: List<BhpMr>.from(json["bhp_mr"]!.map((x) => BhpMr.fromJson(x))),
+        bhpLabMr: json["bhp_lab_mr"] == null
+            ? []
+            : List<BhpLabMr>.from(
+                json["bhp_lab_mr"]!.map((x) => BhpLabMr.fromJson(x))),
         tagihanBhp: List<TagihanBhp>.from(
             json["tagihan_bhp"].map((x) => TagihanBhp.fromJson(x))),
         totalTindakan: json["total_tindakan"],
@@ -350,6 +359,7 @@ class ResepMr {
   int? status;
   int? isBersedia;
   List<Resep>? obatOral;
+  PetugasSbar? petugasSbar;
 
   ResepMr({
     this.id,
@@ -360,6 +370,7 @@ class ResepMr {
     this.status,
     this.obatOral,
     this.isBersedia,
+    this.petugasSbar,
   });
 
   factory ResepMr.fromJson(Map<String, dynamic> json) => ResepMr(
@@ -373,6 +384,9 @@ class ResepMr {
         obatOral: json["obatOral"] == null
             ? []
             : List<Resep>.from(json["obatOral"]!.map((x) => Resep.fromJson(x))),
+        petugasSbar: json["petugas_sbar"] == null
+            ? null
+            : PetugasSbar.fromJson(json["petugas_sbar"]),
       );
 }
 
@@ -423,6 +437,7 @@ class ResepRacikan {
     this.dokter,
     this.status,
     this.isBersedia,
+    this.petugasSbar,
   });
 
   int? id;
@@ -437,6 +452,7 @@ class ResepRacikan {
   String? dokter;
   int? status;
   int? isBersedia;
+  PetugasSbar? petugasSbar;
 
   factory ResepRacikan.fromJson(Map<String, dynamic> json) => ResepRacikan(
         id: json["id"],
@@ -452,6 +468,9 @@ class ResepRacikan {
         dokter: json["dokter"],
         status: json["status"],
         isBersedia: json["is_bersedia"],
+        petugasSbar: json["petugas_sbar"] == null
+            ? null
+            : PetugasSbar.fromJson(json["petugas_sbar"]),
       );
 }
 
@@ -522,6 +541,7 @@ class Tindakan {
     this.foc,
     this.createdAt,
     this.jamAt,
+    this.petugasSbar,
   });
 
   int? id;
@@ -541,6 +561,7 @@ class Tindakan {
   int? foc;
   String? createdAt;
   String? jamAt;
+  PetugasSbar? petugasSbar;
 
   factory Tindakan.fromJson(Map<String, dynamic> json) => Tindakan(
         id: json["id"],
@@ -564,6 +585,9 @@ class Tindakan {
         foc: json["foc"],
         createdAt: json["created_at"],
         jamAt: json["jam_at"],
+        petugasSbar: json["petugas_sbar"] == null
+            ? null
+            : PetugasSbar.fromJson(json["petugas_sbar"]),
       );
 }
 
@@ -578,6 +602,7 @@ class PengantarLabMr {
   int? status;
   int? isBersedia;
   List<TindakanLab>? tindakanLab;
+  PetugasSbar? petugasSbar;
 
   PengantarLabMr({
     this.id,
@@ -590,6 +615,7 @@ class PengantarLabMr {
     this.status,
     this.isBersedia,
     this.tindakanLab,
+    this.petugasSbar,
   });
 
   factory PengantarLabMr.fromJson(Map<String, dynamic> json) => PengantarLabMr(
@@ -606,6 +632,9 @@ class PengantarLabMr {
             ? []
             : List<TindakanLab>.from(
                 json["tindakan_lab"]!.map((x) => TindakanLab.fromJson(x))),
+        petugasSbar: json["petugas_sbar"] == null
+            ? null
+            : PetugasSbar.fromJson(json["petugas_sbar"]),
       );
 }
 
@@ -658,6 +687,7 @@ class PengantarRadMr {
   int? isBersedia;
   int? status;
   List<TindakanRad>? tindakanRad;
+  PetugasSbar? petugasSbar;
 
   PengantarRadMr({
     this.id,
@@ -670,6 +700,7 @@ class PengantarRadMr {
     this.status,
     this.isBersedia,
     this.tindakanRad,
+    this.petugasSbar,
   });
 
   factory PengantarRadMr.fromJson(Map<String, dynamic> json) => PengantarRadMr(
@@ -686,6 +717,9 @@ class PengantarRadMr {
             ? []
             : List<TindakanRad>.from(
                 json["tindakan_rad"]!.map((x) => TindakanRad.fromJson(x))),
+        petugasSbar: json["petugas_sbar"] == null
+            ? null
+            : PetugasSbar.fromJson(json["petugas_sbar"]),
       );
 }
 
@@ -728,6 +762,7 @@ class Dokter {
     this.status,
     this.konsul = false,
     this.profesi,
+    this.isAdminAdd,
   });
 
   int? id;
@@ -737,6 +772,7 @@ class Dokter {
   int? status;
   bool konsul;
   String? profesi;
+  bool? isAdminAdd;
 
   factory Dokter.fromJson(Map<String, dynamic> json) => Dokter(
         id: json["id"],
@@ -746,6 +782,7 @@ class Dokter {
         status: json["status"],
         konsul: json["konsul"],
         profesi: json["profesi"],
+        isAdminAdd: json["is_admin_add"],
       );
 }
 
@@ -949,6 +986,7 @@ class ObatInjeksiMr {
   String? dokter;
   int? status;
   List<KunjunganObatInjeksi>? obatInjeksi;
+  PetugasSbar? petugasSbar;
 
   ObatInjeksiMr({
     this.id,
@@ -959,6 +997,7 @@ class ObatInjeksiMr {
     this.dokterId,
     this.status,
     this.obatInjeksi,
+    this.petugasSbar,
   });
 
   factory ObatInjeksiMr.fromJson(Map<String, dynamic> json) => ObatInjeksiMr(
@@ -973,6 +1012,9 @@ class ObatInjeksiMr {
             ? []
             : List<KunjunganObatInjeksi>.from(json["obatInjeksi"]!
                 .map((x) => KunjunganObatInjeksi.fromJson(x))),
+        petugasSbar: json["petugas_sbar"] == null
+            ? null
+            : PetugasSbar.fromJson(json["petugas_sbar"]),
       );
 }
 
@@ -1319,5 +1361,44 @@ class JenisKunjunganMr {
         isHomevisitPerawat: json["is_homevisit_perawat"],
         isObservasi: json["is_observasi"],
         isRanap: json["is_ranap"],
+      );
+}
+
+class BhpLabMr {
+  int? id;
+  int? jumlah;
+  String? namaBarang;
+  int? harga;
+  String? createdAt;
+
+  BhpLabMr({
+    this.id,
+    this.jumlah,
+    this.namaBarang,
+    this.harga,
+    this.createdAt,
+  });
+
+  factory BhpLabMr.fromJson(Map<String, dynamic> json) => BhpLabMr(
+        id: json["id"],
+        jumlah: json["jumlah"],
+        namaBarang: json["nama_barang"],
+        harga: json["harga"],
+        createdAt: json["created_at"],
+      );
+}
+
+class PetugasSbar {
+  int? id;
+  String? namaPetugas;
+
+  PetugasSbar({
+    this.id,
+    this.namaPetugas,
+  });
+
+  factory PetugasSbar.fromJson(Map<String, dynamic> json) => PetugasSbar(
+        id: json["id"],
+        namaPetugas: json["nama_petugas"],
       );
 }

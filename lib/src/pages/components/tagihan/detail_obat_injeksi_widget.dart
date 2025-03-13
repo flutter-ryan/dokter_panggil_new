@@ -1,4 +1,3 @@
-
 import 'package:animate_icons/animate_icons.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_obat_injeksi_update_bloc.dart';
 import 'package:dokter_panggil/src/blocs/mr_eresep_bloc.dart';
@@ -245,7 +244,9 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
                           children: [
                             RichText(
                               text: TextSpan(
-                                  text: '${resep.dokter} |',
+                                  text: resep.petugasSbar == null
+                                      ? '${resep.dokter} |'
+                                      : '${resep.petugasSbar!.namaPetugas} |',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.black,

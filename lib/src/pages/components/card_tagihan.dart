@@ -11,7 +11,7 @@ class Cardtagihan extends StatefulWidget {
   });
 
   final String? title;
-  final Iterable<Widget>? tiles;
+  final List<Widget>? tiles;
   final Widget? subTotal;
   final Widget? buttonDetail;
   final Widget? transportWidget;
@@ -59,10 +59,7 @@ class _CardtagihanState extends State<Cardtagihan> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Column(
-              children: ListTile.divideTiles(
-                context: context,
-                tiles: widget.tiles!,
-              ).toList(),
+              children: widget.tiles ?? [],
             ),
           ),
           widget.transportWidget ?? const SizedBox(),

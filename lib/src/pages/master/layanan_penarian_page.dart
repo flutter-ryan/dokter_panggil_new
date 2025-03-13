@@ -334,6 +334,16 @@ class _StreamEditTindakanState extends State<StreamEditTindakan> {
             style: const TextStyle(fontSize: 16.0),
           ),
         ),
+        SizedBox(
+          height: 22,
+        ),
+        DetailTindakan(
+          title: 'Kategori tindakan',
+          subtitle: Text(
+            '${tindakan.namaKategori}',
+            style: const TextStyle(fontSize: 16.0),
+          ),
+        ),
         const SizedBox(
           height: 22.0,
         ),

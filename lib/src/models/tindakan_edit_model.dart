@@ -30,6 +30,8 @@ class Tindakan {
     this.status,
     this.groupId,
     this.groupJabatan,
+    this.kategoriId,
+    this.namaKategori,
   });
 
   int? id;
@@ -43,6 +45,8 @@ class Tindakan {
   int? status;
   int? groupId;
   String? groupJabatan;
+  int? kategoriId;
+  String? namaKategori;
 
   factory Tindakan.fromJson(Map<String, dynamic> json) => Tindakan(
         id: json["id"],
@@ -56,5 +60,7 @@ class Tindakan {
         status: json["status"],
         groupId: json["group_id"],
         groupJabatan: json["group_jabatan"],
+        kategoriId: json["kategori_id"],
+        namaKategori: json["nama_kategori"],
       );
 }

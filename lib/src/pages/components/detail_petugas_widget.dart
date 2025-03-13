@@ -1,7 +1,9 @@
 import 'package:dokter_panggil/src/blocs/batal_final_petugas_bloc.dart';
+import 'package:dokter_panggil/src/blocs/mr_petugas_konsul_save_bloc.dart';
 import 'package:dokter_panggil/src/blocs/tambah_perawat_bloc.dart';
 import 'package:dokter_panggil/src/blocs/tambah_perawat_hapus_bloc.dart';
 import 'package:dokter_panggil/src/models/batal_final_petugas_model.dart';
+import 'package:dokter_panggil/src/models/mr_petugas_konsul_save_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
 import 'package:dokter_panggil/src/models/pegawai_dokter_model.dart';
 import 'package:dokter_panggil/src/models/tambah_perawat_hapus_model.dart';
@@ -38,6 +40,7 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
   final _batalFinalPetugasBloc = BatalFinalPetugasBloc();
   final _tambahPerawatBloc = TambahPerawatBloc();
   final _tambahPerawatHapusBloc = TambahPerawatHapusBloc();
+  final _mrPetugasKonsulSaveBloc = MrPetugasKonsulSaveBloc();
   late DetailKunjungan _data;
 
   @override
@@ -83,20 +86,39 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
     });
   }
 
-  void _showPerawat() {
+  void _showPilihanPetugas() {
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => _pilihanPetugas(context),
+    ).then((value) {
+      if (value != null) {
+        final pilihan = value as int;
+        _mrPetugasKonsulSaveBloc.pilihanPetugasSink.add(pilihan);
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _showPetugas(1);
+        });
+      }
+    });
+  }
+
+  void _showPetugas(int idGroup) {
     showBarModalBottomSheet(
       context: context,
       builder: (context) => SafeArea(
         top: false,
         child: PilihPetugasPage(
-          idGroup: 2,
+          idGroup: idGroup,
         ),
       ),
     ).then((value) {
       if (value != null) {
-        final perawat = value as PegawaiProfesi;
+        final petugas = value as PegawaiProfesi;
         Future.delayed(const Duration(milliseconds: 500), () {
-          _confirmationPerawat(perawat);
+          if (idGroup == 1) {
+            _confirmationDokter(petugas);
+          } else {
+            _confirmationPerawat(petugas);
+          }
         });
       }
     });
@@ -106,7 +128,7 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
     showAnimatedDialog(
       context: context,
       builder: (context) => ConfirmDialogWidget(
-        message: 'Anda yakin inging menambahkan perawat ${perawat.nama}',
+        message: 'Anda yakin ingin menambahkan perawat ${perawat.nama}',
         onConfirm: () => Navigator.pop(context, 'confirm'),
         labelConfirm: 'Ya, Tambahkan',
       ),
@@ -118,6 +140,27 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
           _tambahPerawatBloc.idPetugasSink.add(perawat.id!);
           _tambahPerawatBloc.tambahPerawat();
           _showStreamTambahPerawat();
+        });
+      }
+    });
+  }
+
+  void _confirmationDokter(PegawaiProfesi dokter) {
+    showAnimatedDialog(
+      context: context,
+      builder: (context) => ConfirmDialogWidget(
+        message: 'Anda yakin ingin menambahkan\n${dokter.nama}',
+        onConfirm: () => Navigator.pop(context, 'confirm'),
+        labelConfirm: 'Ya, Tambahkan',
+      ),
+      animationType: DialogTransitionType.slideFromBottom,
+    ).then((value) {
+      if (value != null) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _mrPetugasKonsulSaveBloc.idKunjunganSink.add(widget.data.id!);
+          _mrPetugasKonsulSaveBloc.idPetugasSink.add(dokter.id!);
+          _mrPetugasKonsulSaveBloc.simpanPetugasKonsul();
+          _showStreamTambahDokter('create');
         });
       }
     });
@@ -138,7 +181,29 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
     });
   }
 
-  void _hapusPetugas(Perawat perawat) {
+  void _showStreamTambahDokter(String jenis) {
+    showAnimatedDialog(
+      context: context,
+      builder: (context) => _streamTambahDokter(context),
+      animationType: DialogTransitionType.slideFromBottom,
+    ).then((value) {
+      if (value != null) {
+        final dokter = value as Dokter;
+        if (jenis == 'hapus') {
+          setState(() {
+            _data.dokter!
+                .removeWhere((konfirmasi) => konfirmasi.id == dokter.id);
+          });
+        } else {
+          setState(() {
+            _data.dokter!.add(dokter);
+          });
+        }
+      }
+    });
+  }
+
+  void _hapusPerawat(Perawat perawat) {
     showAnimatedDialog(
       context: context,
       builder: (context) => ConfirmDialogWidget(
@@ -152,6 +217,25 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
           _tambahPerawatHapusBloc.idKonfirmasiPerawatSink.add(perawat.id!);
           _tambahPerawatHapusBloc.hapusPerawat();
           _showStreamHapusPerawat();
+        });
+      }
+    });
+  }
+
+  void _hapusDokter(Dokter dokter) {
+    showAnimatedDialog(
+      context: context,
+      builder: (context) => ConfirmDialogWidget(
+        message: 'Anda yakin ingin menghapus\n${dokter.dokter}',
+        onConfirm: () => Navigator.pop(context, 'confirm'),
+      ),
+      animationType: DialogTransitionType.slideFromBottomFade,
+    ).then((value) {
+      if (value != null) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _mrPetugasKonsulSaveBloc.idKonfirmasiSink.add(dokter.id!);
+          _mrPetugasKonsulSaveBloc.deletePetugasKonsul();
+          _showStreamTambahDokter('hapus');
         });
       }
     });
@@ -188,6 +272,7 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
     _tambahPerawatBloc.dispose();
     _batalFinalPetugasBloc.dispose();
     _tambahPerawatHapusBloc.dispose();
+    _mrPetugasKonsulSaveBloc.dispose();
   }
 
   @override
@@ -214,18 +299,19 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
                     ),
                   ),
                 ),
-                if (!widget.isDokter!)
-                  CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: kPrimaryColor,
-                    child: IconButton(
-                      onPressed: _showPerawat,
-                      icon: const Icon(Icons.add),
-                      padding: EdgeInsets.zero,
-                      iconSize: 22,
-                    ),
+                CircleAvatar(
+                  radius: 15,
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: kPrimaryColor,
+                  child: IconButton(
+                    onPressed: !widget.isDokter!
+                        ? () => _showPetugas(2)
+                        : _showPilihanPetugas,
+                    icon: const Icon(Icons.add),
+                    padding: EdgeInsets.zero,
+                    iconSize: 22,
                   ),
+                ),
               ],
             ),
           ),
@@ -238,19 +324,17 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
                   .map(
                     (dokter) => ListTile(
                       dense: true,
-                      title: Row(
+                      title: Text('${dokter.dokter}'),
+                      subtitle: Row(
                         children: [
-                          Flexible(child: Text('${dokter.dokter}')),
-                          const SizedBox(
-                            width: 8.0,
+                          Text('${dokter.profesi}'),
+                          SizedBox(
+                            width: 8,
                           ),
                           if (dokter.konsul)
-                            const Padding(
-                              padding: EdgeInsets.only(top: 4.0),
-                              child: badge_custom.Badge(
-                                color: Colors.indigo,
-                                label: 'Konsul',
-                              ),
+                            const badge_custom.Badge(
+                              color: Colors.indigo,
+                              label: 'Konsul',
                             ),
                           badge_custom.Badge(
                             color:
@@ -259,20 +343,33 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
                           ),
                         ],
                       ),
-                      subtitle: Text('${dokter.profesi}'),
                       trailing: _data.status != 5
-                          ? ElevatedButton(
-                              onPressed: dokter.status == 3
-                                  ? () =>
-                                      _batalFinalPetugas(dokter.idDokter, true)
-                                  : null,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(32.0),
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (dokter.isAdminAdd!)
+                                  IconButton(
+                                    onPressed: () => _hapusDokter(dokter),
+                                    icon: Icon(
+                                      Icons.delete_rounded,
+                                      size: 20,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ElevatedButton(
+                                  onPressed: dokter.status == 3
+                                      ? () => _batalFinalPetugas(
+                                          dokter.idDokter, true)
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(32.0),
+                                    ),
+                                  ),
+                                  child: const Text('Batal'),
                                 ),
-                              ),
-                              child: const Text('Batal'),
+                              ],
                             )
                           : null,
                     ),
@@ -295,11 +392,10 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
                   .map(
                     (perawat) => ListTile(
                       dense: true,
-                      title: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      title: Text('${perawat.perawat}'),
+                      subtitle: Row(
                         children: [
-                          Flexible(child: Text('${perawat.perawat}')),
+                          Text('${perawat.profesi}'),
                           const SizedBox(
                             width: 8.0,
                           ),
@@ -310,7 +406,6 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
                           ),
                         ],
                       ),
-                      subtitle: Text('${perawat.profesi}'),
                       trailing: _data.status != 5
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
@@ -318,7 +413,7 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
                                 if (!widget.isDokter! &&
                                     perawat.isAdminAdd == 1)
                                   IconButton(
-                                    onPressed: () => _hapusPetugas(perawat),
+                                    onPressed: () => _hapusPerawat(perawat),
                                     icon: Icon(
                                       Icons.delete_rounded,
                                       size: 20,
@@ -413,6 +508,31 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
     );
   }
 
+  Widget _streamTambahDokter(BuildContext context) {
+    return StreamBuilder<ApiResponse<MrPetugasKonsulSaveModel>>(
+      stream: _mrPetugasKonsulSaveBloc.petugasKonsulSaveStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          switch (snapshot.data!.status) {
+            case Status.loading:
+              return LoadingKit();
+            case Status.error:
+              return ErrorDialog(
+                message: snapshot.data!.message,
+                onTap: () => Navigator.pop(context),
+              );
+            case Status.completed:
+              return SuccessDialog(
+                message: snapshot.data!.data!.message,
+                onTap: () => Navigator.pop(context, snapshot.data!.data!.data),
+              );
+          }
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
   Widget _streamHapusPerawat(BuildContext context) {
     return StreamBuilder<ApiResponse<TambahPerawatHapusModel>>(
       stream: _tambahPerawatHapusBloc.hapusPerawatStream,
@@ -435,6 +555,44 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
         }
         return const SizedBox();
       },
+    );
+  }
+
+  Widget _pilihanPetugas(BuildContext context) {
+    return SafeArea(
+      top: false,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(22.0),
+            child: Text(
+              'Plih Salah Satu',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          ListTile(
+            onTap: () => Navigator.pop(context, 1),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 22),
+            title: Text('Konsul Kerja Sama'),
+            leading: const Icon(Icons.arrow_right_rounded),
+            minLeadingWidth: 18,
+          ),
+          ListTile(
+            onTap: () => Navigator.pop(context, 2),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 22),
+            title: Text('Konsul Alih Rawat'),
+            leading: const Icon(Icons.arrow_right_rounded),
+            minLeadingWidth: 18,
+          )
+        ],
+      ),
     );
   }
 }

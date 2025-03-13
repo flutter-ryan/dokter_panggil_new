@@ -333,7 +333,9 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
                               const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
                           child: RichText(
                             text: TextSpan(
-                                text: '${pengantar.dokter} |',
+                                text: pengantar.petugasSbar == null
+                                    ? '${pengantar.dokter} |'
+                                    : '${pengantar.petugasSbar!.namaPetugas} |',
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.black,

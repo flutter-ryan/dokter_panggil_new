@@ -1,4 +1,5 @@
 import 'package:animate_icons/animate_icons.dart';
+import 'package:collection/collection.dart';
 import 'package:dokter_panggil/src/blocs/bhp_kategori_bloc.dart';
 import 'package:dokter_panggil/src/blocs/kunjungan_bhp_update_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_bhp_by_category_bloc.dart';
@@ -57,12 +58,20 @@ class _DetailBhpWidgetState extends State<DetailBhpWidget> {
   int? _selectedId;
   int _hargaModal = 0;
   int _tarifAplikasi = 0;
+  List<BarangLab> _bhpLab = [];
 
   @override
   void initState() {
     super.initState();
     _data = widget.data.bhp!;
     _dataMr = widget.data.bhpMr!;
+    if (widget.data.bhpLabMr!.isNotEmpty) {
+      groupBy(widget.data.bhpLabMr!, (bhpLab) => bhpLab.createdAt).forEach(
+        (tanggal, list) => _bhpLab.add(
+          BarangLab(tanggal: tanggal, data: list),
+        ),
+      );
+    }
   }
 
   bool validateAndSave() {
@@ -172,16 +181,65 @@ class _DetailBhpWidgetState extends State<DetailBhpWidget> {
         _rupiah.format(widget.data.totalBhp),
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
-      tiles: ListTile.divideTiles(
-        context: context,
-        tiles: _dataMr
-            .map((bhp) => Row(
+      tiles: [
+        ...ListTile.divideTiles(
+          context: context,
+          tiles: _dataMr
+              .map((bhp) => Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
+                        child: Text(
+                          '${bhp.tanggalShort}\n${bhp.jamShort}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 12.0, 0.0, 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${bhp.namaPegawai}',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              ...bhp.kunjunganBhp!
+                                  .map((barang) => TileObatWidget(
+                                        title: '${barang.barang!.namaBarang}',
+                                        subtitle:
+                                            '${barang.jumlah} x ${_rupiahNo.format(barang.hargaModal! + barang.tarifAplikasi!)}',
+                                        trailing: _rupiah.format(barang.tarif),
+                                      ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ))
+              .toList(),
+        ),
+        Divider(
+          height: 0,
+        ),
+        ...ListTile.divideTiles(
+          context: context,
+          tiles: _bhpLab
+              .map(
+                (bhpLab) => Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0.0, 12.0, 8.0, 8.0),
                       child: Text(
-                        '${bhp.tanggalShort}\n${bhp.jamShort}',
+                        '${bhpLab.tanggal}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w600),
@@ -194,26 +252,27 @@ class _DetailBhpWidgetState extends State<DetailBhpWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${bhp.namaPegawai}',
+                              'Barang Tindakan Lab',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600),
                             ),
-                            ...bhp.kunjunganBhp!.map((barang) => TileObatWidget(
-                                  title: '${barang.barang!.namaBarang}',
-                                  subtitle:
-                                      '${barang.jumlah} x ${_rupiahNo.format(barang.hargaModal! + barang.tarifAplikasi!)}',
-                                  trailing: _rupiah.format(barang.tarif),
+                            ...bhpLab.data!.map((data) => TileObatWidget(
+                                  title: '${data.namaBarang}',
+                                  subtitle: '${data.jumlah} Buah',
+                                  trailing: _rupiah.format(data.harga),
                                 ))
                           ],
                         ),
                       ),
                     ),
                   ],
-                ))
-            .toList(),
-      ).toList(),
+                ),
+              )
+              .toList(),
+        ),
+      ],
     );
   }
 
@@ -644,4 +703,14 @@ class _DaftarBhpState extends State<DaftarBhp> {
       itemCount: bhp.length,
     );
   }
+}
+
+class BarangLab {
+  String? tanggal;
+  List<BhpLabMr>? data;
+
+  BarangLab({
+    this.tanggal,
+    this.data,
+  });
 }

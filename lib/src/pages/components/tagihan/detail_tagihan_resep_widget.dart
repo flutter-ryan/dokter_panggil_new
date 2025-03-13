@@ -276,7 +276,9 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
                                 const EdgeInsets.fromLTRB(8.0, 14.0, 0.0, 8.0),
                             child: RichText(
                               text: TextSpan(
-                                  text: '${resepOral.dokter} |',
+                                  text: resepOral.petugasSbar == null
+                                      ? '${resepOral.dokter} |'
+                                      : '${resepOral.petugasSbar!.namaPetugas} |',
                                   style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.black,
