@@ -5,10 +5,14 @@ class ButtonRoundedWidget extends StatelessWidget {
     super.key,
     this.onPressed,
     this.label,
+    this.backgroundColor,
+    this.foregroundColor,
   });
 
   final VoidCallback? onPressed;
   final String? label;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +20,12 @@ class ButtonRoundedWidget extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         minimumSize: const Size(double.infinity, 42),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: backgroundColor ?? Colors.grey[200],
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(32),
         ),
-        foregroundColor: Colors.black,
+        foregroundColor: foregroundColor ?? Colors.black,
       ),
       child: Text('$label'),
     );

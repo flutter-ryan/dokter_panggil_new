@@ -3,7 +3,7 @@ import 'package:dokter_panggil/src/repositories/dio_helper.dart';
 
 class KunjunganPaketDeleteRepo {
   Future<ResponseKunjunganPaketUpdateModel> deletePaket(int idKunjungan) async {
-    final response = await dio.delete('/v1/kunjungan/paket/$idKunjungan');
+    final response = await dio.delete('/v2/mr/daftar-paket/$idKunjungan');
     return responseKunjunganPaketUpdateModelFromJson(response);
   }
 }

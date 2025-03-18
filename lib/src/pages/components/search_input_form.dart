@@ -11,6 +11,7 @@ class SearchInputForm extends StatelessWidget {
     this.onTap,
     this.autofocus = false,
     this.suffixIcon,
+    this.autocorrect = true,
   });
 
   final TextEditingController? controller;
@@ -20,6 +21,7 @@ class SearchInputForm extends StatelessWidget {
   final VoidCallback? onTap;
   final bool autofocus;
   final Widget? suffixIcon;
+  final bool autocorrect;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class SearchInputForm extends StatelessWidget {
               focusNode: focusNode,
               readOnly: isReadOnly,
               autofocus: autofocus,
+              autocorrect: autocorrect,
               decoration: InputDecoration(
                 isDense: true,
                 border: InputBorder.none,

@@ -13,7 +13,7 @@ class MrKunjunganPasienRepo {
       MrKunjunganPasienPaketRequestModel
           mrKunjunganPasienPaketRequestModel) async {
     final response = await dio.post(
-        '/v2/mr/layanan-kunjungan/paket',
+        '/v2/mr/daftar-paket',
         mrKunjunganPasienPaketRequestModelToJson(
             mrKunjunganPasienPaketRequestModel));
     return mrKunjunganPasienModelFromJson(response);

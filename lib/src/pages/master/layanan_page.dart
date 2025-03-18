@@ -46,7 +46,6 @@ class _LayananPageState extends State<LayananPage> {
   bool _editForm = false;
   SelectedGroup? _selectedGroup;
   bool _errorGroupTindakan = false;
-  String? _layanan, _tarif, _jasa;
 
   bool validateAndSave() {
     var formState = _formKey.currentState;
@@ -72,9 +71,8 @@ class _LayananPageState extends State<LayananPage> {
 
   void _simpan() {
     if (validateAndSave()) {
-      _tindakanBloc.tindakanSink.add(_layanan!);
-      _tindakanBloc.tarifTindakanSink.add(int.parse(_tarif!));
-      _tindakanBloc.jasaSink.add(int.parse(_jasa!));
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      FocusScope.of(context).requestFocus(FocusNode());
       _tindakanBloc.langsungSink.add(_selectedBayarLangsung);
       _tindakanBloc.gojekSink.add(_selectedGojek);
       _tindakanBloc.transportasiSink.add(_selectedTransportasi);
@@ -135,9 +133,8 @@ class _LayananPageState extends State<LayananPage> {
 
   void _update() {
     if (validateAndSave()) {
-      _tindakanBloc.tindakanSink.add(_layanan!);
-      _tindakanBloc.tarifTindakanSink.add(int.parse(_tarif!));
-      _tindakanBloc.jasaSink.add(int.parse(_jasa!));
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      FocusScope.of(context).requestFocus(FocusNode());
       _tindakanBloc.langsungSink.add(_selectedBayarLangsung);
       _tindakanBloc.gojekSink.add(_selectedGojek);
       _tindakanBloc.transportasiSink.add(_selectedTransportasi);
@@ -234,6 +231,7 @@ class _LayananPageState extends State<LayananPage> {
                 title: 'Tambah Tindakan',
                 subtitle: SearchInputForm(
                   isReadOnly: true,
+                  autocorrect: false,
                   hint: 'Pencarian tindakan',
                   onTap: () => Navigator.push(
                     context,
@@ -252,188 +250,193 @@ class _LayananPageState extends State<LayananPage> {
                 closeButton: const ClosedButton(),
               ),
               Expanded(
-                child: ListView(
+                child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(
                       vertical: 32.0, horizontal: 22.0),
-                  children: [
-                    Input(
-                      controller: _layananCon,
-                      label: 'Layanan',
-                      hint: 'Nama tindakan',
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      onSave: (val) => _layanan = val,
-                      textCap: TextCapitalization.words,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    Input(
-                      controller: _kategori,
-                      label: 'Kategori',
-                      hint: 'Pilih Kategori tindakan',
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      readOnly: true,
-                      onSave: (val) => _layanan = val,
-                      suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                      textCap: TextCapitalization.words,
-                      onTap: _selectKategori,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    Input(
-                      controller: _tarifCon,
-                      label: 'Tarif',
-                      hint: 'Tarif tindakan',
-                      maxLines: 1,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      onSave: (val) => _tarif = val,
-                      keyType: TextInputType.number,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    Input(
-                      controller: _jasaCon,
-                      label: 'Jasa',
-                      hint: 'Jasa dokter',
-                      maxLines: 1,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      onSave: (val) => _jasa = val,
-                      keyType: TextInputType.number,
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    const Text(
-                      'Group tindakan',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 0.5),
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: Colors.blueGrey[50],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Input(
+                        controller: _layananCon,
+                        label: 'Layanan',
+                        hint: 'Nama tindakan',
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        onSave: (val) => _tindakanBloc.tindakanSink.add('$val'),
+                        textCap: TextCapitalization.words,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListTile(
-                            onTap: _selectGroup,
-                            title: _selectedGroup != null
-                                ? Text('${_selectedGroup!.namaGroup}')
-                                : Text(
-                                    'Pilih salah satu',
-                                    style: TextStyle(color: Colors.grey[400]),
-                                  ),
-                            trailing: Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.grey[400],
-                            ),
-                          ),
-                          if (_errorGroupTindakan)
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 18.0, vertical: 8.0),
-                              child: Text(
-                                'Input required',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.red),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _kategori,
+                        label: 'Kategori',
+                        hint: 'Pilih Kategori tindakan',
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        readOnly: true,
+                        suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
+                        textCap: TextCapitalization.words,
+                        onTap: _selectKategori,
+                      ),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _tarifCon,
+                        label: 'Tarif',
+                        hint: 'Tarif tindakan',
+                        maxLines: 1,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        onSave: (val) => _tindakanBloc.tarifTindakanSink
+                            .add(int.parse('$val')),
+                        keyType: TextInputType.number,
+                      ),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _jasaCon,
+                        label: 'Jasa',
+                        hint: 'Jasa dokter',
+                        maxLines: 1,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        onSave: (val) =>
+                            _tindakanBloc.jasaSink.add(int.parse('$val')),
+                        keyType: TextInputType.number,
+                      ),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      const Text(
+                        'Group tindakan',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey, width: 0.5),
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: Colors.blueGrey[50],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              onTap: _selectGroup,
+                              title: _selectedGroup != null
+                                  ? Text('${_selectedGroup!.namaGroup}')
+                                  : Text(
+                                      'Pilih salah satu',
+                                      style: TextStyle(color: Colors.grey[400]),
+                                    ),
+                              trailing: Icon(
+                                Icons.keyboard_arrow_right,
+                                color: Colors.grey[400],
                               ),
                             ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    const Text(
-                      'Pendukung layanan',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    CheckboxListTile(
-                      contentPadding: EdgeInsets.zero,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: const Text('Bayar langsung'),
-                      activeColor: kPrimaryColor,
-                      value: _selectedBayarLangsung,
-                      onChanged: (val) {
-                        setState(() {
-                          _selectedBayarLangsung = val!;
-                        });
-                      },
-                    ),
-                    CheckboxListTile(
-                      contentPadding: EdgeInsets.zero,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: const Text('Transportasi'),
-                      activeColor: kPrimaryColor,
-                      value: _selectedTransportasi,
-                      onChanged: (val) {
-                        setState(() {
-                          _selectedTransportasi = val!;
-                        });
-                      },
-                    ),
-                    CheckboxListTile(
-                      contentPadding: EdgeInsets.zero,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: const Text('Gojek'),
-                      activeColor: kPrimaryColor,
-                      value: _selectedGojek,
-                      onChanged: (val) {
-                        setState(() {
-                          _selectedGojek = val!;
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 52.0,
-                    ),
-                    if (_editForm)
-                      ButtonEditMaster(
-                        update: _update,
-                        delete: _delete,
-                        batal: _batal,
-                      )
-                    else
-                      SizedBox(
-                        height: 48.0,
-                        child: ElevatedButton(
-                          onPressed: _simpan,
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            backgroundColor: kPrimaryColor,
-                          ),
-                          child: const Text('SIMPAN'),
+                            if (_errorGroupTindakan)
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 18.0, vertical: 8.0),
+                                child: Text(
+                                  'Input required',
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.red),
+                                ),
+                              ),
+                          ],
                         ),
-                      )
-                  ],
+                      ),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      const Text(
+                        'Pendukung layanan',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: const Text('Bayar langsung'),
+                        activeColor: kPrimaryColor,
+                        value: _selectedBayarLangsung,
+                        onChanged: (val) {
+                          setState(() {
+                            _selectedBayarLangsung = val!;
+                          });
+                        },
+                      ),
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: const Text('Transportasi'),
+                        activeColor: kPrimaryColor,
+                        value: _selectedTransportasi,
+                        onChanged: (val) {
+                          setState(() {
+                            _selectedTransportasi = val!;
+                          });
+                        },
+                      ),
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: const Text('Gojek'),
+                        activeColor: kPrimaryColor,
+                        value: _selectedGojek,
+                        onChanged: (val) {
+                          setState(() {
+                            _selectedGojek = val!;
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 52.0,
+                      ),
+                      if (_editForm)
+                        ButtonEditMaster(
+                          update: _update,
+                          delete: _delete,
+                          batal: _batal,
+                        )
+                      else
+                        SizedBox(
+                          width: double.infinity,
+                          height: 48.0,
+                          child: ElevatedButton(
+                            onPressed: _simpan,
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              backgroundColor: kPrimaryColor,
+                            ),
+                            child: const Text('SIMPAN'),
+                          ),
+                        )
+                    ],
+                  ),
                 ),
               )
             ],

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:dokter_panggil/src/pages/components/button_circle_widget.dart';
+import 'package:dokter_panggil/src/pages/components/button_rounded_widget.dart';
 import 'package:dokter_panggil/src/pages/components/list_master_bhp_category.dart';
 import 'package:dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +117,12 @@ class _TambahLangsungConsumeState extends State<TambahLangsungConsume> {
               ? const Icon(Icons.arrow_back)
               : const Icon(Icons.arrow_back_ios),
         ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,25 +158,18 @@ class _TambahLangsungConsumeState extends State<TambahLangsungConsume> {
             ),
             child: Row(
               children: [
-                ElevatedButton(
+                ButtonCircleWidget(
                   onPressed: _showMasterBhp,
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[200],
-                      foregroundColor: Colors.black,
-                      minimumSize: const Size(52, 45)),
-                  child: const Icon(Icons.add_rounded),
                 ),
                 const SizedBox(
                   width: 12.0,
                 ),
                 Expanded(
-                    child: ElevatedButton(
+                    child: ButtonRoundedWidget(
                   onPressed: _selectedConsume.isEmpty ? null : _simpanBarang,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: kPrimaryColor,
-                    minimumSize: const Size.fromHeight(45),
-                  ),
-                  child: const Text('Simpan Barang'),
+                  label: 'Simpan Barang',
+                  backgroundColor: kPrimaryColor,
+                  foregroundColor: Colors.white,
                 ))
               ],
             ),

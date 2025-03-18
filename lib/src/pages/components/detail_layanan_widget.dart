@@ -270,27 +270,30 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                   id: widget.id,
                   type: widget.type,
                 ),
-                DetailPetugasWidget(
-                  data: _data!,
-                  isDokter: true,
-                  reload: (DetailKunjungan? data) =>
-                      setState(() => _data = data),
-                ),
-                DetailPetugasWidget(
-                  data: _data!,
-                  isDokter: false,
-                  reload: (DetailKunjungan? data) =>
-                      setState(() => _data = data),
-                ),
-                DetailPaketWidget(
-                  data: _data!,
-                  type: widget.type,
-                  reload: (DetailKunjungan? data) => setState(
-                    () {
-                      _data = data;
-                    },
+                if (!widget.data.langsung!)
+                  DetailPetugasWidget(
+                    data: _data!,
+                    isDokter: true,
+                    reload: (DetailKunjungan? data) =>
+                        setState(() => _data = data),
                   ),
-                ),
+                if (!widget.data.langsung!)
+                  DetailPetugasWidget(
+                    data: _data!,
+                    isDokter: false,
+                    reload: (DetailKunjungan? data) =>
+                        setState(() => _data = data),
+                  ),
+                if (!widget.data.langsung!)
+                  DetailPaketWidget(
+                    data: _data!,
+                    type: widget.type,
+                    reload: (DetailKunjungan? data) => setState(
+                      () {
+                        _data = data;
+                      },
+                    ),
+                  ),
                 if (_data!.tindakan!.isNotEmpty)
                   DetailTindakanWidget(
                     data: _data!,

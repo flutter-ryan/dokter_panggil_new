@@ -7,6 +7,7 @@ import 'package:dokter_panggil/src/models/mr_kunjungan_pasien_model.dart';
 import 'package:dokter_panggil/src/models/mr_master_skrining_model.dart';
 import 'package:dokter_panggil/src/models/pasien_show_model.dart';
 import 'package:dokter_panggil/src/models/pendaftaran_pembelian_langsug_save_model.dart';
+import 'package:dokter_panggil/src/pages/components/button_rounded_widget.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
 import 'package:dokter_panggil/src/pages/components/tambah_langsung_drugs_widget.dart';
@@ -415,6 +416,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
       _mrKunjunganPasienBloc.jamSink.add(_jamCon.text);
       _mrKunjunganPasienBloc.idPaketSink.add(_selectedIdPaket!);
       _mrKunjunganPasienBloc.tokensSink.add(_tokens);
+      _mrKunjunganPasienBloc.keluhanSink.add(_keluhanCon.text);
       _mrKunjunganPasienBloc.simpanKunjunganPaket();
       _showStreamSave();
     } else {
@@ -716,10 +718,57 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
 
   Widget _formInputPaket(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Input(
+          controller: _layananCon,
+          label: 'Layanan',
+          hint: 'Pilih layanan',
+          maxLines: 1,
+          readOnly: true,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return 'Input required';
+            }
+            return null;
+          },
+          onTap: _showLayanan,
+          suffixIcon: _layananCon.text.isNotEmpty
+              ? IconButton(
+                  onPressed: () {
+                    _layananCon.clear();
+                    setState(() {
+                      bayar = 0;
+                    });
+                  },
+                  color: Colors.red[300],
+                  icon: const Icon(Icons.cancel),
+                )
+              : AnimateIcons(
+                  startIcon: Icons.add_circle_outline,
+                  endIcon: Icons.add_circle_outline,
+                  endIconColor: Colors.grey,
+                  startIconColor: Colors.grey,
+                  onStartIconPress: () {
+                    return true;
+                  },
+                  onEndIconPress: () {
+                    return true;
+                  },
+                  controller: _animateIconTindakanCon,
+                ),
+        ),
+        if (bayar == 1)
+          const Padding(
+            padding: EdgeInsets.only(top: 4.0),
+            child: Text(
+              'Layanan ini membutuhkan pembayaran diawal',
+              style: TextStyle(color: Colors.red, fontSize: 13.0),
+            ),
+          ),
         if (_isDokter == 1)
           Padding(
-            padding: const EdgeInsets.only(bottom: 22),
+            padding: const EdgeInsets.only(bottom: 22, top: 22),
             child: Input(
               controller: _dokterCon,
               label: 'Dokter',
@@ -816,6 +865,132 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
                   color: Colors.grey,
                 ),
         ),
+        const SizedBox(
+          height: 22,
+        ),
+        const Divider(),
+        const ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(
+            'Skrining Pasien',
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+          ),
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 12,
+        ),
+        Input(
+          controller: _keluhanCon,
+          label: 'Keluhan',
+          hint: 'Keluhan masuk pasien',
+          maxLines: 1,
+          textCap: TextCapitalization.words,
+          textInputAction: TextInputAction.next,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Input required';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(
+          height: 22.0,
+        ),
+        Input(
+          controller: _tanda,
+          label: 'Tanda & Gejala',
+          hint: 'Pilih tanda dan gejala masuk pasien',
+          maxLines: 1,
+          readOnly: true,
+          onTap: () {
+            showBarModalBottomSheet(
+              context: context,
+              builder: (context) => const FormSkriningWidget(),
+            ).then((value) {
+              if (value != null) {
+                var data = value as MasterSkrining;
+                _mrKunjunganPasienBloc.skriningSink.add(data.id!);
+                setState(() {
+                  _tanda.text = '${data.skrining}';
+                });
+              }
+            });
+          },
+          suffixIcon: AnimateIcons(
+            startIcon: Icons.add_circle_outline,
+            endIcon: Icons.add_circle_outline,
+            endIconColor: Colors.grey,
+            startIconColor: Colors.grey,
+            onStartIconPress: () {
+              return true;
+            },
+            onEndIconPress: () {
+              return true;
+            },
+            controller: _animateIconTindakanCon,
+          ),
+        ),
+        const SizedBox(
+          height: 22,
+        ),
+        const Text(
+          'Resiko Jatuh',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        FormField(
+          onSaved: (val) {
+            if (val != null) {
+              _mrKunjunganPasienBloc.resikoJatuh.add('$val');
+              _mrKunjunganPasienBloc.keputusanResikoJatuhSink
+                  .add('Kursi Roda/Antrian Khusus');
+            }
+          },
+          builder: (state) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RadioListTile(
+                value: 'Tidak beresiko',
+                groupValue: state.value,
+                title: const Text('Tidak Beresiko'),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                  _mrKunjunganPasienBloc.resikoJatuh.add('');
+                  _mrKunjunganPasienBloc.keputusanResikoJatuhSink.add('');
+                },
+              ),
+              RadioListTile(
+                value: 'Menggunakan Alat Bantu',
+                groupValue: state.value,
+                title: const Text('Menggunakan Alat Bantu'),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                },
+              ),
+              RadioListTile(
+                value: 'Gangguan Saat Jalan',
+                groupValue: state.value,
+                title: const Text('Gangguan Saat Jalan'),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                },
+              ),
+              RadioListTile(
+                value: 'Menggunakan Penutup Mata (Salah Satu/Keduanya)',
+                groupValue: state.value,
+                title: const Text(
+                    'Menggunakan Penutup Mata (Salah Satu/Keduanya)'),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                },
+              )
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -842,7 +1017,9 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
               ? IconButton(
                   onPressed: () {
                     _layananCon.clear();
-                    setState(() {});
+                    setState(() {
+                      bayar = 0;
+                    });
                   },
                   color: Colors.red[300],
                   icon: const Icon(Icons.cancel),
@@ -1553,8 +1730,8 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   Widget _buttonDaftarLayanan(BuildContext context) {
     if (_jenisPendaftaran == 'konsul') {
       return Container(
-        padding: const EdgeInsets.fromLTRB(22.0, 18.0, 22.0, 22.0),
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.all(22),
+        decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -1564,20 +1741,17 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             )
           ],
         ),
-        child: SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: ElevatedButton(
-            onPressed: _saveKunjungan,
-            style: ElevatedButton.styleFrom(backgroundColor: kPrimaryColor),
-            child: const Text('Daftar Layanan'),
-          ),
+        child: ButtonRoundedWidget(
+          onPressed: _saveKunjungan,
+          label: 'Daftar Layanan',
+          backgroundColor: kPrimaryColor,
+          foregroundColor: Colors.white,
         ),
       );
     } else if (_jenisPendaftaran == 'non-konsul') {
       return Container(
-        padding: const EdgeInsets.fromLTRB(22.0, 18.0, 22.0, 22.0),
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.all(22),
+        decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -1587,20 +1761,17 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             )
           ],
         ),
-        child: SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: ElevatedButton(
-            onPressed: _saveKunjunganNonKonsul,
-            style: ElevatedButton.styleFrom(backgroundColor: kPrimaryColor),
-            child: const Text('Daftar Layanan'),
-          ),
+        child: ButtonRoundedWidget(
+          onPressed: _saveKunjunganNonKonsul,
+          label: 'Daftar Layanan',
+          backgroundColor: kPrimaryColor,
+          foregroundColor: Colors.white,
         ),
       );
     } else if (_jenisPendaftaran == 'pembelian-langsung') {
       return Container(
-        padding: const EdgeInsets.fromLTRB(22.0, 18.0, 22.0, 22.0),
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.all(22),
+        decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -1610,20 +1781,17 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             )
           ],
         ),
-        child: SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: ElevatedButton(
-            onPressed: _savePembelianLangsung,
-            style: ElevatedButton.styleFrom(backgroundColor: kPrimaryColor),
-            child: const Text('Daftar Layanan'),
-          ),
+        child: ButtonRoundedWidget(
+          onPressed: _savePembelianLangsung,
+          label: 'Daftar Layanan',
+          backgroundColor: kPrimaryColor,
+          foregroundColor: Colors.white,
         ),
       );
     } else if (_jenisPendaftaran == 'paket') {
       return Container(
-        padding: const EdgeInsets.fromLTRB(22.0, 18.0, 22.0, 22.0),
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.all(22),
+        decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -1633,14 +1801,11 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             )
           ],
         ),
-        child: SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: ElevatedButton(
-            onPressed: _savePaket,
-            style: ElevatedButton.styleFrom(backgroundColor: kPrimaryColor),
-            child: const Text('Daftar Layanan'),
-          ),
+        child: ButtonRoundedWidget(
+          onPressed: _savePaket,
+          label: 'Daftar Layanan',
+          backgroundColor: kPrimaryColor,
+          foregroundColor: Colors.white,
         ),
       );
     }

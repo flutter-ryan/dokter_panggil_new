@@ -1,6 +1,7 @@
 import 'package:dokter_panggil/src/blocs/master_bhp_by_category_bloc.dart';
 import 'package:dokter_panggil/src/models/master_bhp_by_category_model.dart';
 import 'package:dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:dokter_panggil/src/pages/components/button_rounded_widget.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
@@ -230,15 +231,13 @@ class _ListBhpCategoryWidgetState extends State<ListBhpCategoryWidget> {
               )
             ],
           ),
-          child: Center(
-            child: ElevatedButton(
-              onPressed: _selectedData.isEmpty ? null : _finalSelected,
-              style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 48.0)),
-              child: _selectedData.isEmpty
-                  ? const Text('PILIH BARANG')
-                  : Text('PILIH BARANG (${_selectedData.length} barang)'),
-            ),
+          child: ButtonRoundedWidget(
+            onPressed: _selectedData.isEmpty ? null : _finalSelected,
+            backgroundColor: kPrimaryColor,
+            foregroundColor: Colors.white,
+            label: _selectedData.isEmpty
+                ? 'PILIH BARANG'
+                : 'PILIH BARANG (${_selectedData.length} barang)',
           ),
         ),
       ],

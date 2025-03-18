@@ -1,4 +1,3 @@
-
 import 'package:dokter_panggil/src/blocs/kwitansi_sementara_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_biaya_admin_bloc.dart';
 import 'package:dokter_panggil/src/blocs/master_biaya_admin_emr_bloc.dart';
@@ -184,7 +183,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
         persen = (data.nilai! * _data.total!) / 100;
       }
       if (_data.biayaLayanan == 0) {
-        _checked.add(true);
+        _checked.add(false);
         _selectedBiaya.add(
           BiayaAdminSelected(
             id: data.id,
@@ -210,17 +209,16 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
           _checked.add(false);
         }
       }
-      _biaya.add(
-        MasterBiayaAdmin(
-          id: data.id,
-          deskripsi: data.deskripsi,
-          nilai: data.persen == 1 ? persen.round() : data.nilai,
-          persen: data.persen,
-        ),
-      );
-    });
-    _selectedBiaya.asMap().forEach((key, value) {
-      totalBiaya += value.nilai;
+      if (data.id == 1) {
+        _biaya.add(
+          MasterBiayaAdmin(
+            id: data.id,
+            deskripsi: data.deskripsi,
+            nilai: data.persen == 1 ? persen.round() : data.nilai,
+            persen: data.persen,
+          ),
+        );
+      }
     });
   }
 
@@ -906,9 +904,13 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                 onChanged: _biaya.indexOf(e) == _indexDisable
                     ? null
                     : (value) {
-                        _onSelectedBiaya(value, e, null);
                         setState(() {
                           _checked[_biaya.indexOf(e)] = value!;
+                          if (value == true) {
+                            totalBiaya += e.nilai!;
+                          } else {
+                            totalBiaya -= e.nilai!;
+                          }
                         });
                       },
                 selectedTileColor: Colors.green,

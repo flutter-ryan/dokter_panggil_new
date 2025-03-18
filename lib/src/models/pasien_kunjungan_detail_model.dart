@@ -25,6 +25,7 @@ class PasienKunjunganDetailModel {
 class DetailKunjungan {
   DetailKunjungan({
     this.id,
+    this.langsung,
     this.isEmr,
     this.jenisKunjunganMr,
     this.nomorRegistrasi,
@@ -84,6 +85,7 @@ class DetailKunjungan {
   });
 
   int? id;
+  bool? langsung;
   int? isEmr;
   JenisKunjunganMr? jenisKunjunganMr;
   String? nomorRegistrasi;
@@ -144,6 +146,7 @@ class DetailKunjungan {
   factory DetailKunjungan.fromJson(Map<String, dynamic> json) =>
       DetailKunjungan(
         id: json["id"],
+        langsung: json["langsung"],
         isEmr: json["is_emr"],
         nomorRegistrasi: json["nomor_registrasi"],
         tanggal: json["tanggal"],

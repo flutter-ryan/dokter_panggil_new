@@ -5,7 +5,7 @@ class KunjunganPaketUpdateRepo {
   Future<ResponseKunjunganPaketUpdateModel> updateKunjunganPaket(
       KunjunganPaketUpdateModel kunjunganPaketUpdateModel,
       int idKunjungan) async {
-    final response = await dio.put('/v1/kunjungan/paket/$idKunjungan',
+    final response = await dio.put('/v2/mr/daftar-paket/$idKunjungan',
         kunjunganPaketUpdateModelToJson(kunjunganPaketUpdateModel));
     return responseKunjunganPaketUpdateModelFromJson(response);
   }
