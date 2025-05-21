@@ -9,7 +9,9 @@ class PegawaiProfesiBloc {
   final PegawaiProfesiRepo _repo = PegawaiProfesiRepo();
   StreamController<ApiResponse<PegawaiProfesiModel>>? _streamPegawaiProfesi;
   final BehaviorSubject<int> _groupId = BehaviorSubject();
+  final BehaviorSubject<String> _filter = BehaviorSubject.seeded('');
   StreamSink<int> get groupIdSink => _groupId.sink;
+  StreamSink<String> get filtersink => _filter.sink;
   StreamSink<ApiResponse<PegawaiProfesiModel>> get pegawaiProfesiSink =>
       _streamPegawaiProfesi!.sink;
   Stream<ApiResponse<PegawaiProfesiModel>> get pegawaiProfesiStream =>
@@ -29,8 +31,28 @@ class PegawaiProfesiBloc {
     }
   }
 
+  Future<void> filterPegawaiProfesi() async {
+    _streamPegawaiProfesi = StreamController();
+    final groupId = _groupId.value;
+    final filter = _filter.value;
+    pegawaiProfesiSink.add(ApiResponse.loading('Memuat..'));
+    PegawaiProfesiRequestModel pegawaiProfesiRequestModel =
+        PegawaiProfesiRequestModel(filter: filter);
+
+    try {
+      final res =
+          await _repo.filterProfesiPegawai(pegawaiProfesiRequestModel, groupId);
+      if (_streamPegawaiProfesi!.isClosed) return;
+      pegawaiProfesiSink.add(ApiResponse.completed(res));
+    } catch (e) {
+      if (_streamPegawaiProfesi!.isClosed) return;
+      pegawaiProfesiSink.add(ApiResponse.error(e.toString()));
+    }
+  }
+
   dispose() {
     _streamPegawaiProfesi?.close();
+    _filter.close();
     _groupId.close();
   }
 }

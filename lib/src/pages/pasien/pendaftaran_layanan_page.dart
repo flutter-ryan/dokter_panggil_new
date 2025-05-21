@@ -118,6 +118,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   List<int> groupTindakan = [];
   int _isPerawat = 1;
   int _isDokter = 1;
+  bool _isPerawatPaket = false;
 
   void _showPegawai(int id, String title) {
     if (title == 'Dokter') {
@@ -571,8 +572,12 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     showBarModalBottomSheet(
       context: context,
       builder: (context) {
-        return ListPaketWidget(
-          selectedId: _selectedIdPaket,
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: ListPaketWidget(
+            selectedId: _selectedIdPaket,
+          ),
         );
       },
       duration: const Duration(milliseconds: 500),
@@ -581,6 +586,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
         var data = value as SelectedPaketModel;
         setState(() {
           _selectedIdPaket = data.id;
+          _isPerawatPaket = data.isPerawat;
           _paketCon.text = data.namaPaket!;
         });
       }
@@ -758,50 +764,74 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
                   controller: _animateIconTindakanCon,
                 ),
         ),
-        if (bayar == 1)
-          const Padding(
-            padding: EdgeInsets.only(top: 4.0),
-            child: Text(
-              'Layanan ini membutuhkan pembayaran diawal',
-              style: TextStyle(color: Colors.red, fontSize: 13.0),
-            ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 22, top: 22),
+          child: Input(
+            controller: _dokterCon,
+            label: 'Dokter',
+            hint: 'Pilih dokter',
+            maxLines: 1,
+            readOnly: true,
+            onTap: () => _showPegawai(1, 'Dokter'),
+            suffixIcon: _dokterCon.text.isNotEmpty
+                ? IconButton(
+                    onPressed: () {
+                      _dokterCon.clear();
+                      _mrKunjunganPasienBloc.dokterSink.add('');
+                      setState(() {});
+                    },
+                    color: Colors.red[300],
+                    icon: const Icon(Icons.cancel_outlined),
+                  )
+                : AnimateIcons(
+                    startIcon: Icons.add_circle_outline,
+                    endIcon: Icons.add_circle_outline,
+                    endIconColor: Colors.grey,
+                    startIconColor: Colors.grey,
+                    onStartIconPress: () {
+                      return true;
+                    },
+                    onEndIconPress: () {
+                      return true;
+                    },
+                    controller: _animateIconDokterCon,
+                  ),
           ),
-        if (_isDokter == 1)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 22, top: 22),
-            child: Input(
-              controller: _dokterCon,
-              label: 'Dokter',
-              hint: 'Pilih dokter',
-              maxLines: 1,
-              readOnly: true,
-              onTap: () => _showPegawai(1, 'Dokter'),
-              suffixIcon: _dokterCon.text.isNotEmpty
-                  ? IconButton(
-                      onPressed: () {
-                        _dokterCon.clear();
-                        _mrKunjunganPasienBloc.dokterSink.add('');
-                        setState(() {});
-                      },
-                      color: Colors.red[300],
-                      icon: const Icon(Icons.cancel_outlined),
-                    )
-                  : AnimateIcons(
-                      startIcon: Icons.add_circle_outline,
-                      endIcon: Icons.add_circle_outline,
-                      endIconColor: Colors.grey,
-                      startIconColor: Colors.grey,
-                      onStartIconPress: () {
-                        return true;
-                      },
-                      onEndIconPress: () {
-                        return true;
-                      },
-                      controller: _animateIconDokterCon,
-                    ),
-            ),
+        ),
+        Input(
+          controller: _paketCon,
+          label: 'Paket',
+          hint: 'Pilih paket',
+          maxLines: 1,
+          readOnly: true,
+          onTap: _showPaket,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Input required';
+            }
+            return null;
+          },
+          suffixIcon: _paketCon.text.isNotEmpty
+              ? IconButton(
+                  onPressed: () {
+                    _paketCon.clear();
+                    _mrKunjunganPasienBloc.perawatSink.add('');
+                    _selectedIdPaket = null;
+                    setState(() {});
+                  },
+                  color: Colors.red[300],
+                  icon: const Icon(Icons.cancel_outlined),
+                )
+              : const Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.grey,
+                ),
+        ),
+        if (_isPerawat == 1 || _isPerawatPaket)
+          SizedBox(
+            height: 22,
           ),
-        if (_isPerawat == 1)
+        if (_isPerawat == 1 || _isPerawatPaket)
           Padding(
             padding: const EdgeInsets.only(bottom: 22.0),
             child: Input(
@@ -836,38 +866,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
                     ),
             ),
           ),
-        Input(
-          controller: _paketCon,
-          label: 'Paket',
-          hint: 'Pilih paket',
-          maxLines: 1,
-          readOnly: true,
-          onTap: _showPaket,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'Input required';
-            }
-            return null;
-          },
-          suffixIcon: _paketCon.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    _paketCon.clear();
-                    _mrKunjunganPasienBloc.perawatSink.add('');
-                    _selectedIdPaket = null;
-                    setState(() {});
-                  },
-                  color: Colors.red[300],
-                  icon: const Icon(Icons.cancel_outlined),
-                )
-              : const Icon(
-                  Icons.add_circle_outline,
-                  color: Colors.grey,
-                ),
-        ),
-        const SizedBox(
-          height: 22,
-        ),
         const Divider(),
         const ListTile(
           contentPadding: EdgeInsets.zero,
@@ -876,7 +874,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
           ),
         ),
-        const Divider(),
         const SizedBox(
           height: 12,
         ),
@@ -903,6 +900,12 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
           hint: 'Pilih tanda dan gejala masuk pasien',
           maxLines: 1,
           readOnly: true,
+          validator: (value) {
+            if (value == null) {
+              return 'Input required';
+            }
+            return null;
+          },
           onTap: () {
             showBarModalBottomSheet(
               context: context,
@@ -945,6 +948,12 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
               _mrKunjunganPasienBloc.keputusanResikoJatuhSink
                   .add('Kursi Roda/Antrian Khusus');
             }
+          },
+          validator: (value) {
+            if (value == null) {
+              return 'Input required';
+            }
+            return null;
           },
           builder: (state) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,

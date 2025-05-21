@@ -130,11 +130,7 @@ class _DetailPaketWidgetState extends State<DetailPaketWidget> {
       if (value != null) {
         _kunjunganPaketUpdateBloc.idKunjunganSink.add(widget.data.id!);
         _kunjunganPaketUpdateBloc.idPaketSink.add(data.id!);
-        if (type == 'store') {
-          _kunjunganPaketUpdateBloc.storekunjunganPaket();
-        } else {
-          _kunjunganPaketUpdateBloc.updateKunjunganPaket();
-        }
+        _kunjunganPaketUpdateBloc.updateKunjunganPaket();
         _showStreamUpdatePaket();
       }
     });

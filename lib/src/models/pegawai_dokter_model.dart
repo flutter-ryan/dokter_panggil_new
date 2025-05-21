@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 PegawaiProfesiModel pegawaiProfesiModelFromJson(dynamic str) =>
     PegawaiProfesiModel.fromJson(str);
 
@@ -75,4 +77,19 @@ class ProfesiPegawai {
         id: json["id"],
         nama: json["nama_profesi"],
       );
+}
+
+String pegawaiProfesiRequestModelToJson(PegawaiProfesiRequestModel data) =>
+    json.encode(data.toJson());
+
+class PegawaiProfesiRequestModel {
+  PegawaiProfesiRequestModel({
+    required this.filter,
+  });
+
+  String filter;
+
+  Map<String, dynamic> toJson() => {
+        "filter": filter,
+      };
 }

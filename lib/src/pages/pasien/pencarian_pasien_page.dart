@@ -59,15 +59,23 @@ class _PencarianPasianpageState extends State<PencarianPasianpage> {
   void initState() {
     super.initState();
     _filterCon.addListener(_inputListener);
-    _filterPasien();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => Future.delayed(
+          const Duration(milliseconds: 500), () => _filterPasien()),
+    );
   }
 
   void _inputListener() {
     timer?.cancel();
-    timer = Timer.periodic(const Duration(milliseconds: 800), (timer) {
+    if (_filterCon.text.isNotEmpty && _filterCon.text.length > 2) {
+      timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+        _filterPasien();
+        timer.cancel();
+      });
+    }
+    if (_filterCon.text.isEmpty) {
       _filterPasien();
-      timer.cancel();
-    });
+    }
   }
 
   void _filterPasien() {
@@ -77,10 +85,6 @@ class _PencarianPasianpageState extends State<PencarianPasianpage> {
       _isStream = true;
       _showPasien = false;
     });
-  }
-
-  void _streamAllPasien() {
-    _pasienPageBloc.getPagePasien();
   }
 
   @override
@@ -137,15 +141,15 @@ class _PencarianPasianpageState extends State<PencarianPasianpage> {
                       controller: _filterCon,
                       focusNode: _filterFocus,
                       hint: 'Pencarian pasien',
+                      autocorrect: false,
                       suffixIcon: _isStream
                           ? InkWell(
                               onTap: () {
-                                _filterFocus.requestFocus(FocusNode());
-                                _streamAllPasien();
+                                _filterCon.clear();
                                 setState(() {
-                                  _filterCon.clear();
                                   _isStream = false;
                                 });
+                                _filterPasien();
                               },
                               child: FaIcon(
                                 FontAwesomeIcons.circleXmark,
@@ -162,7 +166,15 @@ class _PencarianPasianpageState extends State<PencarianPasianpage> {
             const SizedBox(
               height: 22.0,
             ),
-            _buildStreamFilter(context)
+            if (_isStream)
+              _buildStreamFilter(context)
+            else
+              Expanded(
+                child: Center(
+                    child: LoadingKit(
+                  color: kPrimaryColor,
+                )),
+              ),
           ],
         ),
       ),
