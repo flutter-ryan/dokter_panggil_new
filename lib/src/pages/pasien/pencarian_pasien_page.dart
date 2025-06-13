@@ -11,6 +11,7 @@ import 'package:dokter_panggil/src/models/pasien_filter_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_model.dart';
 import 'package:dokter_panggil/src/models/pasien_model.dart';
 import 'package:dokter_panggil/src/models/pasien_show_model.dart';
+import 'package:dokter_panggil/src/pages/components/button_rounded_widget.dart';
 import 'package:dokter_panggil/src/pages/components/card_layanan_pasien.dart';
 import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
@@ -441,6 +442,17 @@ class _PasienWidgetState extends State<PasienWidget> {
     );
   }
 
+  void _daftarLayanan() {
+    Navigator.push(context,
+            SlideLeftRoute(page: PendaftaranLayananPage(pasien: _data)))
+        .then((value) {
+      if (value != null) {
+        _pasienKunjunganBloc.kunjunganAktif();
+        setState(() {});
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -461,24 +473,11 @@ class _PasienWidgetState extends State<PasienWidget> {
               )
             ],
           ),
-          child: ElevatedButton(
-            onPressed: () => Navigator.push(
-              context,
-              SlideLeftRoute(
-                page: PendaftaranLayananPage(
-                  pasien: _data,
-                ),
-              ),
-            ).then((value) {
-              if (value != null) {
-                _pasienKunjunganBloc.kunjunganAktif();
-                setState(() {});
-              }
-            }),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: kPrimaryColor,
-                minimumSize: const Size(double.infinity, 45)),
-            child: const Text('Daftar Layanan'),
+          child: ButtonRoundedWidget(
+            onPressed: _daftarLayanan,
+            label: 'Daftar Layanan',
+            backgroundColor: kPrimaryColor,
+            foregroundColor: Colors.white,
           ),
         ),
       ],

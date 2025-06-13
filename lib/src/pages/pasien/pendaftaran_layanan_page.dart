@@ -2216,20 +2216,17 @@ class _ListTindakanLabNonKonsulState extends State<ListTindakanLabNonKonsul> {
               ),
             ),
           Container(
-            padding: const EdgeInsets.all(18.0),
-            child: ElevatedButton(
-              onPressed: _selectedData.isEmpty
-                  ? null
-                  : () => Navigator.pop(context, _selectedData),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 45.0),
+              padding: const EdgeInsets.all(18.0),
+              child: ButtonRoundedWidget(
+                onPressed: _selectedData.isEmpty
+                    ? null
+                    : () => Navigator.pop(context, _selectedData),
                 backgroundColor: kPrimaryColor,
-              ),
-              child: _selectedData.isEmpty
-                  ? const Text('Pilih Tindakan Lab')
-                  : Text('Pilih ${_selectedData.length} Tindakan Lab'),
-            ),
-          ),
+                foregroundColor: Colors.white,
+                label: _selectedData.isEmpty
+                    ? 'Pilih Tindakan Lab'
+                    : 'Pilih ${_selectedData.length} Tindakan Lab',
+              )),
         ],
       ),
     );

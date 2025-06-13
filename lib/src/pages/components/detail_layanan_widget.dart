@@ -5,6 +5,7 @@ import 'package:dokter_panggil/src/models/kunjungan_final_model.dart';
 import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
 import 'package:dokter_panggil/src/pages/components/detail_biaya_lainnya_wigdet.dart';
 import 'package:dokter_panggil/src/pages/components/detail_paket_widget.dart';
+import 'package:dokter_panggil/src/pages/components/detail_tindakan_rad_widget.dart';
 import 'package:dokter_panggil/src/pages/components/final_tagihan_page.dart';
 import 'package:dokter_panggil/src/pages/components/pembayaran_uang_muka.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/detail_bhp_widget.dart';
@@ -15,6 +16,7 @@ import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/detail_obat_injeksi_widget.dart';
+import 'package:dokter_panggil/src/pages/components/tagihan/detail_tagihan_lab_widget.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/detail_tagihan_racikan_widget.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/detail_tagihan_resep_widget.dart';
 import 'package:dokter_panggil/src/pages/components/tagihan/list_tagihan_widget.dart';
@@ -354,26 +356,48 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                   ),
                 if (_data!.tindakanLab!.isNotEmpty ||
                     _data!.pengantarLabMr!.isNotEmpty)
-                  NewDetailTagihanLabWidget(
-                    data: _data!,
-                    type: widget.type,
-                    reload: (DetailKunjungan data) {
-                      setState(() {
-                        _data = data;
-                      });
-                    },
-                  ),
+                  if (_data!.isEmr == 1)
+                    NewDetailTagihanLabWidget(
+                      data: _data!,
+                      type: widget.type,
+                      reload: (DetailKunjungan data) {
+                        setState(() {
+                          _data = data;
+                        });
+                      },
+                    )
+                  else
+                    DetailTagihanLabWidget(
+                      data: _data!,
+                      type: widget.type,
+                      reload: (DetailKunjungan data) {
+                        setState(() {
+                          _data = data;
+                        });
+                      },
+                    ),
                 if (_data!.tindakanRad!.isNotEmpty ||
                     _data!.pengantarRadMr!.isNotEmpty)
-                  NewDetailTagihanRadWidget(
-                    data: _data!,
-                    type: widget.type,
-                    reload: (DetailKunjungan data) {
-                      setState(() {
-                        _data = data;
-                      });
-                    },
-                  ),
+                  if (_data!.isEmr == 1)
+                    NewDetailTagihanRadWidget(
+                      data: _data!,
+                      type: widget.type,
+                      reload: (DetailKunjungan data) {
+                        setState(() {
+                          _data = data;
+                        });
+                      },
+                    )
+                  else
+                    DetailTindakanRadWidget(
+                      data: _data!,
+                      type: widget.type,
+                      reload: (DetailKunjungan data) {
+                        setState(() {
+                          _data = data;
+                        });
+                      },
+                    ),
                 DetailBiayaLainnyaWidget(
                   data: _data!,
                   type: widget.type,

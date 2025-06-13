@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const String urlDev = 'http://my_klinik_api.test';
+const String urlDev = 'https://dcd4-223-25-98-244.ngrok-free.app';
 const String urlProd = 'https://dokterpanggil.cloud';
 const bool dev = false;
 const String url = dev ? urlDev : urlProd;

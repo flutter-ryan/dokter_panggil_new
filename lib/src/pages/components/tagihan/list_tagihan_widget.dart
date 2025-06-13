@@ -177,7 +177,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
   }
 
   void _initBiaya() {
-    widget.data!.asMap().forEach((key, data) {
+    widget.data?.asMap().forEach((key, data) {
       double persen = 0;
       if (data.persen == 1) {
         persen = (data.nilai! * _data.total!) / 100;
