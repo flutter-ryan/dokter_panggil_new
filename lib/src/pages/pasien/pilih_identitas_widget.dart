@@ -1,6 +1,7 @@
 import 'package:dokter_panggil/src/blocs/master_idenetitas_bloc.dart';
 import 'package:dokter_panggil/src/models/master_identitas_model.dart';
 import 'package:dokter_panggil/src/models/pasien_show_model.dart';
+import 'package:dokter_panggil/src/pages/components/button_rounded_widget.dart';
 import 'package:dokter_panggil/src/pages/components/error_response.dart';
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
@@ -37,8 +38,6 @@ class _PilihIdentitasWidgetState extends State<PilihIdentitasWidget> {
       setState(() {
         _selectedJenis = widget.pasien!.identitas!.identitas!.id!;
       });
-    } else if (widget.pasien != null) {
-      _nomor.text = '${widget.pasien!.nik}';
     }
   }
 
@@ -51,14 +50,14 @@ class _PilihIdentitasWidgetState extends State<PilihIdentitasWidget> {
     if (_nomor.text.isEmpty) {
       Fluttertoast.showToast(
         msg: 'Nomor identitas tidak boleh kosong',
-        backgroundColor: Colors.red.withOpacity(0.8),
+        backgroundColor: Colors.red.withValues(alpha: 0.8),
       );
       return;
     }
     if (_selectedJenis == 0) {
       Fluttertoast.showToast(
         msg: 'Silahkan pilih jenis identitas terlebih dahulu',
-        backgroundColor: Colors.red.withOpacity(0.8),
+        backgroundColor: Colors.red.withValues(alpha: 0.8),
       );
       return;
     }
@@ -125,12 +124,11 @@ class _PilihIdentitasWidgetState extends State<PilihIdentitasWidget> {
             top: false,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(22, 32, 22, 0),
-              child: ElevatedButton(
+              child: ButtonRoundedWidget(
                 onPressed: _konfirmasi,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 45),
-                ),
-                child: const Text('Kofirmasi Identitas'),
+                backgroundColor: kPrimaryColor,
+                foregroundColor: Colors.white,
+                label: 'Kofirmasi Identitas',
               ),
             ),
           ),

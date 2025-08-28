@@ -25,6 +25,7 @@ class MrKunjunganPasienBloc {
   final BehaviorSubject<String> _hubungan = BehaviorSubject.seeded('');
   final BehaviorSubject<String> _nomorWali = BehaviorSubject.seeded('');
   final BehaviorSubject<int> _idPaket = BehaviorSubject();
+  final BehaviorSubject<int> _idRuangan = BehaviorSubject();
   StreamSink<String> get normSink => _norm.sink;
   StreamSink<String> get tanggalSink => _tanggal.sink;
   StreamSink<String> get jamSink => _jam.sink;
@@ -42,6 +43,7 @@ class MrKunjunganPasienBloc {
   StreamSink<String> get hubunganSink => _hubungan.sink;
   StreamSink<String> get nomorWaliSink => _nomorWali.sink;
   StreamSink<int> get idPaketSink => _idPaket.sink;
+  StreamSink<int> get idRuanganSink => _idRuangan.sink;
   StreamSink<ApiResponse<MrKunjunganPasienModel>> get kunjunganPasienSink =>
       _streamKunjunganPasien!.sink;
   Stream<ApiResponse<MrKunjunganPasienModel>> get kunjunganPasienStream =>
@@ -65,6 +67,7 @@ class MrKunjunganPasienBloc {
     final namaWali = _namaWali.value;
     final hubungan = _hubungan.value;
     final nomorWali = _nomorWali.value;
+    final idRuangan = _idRuangan.value;
     kunjunganPasienSink.add(ApiResponse.loading('Memuat...'));
     MrKunjunganPasienRequestModel mrKunjunganPasienRequestModel =
         MrKunjunganPasienRequestModel(
@@ -84,6 +87,7 @@ class MrKunjunganPasienBloc {
       namaWali: namaWali,
       nomorWali: nomorWali,
       hubungan: hubungan,
+      idRuangan: idRuangan,
     );
     try {
       final res = await _repo.simpanKunjungan(mrKunjunganPasienRequestModel);
@@ -113,25 +117,28 @@ class MrKunjunganPasienBloc {
     final namaWali = _namaWali.value;
     final hubungan = _hubungan.value;
     final nomorWali = _nomorWali.value;
+    final idRuangan = _idRuangan.value;
     kunjunganPasienSink.add(ApiResponse.loading('Memuat...'));
     MrKunjunganPasienPaketRequestModel mrKunjunganPasienPaketRequestModel =
         MrKunjunganPasienPaketRequestModel(
-            norm: norm,
-            tanggal: tanggal,
-            jam: jam,
-            keluhan: keluhan,
-            status: status,
-            dokter: dokter,
-            perawat: perawat,
-            layanan: layanan,
-            idPaket: idPaket,
-            namaWali: namaWali,
-            hubungan: hubungan,
-            nomorWali: nomorWali,
-            skrining: skrining,
-            resikoJatuh: resikoJatuh,
-            keputusanResikoJatuh: keputusanResikoJatuh,
-            tokens: tokens);
+      norm: norm,
+      tanggal: tanggal,
+      jam: jam,
+      keluhan: keluhan,
+      status: status,
+      dokter: dokter,
+      perawat: perawat,
+      layanan: layanan,
+      idPaket: idPaket,
+      namaWali: namaWali,
+      hubungan: hubungan,
+      nomorWali: nomorWali,
+      skrining: skrining,
+      resikoJatuh: resikoJatuh,
+      keputusanResikoJatuh: keputusanResikoJatuh,
+      tokens: tokens,
+      idRuangan: idRuangan,
+    );
     try {
       final res =
           await _repo.simpanKunjunganPaket(mrKunjunganPasienPaketRequestModel);

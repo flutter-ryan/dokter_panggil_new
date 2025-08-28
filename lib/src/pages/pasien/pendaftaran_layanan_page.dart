@@ -2,6 +2,7 @@ import 'package:animate_icons/animate_icons.dart';
 import 'package:dokter_panggil/src/blocs/mr_kunjungan_pasien_bloc.dart';
 import 'package:dokter_panggil/src/blocs/pendaftaran_pembelian_langsung_bloc.dart';
 import 'package:dokter_panggil/src/models/master_layanan_model.dart';
+import 'package:dokter_panggil/src/models/master_ruangan_model.dart';
 import 'package:dokter_panggil/src/models/master_tindakan_lab_all_model.dart';
 import 'package:dokter_panggil/src/models/mr_kunjungan_pasien_model.dart';
 import 'package:dokter_panggil/src/models/mr_master_skrining_model.dart';
@@ -11,6 +12,7 @@ import 'package:dokter_panggil/src/pages/components/button_rounded_widget.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
 import 'package:dokter_panggil/src/pages/components/tambah_langsung_drugs_widget.dart';
+import 'package:dokter_panggil/src/pages/master/list_master_ruangan_page.dart';
 import 'package:dokter_panggil/src/pages/master/master_layanan_widget.dart';
 import 'package:dokter_panggil/src/pages/pasien/form_skrining_widget.dart';
 import 'package:dokter_panggil/src/pages/pasien/list_paket_widget.dart';
@@ -86,7 +88,9 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   final _pendaftaranPembelianLangsungBloc = PendaftaranPembelianLangsungBloc();
   final animateIconPerawatCon = AnimateIconController();
   final _animateIconDokterCon = AnimateIconController();
-  final _animateIconTindakanCon = AnimateIconController();
+  final _animatedIconRuanganCon = AnimateIconController();
+  final _animatedIconLayanan = AnimateIconController();
+  final _animatedIconSkriningCon = AnimateIconController();
   final _tindakanCreateBloc = TindakanCreateBloc();
   final _hubunganFetchBloc = HubunganFetchBloc();
   final _dateFormat = DateFormat('yyyy-MM-dd');
@@ -97,6 +101,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   final _dokterCon = TextEditingController();
   final _perawatCon = TextEditingController();
   final _layananCon = TextEditingController();
+  final _ruanganCon = TextEditingController();
   final _namaWali = TextEditingController();
   final _hubungan = TextEditingController();
   final _nomorWali = TextEditingController();
@@ -121,11 +126,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   bool _isPerawatPaket = false;
 
   void _showPegawai(int id, String title) {
-    if (title == 'Dokter') {
-      _animateIconDokterCon.animateToEnd();
-    } else {
-      animateIconPerawatCon.animateToEnd();
-    }
     showBarModalBottomSheet(
       context: context,
       builder: (context) {
@@ -137,13 +137,12 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     ).then((value) {
       if (value != null) {
         var data = value as PegawaiProfesi;
-        if (_layananCon.text.isEmpty) {
-          //
-        }
         if (title == 'Dokter') {
+          _animateIconDokterCon.animateToEnd();
           _dokterCon.text = data.nama!;
           _mrKunjunganPasienBloc.dokterSink.add('${data.id}');
         } else {
+          animateIconPerawatCon.animateToEnd();
           _perawatCon.text = data.nama!;
           _mrKunjunganPasienBloc.perawatSink.add('${data.id}');
           _perawatKonsul = data.id;
@@ -152,12 +151,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
           _tokens.add('${data.user!.tokenFcm}');
         }
         setState(() {});
-      } else {
-        if (title == 'Dokter') {
-          _animateIconDokterCon.animateToStart();
-        } else {
-          animateIconPerawatCon.animateToStart();
-        }
       }
     });
   }
@@ -235,7 +228,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
   }
 
   void _showLayanan() {
-    _animateIconTindakanCon.animateToEnd();
+    _animatedIconLayanan.animateToEnd();
     _tindakanCreateBloc.tindakanCreate();
     showBarModalBottomSheet(
       context: context,
@@ -247,7 +240,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
         );
       },
     ).then((value) {
-      _animateIconTindakanCon.animateToStart();
       if (value != null) {
         var data = value as MasterLayanan;
         _dokterCon.clear();
@@ -593,6 +585,42 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     });
   }
 
+  void _showRuangan() {
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => Padding(
+        padding: EdgeInsetsGeometry.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: ListMasterRuanganPage(),
+      ),
+    ).then((value) {
+      if (value != null) {
+        _animatedIconRuanganCon.animateToEnd();
+        final ruangan = value as MasterRuangan;
+        _mrKunjunganPasienBloc.idRuanganSink.add(ruangan.id!);
+        setState(() {
+          _ruanganCon.text = '${ruangan.namaRuangan}';
+        });
+      }
+    });
+  }
+
+  void _showSkrining() {
+    showBarModalBottomSheet(
+      context: context,
+      builder: (context) => const FormSkriningWidget(),
+    ).then((value) {
+      if (value != null) {
+        var data = value as MasterSkrining;
+        _mrKunjunganPasienBloc.skriningSink.add(data.id!);
+        _animatedIconSkriningCon.animateToEnd();
+        setState(() {
+          _tanda.text = '${data.skrining}';
+        });
+      }
+    });
+  }
+
   @override
   void dispose() {
     _tanggalCon.dispose();
@@ -601,6 +629,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
     _dokterCon.dispose();
     _perawatCon.dispose();
     _layananCon.dispose();
+    _ruanganCon.dispose();
     _namaWali.dispose();
     _hubungan.dispose();
     _nomorWali.dispose();
@@ -700,6 +729,41 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
                     trailing: const Icon(Icons.keyboard_arrow_right),
                   ),
                 ),
+                if (_jenisPendaftaran != 'pembelian-langsung')
+                  SizedBox(
+                    height: 22,
+                  ),
+                if (_jenisPendaftaran != 'pembelian-langsung')
+                  Input(
+                    controller: _ruanganCon,
+                    label: 'Ruangan',
+                    hint: 'Pilih ruangan',
+                    maxLines: 1,
+                    readOnly: true,
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'Input required';
+                      }
+                      return null;
+                    },
+                    onTap: _showRuangan,
+                    suffixIcon: AnimateIcons(
+                      startIcon: Icons.add_circle_outline,
+                      endIcon: Icons.cancel_outlined,
+                      endIconColor: Colors.red,
+                      startIconColor: Colors.grey,
+                      onStartIconPress: () {
+                        _showRuangan();
+                        return true;
+                      },
+                      onEndIconPress: () {
+                        _ruanganCon.clear();
+                        setState(() {});
+                        return true;
+                      },
+                      controller: _animatedIconRuanganCon,
+                    ),
+                  ),
                 const SizedBox(
                   height: 22.0,
                 ),
@@ -739,30 +803,24 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             return null;
           },
           onTap: _showLayanan,
-          suffixIcon: _layananCon.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    _layananCon.clear();
-                    setState(() {
-                      bayar = 0;
-                    });
-                  },
-                  color: Colors.red[300],
-                  icon: const Icon(Icons.cancel),
-                )
-              : AnimateIcons(
-                  startIcon: Icons.add_circle_outline,
-                  endIcon: Icons.add_circle_outline,
-                  endIconColor: Colors.grey,
-                  startIconColor: Colors.grey,
-                  onStartIconPress: () {
-                    return true;
-                  },
-                  onEndIconPress: () {
-                    return true;
-                  },
-                  controller: _animateIconTindakanCon,
-                ),
+          suffixIcon: AnimateIcons(
+            startIcon: Icons.add_circle_outline,
+            endIcon: Icons.cancel_outlined,
+            endIconColor: Colors.red,
+            startIconColor: Colors.grey,
+            onStartIconPress: () {
+              _showLayanan();
+              return true;
+            },
+            onEndIconPress: () {
+              _layananCon.clear();
+              setState(() {
+                bayar = 0;
+              });
+              return true;
+            },
+            controller: _animatedIconLayanan,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 22, top: 22),
@@ -773,29 +831,23 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             maxLines: 1,
             readOnly: true,
             onTap: () => _showPegawai(1, 'Dokter'),
-            suffixIcon: _dokterCon.text.isNotEmpty
-                ? IconButton(
-                    onPressed: () {
-                      _dokterCon.clear();
-                      _mrKunjunganPasienBloc.dokterSink.add('');
-                      setState(() {});
-                    },
-                    color: Colors.red[300],
-                    icon: const Icon(Icons.cancel_outlined),
-                  )
-                : AnimateIcons(
-                    startIcon: Icons.add_circle_outline,
-                    endIcon: Icons.add_circle_outline,
-                    endIconColor: Colors.grey,
-                    startIconColor: Colors.grey,
-                    onStartIconPress: () {
-                      return true;
-                    },
-                    onEndIconPress: () {
-                      return true;
-                    },
-                    controller: _animateIconDokterCon,
-                  ),
+            suffixIcon: AnimateIcons(
+              startIcon: Icons.add_circle_outline,
+              endIcon: Icons.cancel_outlined,
+              endIconColor: Colors.red,
+              startIconColor: Colors.grey,
+              onStartIconPress: () {
+                _showPegawai(1, 'Dokter');
+                return true;
+              },
+              onEndIconPress: () {
+                _dokterCon.clear();
+                _mrKunjunganPasienBloc.dokterSink.add('');
+                setState(() {});
+                return true;
+              },
+              controller: _animateIconDokterCon,
+            ),
           ),
         ),
         Input(
@@ -906,32 +958,22 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             }
             return null;
           },
-          onTap: () {
-            showBarModalBottomSheet(
-              context: context,
-              builder: (context) => const FormSkriningWidget(),
-            ).then((value) {
-              if (value != null) {
-                var data = value as MasterSkrining;
-                _mrKunjunganPasienBloc.skriningSink.add(data.id!);
-                setState(() {
-                  _tanda.text = '${data.skrining}';
-                });
-              }
-            });
-          },
+          onTap: _showSkrining,
           suffixIcon: AnimateIcons(
             startIcon: Icons.add_circle_outline,
-            endIcon: Icons.add_circle_outline,
-            endIconColor: Colors.grey,
+            endIcon: Icons.cancel_outlined,
+            endIconColor: Colors.red,
             startIconColor: Colors.grey,
             onStartIconPress: () {
+              _showSkrining();
               return true;
             },
             onEndIconPress: () {
+              _tanda.clear();
+              setState(() {});
               return true;
             },
-            controller: _animateIconTindakanCon,
+            controller: _animatedIconSkriningCon,
           ),
         ),
         const SizedBox(
@@ -1022,30 +1064,24 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             return null;
           },
           onTap: _showLayanan,
-          suffixIcon: _layananCon.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    _layananCon.clear();
-                    setState(() {
-                      bayar = 0;
-                    });
-                  },
-                  color: Colors.red[300],
-                  icon: const Icon(Icons.cancel),
-                )
-              : AnimateIcons(
-                  startIcon: Icons.add_circle_outline,
-                  endIcon: Icons.add_circle_outline,
-                  endIconColor: Colors.grey,
-                  startIconColor: Colors.grey,
-                  onStartIconPress: () {
-                    return true;
-                  },
-                  onEndIconPress: () {
-                    return true;
-                  },
-                  controller: _animateIconTindakanCon,
-                ),
+          suffixIcon: AnimateIcons(
+            startIcon: Icons.add_circle_outline,
+            endIcon: Icons.cancel_outlined,
+            endIconColor: Colors.red,
+            startIconColor: Colors.grey,
+            onStartIconPress: () {
+              _showLayanan();
+              return true;
+            },
+            onEndIconPress: () {
+              _layananCon.clear();
+              setState(() {
+                bayar = 0;
+              });
+              return true;
+            },
+            controller: _animatedIconLayanan,
+          ),
         ),
         if (bayar == 1)
           const Padding(
@@ -1073,29 +1109,23 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
               }
               return null;
             },
-            suffixIcon: _dokterCon.text.isNotEmpty
-                ? IconButton(
-                    onPressed: () {
-                      _dokterCon.clear();
-                      _mrKunjunganPasienBloc.dokterSink.add('');
-                      setState(() {});
-                    },
-                    color: Colors.red[300],
-                    icon: const Icon(Icons.cancel),
-                  )
-                : AnimateIcons(
-                    startIcon: Icons.add_circle_outline,
-                    endIcon: Icons.add_circle_outline,
-                    endIconColor: Colors.grey,
-                    startIconColor: Colors.grey,
-                    onStartIconPress: () {
-                      return true;
-                    },
-                    onEndIconPress: () {
-                      return true;
-                    },
-                    controller: _animateIconDokterCon,
-                  ),
+            suffixIcon: AnimateIcons(
+              startIcon: Icons.add_circle_outline,
+              endIcon: Icons.cancel_outlined,
+              endIconColor: Colors.red,
+              startIconColor: Colors.grey,
+              onStartIconPress: () {
+                _showPegawai(1, 'Dokter');
+                return true;
+              },
+              onEndIconPress: () {
+                _dokterCon.clear();
+                _mrKunjunganPasienBloc.dokterSink.add('');
+                setState(() {});
+                return true;
+              },
+              controller: _animateIconDokterCon,
+            ),
           ),
         if (_isDokter == 1)
           const SizedBox(
@@ -1116,29 +1146,22 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
               }
               return null;
             },
-            suffixIcon: _perawatCon.text.isNotEmpty
-                ? IconButton(
-                    onPressed: () {
-                      _perawatCon.clear();
-                      _mrKunjunganPasienBloc.perawatSink.add('');
-                      setState(() {});
-                    },
-                    color: Colors.red[300],
-                    icon: const Icon(Icons.cancel_outlined),
-                  )
-                : AnimateIcons(
-                    startIcon: Icons.add_circle_outline,
-                    endIcon: Icons.add_circle_outline,
-                    endIconColor: Colors.grey,
-                    startIconColor: Colors.grey,
-                    onStartIconPress: () {
-                      return true;
-                    },
-                    onEndIconPress: () {
-                      return true;
-                    },
-                    controller: animateIconPerawatCon,
-                  ),
+            suffixIcon: AnimateIcons(
+              startIcon: Icons.add_circle_outline,
+              endIcon: Icons.cancel_outlined,
+              endIconColor: Colors.red,
+              startIconColor: Colors.grey,
+              onStartIconPress: () {
+                return true;
+              },
+              onEndIconPress: () {
+                _perawatCon.clear();
+                _mrKunjunganPasienBloc.perawatSink.add('');
+                setState(() {});
+                return true;
+              },
+              controller: animateIconPerawatCon,
+            ),
           ),
         if (_isPerawat == 1)
           const SizedBox(
@@ -1179,32 +1202,22 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
           hint: 'Pilih tanda dan gejala masuk pasien',
           maxLines: 1,
           readOnly: true,
-          onTap: () {
-            showBarModalBottomSheet(
-              context: context,
-              builder: (context) => const FormSkriningWidget(),
-            ).then((value) {
-              if (value != null) {
-                var data = value as MasterSkrining;
-                _mrKunjunganPasienBloc.skriningSink.add(data.id!);
-                setState(() {
-                  _tanda.text = '${data.skrining}';
-                });
-              }
-            });
-          },
+          onTap: _showSkrining,
           suffixIcon: AnimateIcons(
             startIcon: Icons.add_circle_outline,
-            endIcon: Icons.add_circle_outline,
-            endIconColor: Colors.grey,
+            endIcon: Icons.cancel_outlined,
+            endIconColor: Colors.red,
             startIconColor: Colors.grey,
             onStartIconPress: () {
+              _showSkrining();
               return true;
             },
             onEndIconPress: () {
+              _tanda.clear();
+              setState(() {});
               return true;
             },
-            controller: _animateIconTindakanCon,
+            controller: _animatedIconSkriningCon,
           ),
         ),
         const SizedBox(

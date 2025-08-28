@@ -1,15 +1,20 @@
-import 'package:animate_icons/animate_icons.dart';
-import 'package:dokter_panggil/src/blocs/pasien_bloc.dart';
-import 'package:dokter_panggil/src/models/pasien_model.dart';
+import 'package:dokter_panggil/src/blocs/mr_pasien_save_bloc.dart';
+import 'package:dokter_panggil/src/models/master_status_nikah_model.dart';
+import 'package:dokter_panggil/src/models/master_village_model.dart';
+import 'package:dokter_panggil/src/models/mr_pasien_save_model.dart';
 import 'package:dokter_panggil/src/models/pasien_show_model.dart';
 import 'package:dokter_panggil/src/pages/components/button_edit_master.dart';
 import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:dokter_panggil/src/pages/components/header.dart';
 import 'package:dokter_panggil/src/pages/components/input_form.dart';
+import 'package:dokter_panggil/src/pages/components/input_kontak.dart';
+import 'package:dokter_panggil/src/pages/components/list_jenis_kelamin.dart';
+import 'package:dokter_panggil/src/pages/components/list_master_status_nikah.dart';
 import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
 import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:dokter_panggil/src/pages/master/list_master_village_page.dart';
 import 'package:dokter_panggil/src/pages/pasien/pencarian_pasien_page.dart';
 import 'package:dokter_panggil/src/pages/pasien/pilih_identitas_widget.dart';
 import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
@@ -19,7 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
@@ -32,8 +36,7 @@ class Tambahpasienpage extends StatefulWidget {
 
 class _TambahpasienpageState extends State<Tambahpasienpage> {
   final _scrollCon = ScrollController();
-  final _pasienBloc = PasienBloc();
-  final _animateIconController = AnimateIconController();
+  final _mrPasienSaveBloc = MrPasienSaveBloc();
   final _formKey = GlobalKey<FormState>();
   final _nikCon = TextEditingController();
   final _namaCon = TextEditingController();
@@ -42,10 +45,18 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
   final _alamatCon = TextEditingController();
   final _nomorHpCon = TextEditingController();
   final _jenisKelaminCon = TextEditingController();
+  final _kelurahanCon = TextEditingController();
+  final _kodeposCon = TextEditingController();
+  final _namaDarurat = TextEditingController();
+  final _nomorHpDaruratCon = TextEditingController();
+  final _rwCon = TextEditingController();
+  final _rtCon = TextEditingController();
+  final _statusNikahCon = TextEditingController();
+
   DateTime _selectedDate = DateTime.parse('1990-01-01');
   final DateFormat _tanggal = DateFormat('yyyy-MM-dd');
   bool _editForm = false;
-  String? _nomorHp;
+  String? _nomorHp, _nomorHpDarurat;
 
   bool validateAndSave() {
     var formState = _formKey.currentState;
@@ -94,63 +105,35 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
   }
 
   void _showJenisKelamin() {
-    _animateIconController.animateToEnd();
     showMaterialModalBottomSheet(
       context: context,
       useRootNavigator: true,
       builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 22.0, left: 18.0, right: 18.0),
-              child: Text(
-                'Pilih jenis kelamin',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-            ),
-            const SizedBox(
-              height: 18.0,
-            ),
-            ListTile(
-              onTap: () =>
-                  Navigator.pop(context, {'id': "1", 'jenis': 'Laki-laki'}),
-              leading: const Icon(Icons.male),
-              title: const Text('Laki-laki'),
-            ),
-            const Divider(height: 0.0),
-            ListTile(
-              onTap: () =>
-                  Navigator.pop(context, {'id': "2", 'jenis': 'Perempuan'}),
-              leading: const Icon(Icons.female),
-              title: const Text('Perempuan'),
-            ),
-            const SizedBox(
-              height: 22.0,
-            ),
-          ],
-        );
+        return ListJenisKelamin();
       },
     ).then((value) {
-      _animateIconController.animateToStart();
       if (value != null) {
         var data = value as Map<String, dynamic>;
         _jenisKelaminCon.text = data['jenis'];
-        _pasienBloc.jenisKelaminSink.add(data['id']);
+        _mrPasienSaveBloc.jenisKelaminSink.add(data['id']);
       }
     });
   }
 
   void _simpan() {
     if (validateAndSave()) {
-      _pasienBloc.nikSink.add(_nikCon.text);
-      _pasienBloc.namaSink.add(_namaCon.text);
-      _pasienBloc.tempatLahirSink.add(_tempatLahirCon.text);
-      _pasienBloc.tanggalLahirSink.add(_tanggalLahirCon.text);
-      _pasienBloc.alamatSink.add(_alamatCon.text);
-      _pasienBloc.nomorHpSink.add(_nomorHp!);
-      _pasienBloc.savePasien();
+      _mrPasienSaveBloc.nikSink.add(_nikCon.text);
+      _mrPasienSaveBloc.namaPasienSink.add(_namaCon.text);
+      _mrPasienSaveBloc.tempatLahirSink.add(_tempatLahirCon.text);
+      _mrPasienSaveBloc.tanggalLahirSink.add(_tanggalLahirCon.text);
+      _mrPasienSaveBloc.alamatSink.add(_alamatCon.text);
+      _mrPasienSaveBloc.nomorHpSink.add(_nomorHp!);
+      _mrPasienSaveBloc.rwSink.add(_rwCon.text);
+      _mrPasienSaveBloc.rtSink.add(_rtCon.text);
+      _mrPasienSaveBloc.kodePosSink.add(_kodeposCon.text);
+      _mrPasienSaveBloc.namaDaruratSink.add(_namaDarurat.text);
+      _mrPasienSaveBloc.nomorHpDaruratSink.add('$_nomorHpDarurat');
+      _mrPasienSaveBloc.simpanPasien();
       _showStream();
     }
   }
@@ -163,6 +146,14 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
     _alamatCon.clear();
     _nomorHpCon.clear();
     _jenisKelaminCon.clear();
+    _kelurahanCon.clear();
+    _kodeposCon.clear();
+    _namaDarurat.clear();
+    _kelurahanCon.clear();
+    _statusNikahCon.clear();
+    _rtCon.clear();
+    _rwCon.clear();
+    _nomorHpDaruratCon.clear();
     FocusScope.of(context).requestFocus(FocusNode());
     _scrollCon.animateTo(0,
         duration: const Duration(milliseconds: 300),
@@ -193,7 +184,7 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
     _jenisKelaminCon.text = pasien.jenisKelamin!;
     _alamatCon.text = pasien.alamat!;
     _nomorHpCon.text = pasien.nomorTelepon!;
-    _pasienBloc.idSink.add(pasien.id!);
+    _mrPasienSaveBloc.idPasienSink.add(pasien.id!);
     setState(() {
       _editForm = true;
     });
@@ -201,14 +192,14 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
 
   void _update() {
     if (validateAndSave()) {
-      _pasienBloc.nikSink.add(_nikCon.text);
-      _pasienBloc.namaSink.add(_namaCon.text);
-      _pasienBloc.tempatLahirSink.add(_tempatLahirCon.text);
-      _pasienBloc.tanggalLahirSink.add(_tanggalLahirCon.text);
-      _pasienBloc.jenisKelaminSink.add(_jenisKelaminCon.text);
-      _pasienBloc.alamatSink.add(_alamatCon.text);
-      _pasienBloc.nomorHpSink.add(_nomorHpCon.text);
-      _pasienBloc.updatePasien();
+      _mrPasienSaveBloc.nikSink.add(_nikCon.text);
+      _mrPasienSaveBloc.namaPasienSink.add(_namaCon.text);
+      _mrPasienSaveBloc.tempatLahirSink.add(_tempatLahirCon.text);
+      _mrPasienSaveBloc.tanggalLahirSink.add(_tanggalLahirCon.text);
+      _mrPasienSaveBloc.jenisKelaminSink.add(_jenisKelaminCon.text);
+      _mrPasienSaveBloc.alamatSink.add(_alamatCon.text);
+      _mrPasienSaveBloc.nomorHpSink.add(_nomorHpCon.text);
+      // _mrPasienSaveBloc.updatePasien();
       _showStream();
     }
   }
@@ -227,7 +218,7 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
     ).then((value) {
       if (value != null) {
         Future.delayed(const Duration(milliseconds: 300), () {
-          _pasienBloc.deletePasien();
+          _mrPasienSaveBloc.deletePasien();
           _showStream();
         });
       }
@@ -249,14 +240,54 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
       if (value != null) {
         var identitas = value as PilihIdentitasModel;
         _nikCon.text = identitas.nomor;
-        _pasienBloc.jenisSink.add('${identitas.id}');
+        _mrPasienSaveBloc.jenisSink.add(identitas.id);
+      }
+    });
+  }
+
+  void _showVillage() {
+    showMaterialModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SafeArea(
+          bottom: false,
+          child: ListMasterVillagePage(),
+        ),
+      ),
+    ).then((value) {
+      if (value != null) {
+        var kelurahan = value as Village;
+        _mrPasienSaveBloc.villageSink.add(kelurahan);
+        setState(() {
+          _kelurahanCon.text = '${kelurahan.name}';
+        });
+      }
+    });
+  }
+
+  void _showStatusNikah() {
+    showMaterialModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      builder: (context) => ListMasterStatusNikah(),
+    ).then((value) {
+      if (value != null) {
+        final status = value as MasterStatusNikah;
+        _mrPasienSaveBloc.statusNikahSink.add(status.id!);
+        setState(() {
+          _statusNikahCon.text = '${status.deskripsi}';
+        });
       }
     });
   }
 
   @override
   void dispose() {
-    _pasienBloc.dispose();
+    _mrPasienSaveBloc.dispose();
     _namaCon.dispose();
     _nikCon.dispose();
     _tempatLahirCon.dispose();
@@ -302,227 +333,360 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
                 ),
               ),
               Expanded(
-                child: ListView(
+                child: SingleChildScrollView(
                   controller: _scrollCon,
                   padding: const EdgeInsets.all(32.0),
-                  children: [
-                    Input(
-                      controller: _nikCon,
-                      readOnly: true,
-                      label: 'Nomor identitas',
-                      hint: 'Nomor identitas',
-                      maxLines: 1,
-                      keyType: TextInputType.number,
-                      onTap: _pilihIdentitas,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    Input(
-                      controller: _namaCon,
-                      label: 'Nama pasien',
-                      hint: 'Nama sesuai identitas',
-                      maxLines: 1,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      textCap: TextCapitalization.words,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    Input(
-                      controller: _tempatLahirCon,
-                      label: 'Tempat lahir',
-                      hint: 'Tempat lahir sesuai identitas',
-                      suffixIcon: const Icon(Icons.place),
-                      maxLines: 1,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      textCap: TextCapitalization.words,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    Input(
-                      controller: _tanggalLahirCon,
-                      label: 'Tanggal lahir',
-                      hint: 'Tanggal lahir sesuai identitas',
-                      maxLines: 1,
-                      suffixIcon: const Icon(
-                        Icons.calendar_month,
-                        color: Colors.grey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Infromasi Pribadi',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600),
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      readOnly: true,
-                      onTap: _showDate,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    Input(
-                      controller: _jenisKelaminCon,
-                      label: 'Jenis kelamin',
-                      hint: 'Jenis kelamin pasien',
-                      suffixIcon: AnimateIcons(
-                        startIconColor: Colors.grey,
-                        endIconColor: Colors.grey,
-                        startIcon: Icons.expand_more_rounded,
-                        endIcon: Icons.expand_less_rounded,
-                        duration: const Duration(milliseconds: 300),
-                        onStartIconPress: () {
-                          _showJenisKelamin();
-                          return false;
-                        },
-                        onEndIconPress: () {
-                          Navigator.pop(context);
-                          return false;
-                        },
-                        controller: _animateIconController,
+                      Divider(
+                        height: 22,
                       ),
-                      maxLines: 1,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      readOnly: true,
-                      onTap: _showJenisKelamin,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    Input(
-                      controller: _alamatCon,
-                      label: 'Alamat',
-                      hint: 'Alamat sesuai identitas',
-                      minLines: 4,
-                      maxLines: null,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'Input required';
-                        }
-                        return null;
-                      },
-                      textCap: TextCapitalization.words,
-                      keyType: TextInputType.multiline,
-                      textInputAction: TextInputAction.newline,
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    const Text(
-                      'Nomor Handphone',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4.0, horizontal: 18.0),
-                      decoration: BoxDecoration(
-                        color: Colors.blueGrey[50],
-                        border: Border.all(width: 0.3, color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: IntlPhoneField(
-                        controller: _nomorHpCon,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 10.0),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          hintText: 'Ex: 081334334334',
-                          hintStyle: TextStyle(color: Colors.grey[400]),
-                        ),
-                        initialCountryCode: 'ID',
-                        disableLengthCheck: true,
-                        showDropdownIcon: false,
-                        showCountryFlag: false,
-                        validator: (value) {
-                          if (value!.number.isEmpty) {
-                            return 'Invalid phone Number';
+                      Input(
+                        controller: _nikCon,
+                        readOnly: true,
+                        label: 'Nomor identitas',
+                        hint: 'Nomor identitas',
+                        maxLines: 1,
+                        keyType: TextInputType.number,
+                        onTap: _pilihIdentitas,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
                           }
                           return null;
                         },
-                        onSaved: (value) {
-                          setState(() {
-                            _nomorHp = value!.number;
-                          });
-                        },
                       ),
-                    ),
-                    const SizedBox(
-                      height: 32.0,
-                    ),
-                    if (_editForm)
-                      ButtonEditMaster(
-                        update: _update,
-                        delete: _delete,
-                        batal: _batal,
-                      )
-                    else
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _namaCon,
+                        label: 'Nama pasien',
+                        hint: 'Nama sesuai identitas',
+                        maxLines: 1,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        textCap: TextCapitalization.words,
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _tempatLahirCon,
+                        label: 'Tempat lahir',
+                        hint: 'Tempat lahir sesuai identitas',
+                        suffixIcon: const Icon(Icons.place),
+                        maxLines: 1,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        textCap: TextCapitalization.words,
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _tanggalLahirCon,
+                        label: 'Tanggal lahir',
+                        hint: 'Tanggal lahir sesuai identitas',
+                        maxLines: 1,
+                        suffixIcon: const Icon(
+                          Icons.calendar_month,
+                          color: Colors.grey,
+                        ),
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        readOnly: true,
+                        onTap: _showDate,
+                      ),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _jenisKelaminCon,
+                        label: 'Jenis kelamin',
+                        hint: 'Jenis kelamin pasien',
+                        suffixIcon: Icon(Icons.expand_more_rounded),
+                        maxLines: 1,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        readOnly: true,
+                        onTap: _showJenisKelamin,
+                        textInputAction: TextInputAction.next,
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Input(
+                        controller: _statusNikahCon,
+                        label: 'Status',
+                        hint: 'Status perkawinan',
+                        suffixIcon: Icon(Icons.expand_more_rounded),
+                        maxLines: 1,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        readOnly: true,
+                        onTap: _showStatusNikah,
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _alamatCon,
+                        label: 'Alamat',
+                        hint: 'Alamat sesuai identitas',
+                        minLines: 4,
+                        maxLines: null,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        textCap: TextCapitalization.words,
+                        keyType: TextInputType.multiline,
+                        textInputAction: TextInputAction.newline,
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Input(
+                          controller: _kelurahanCon,
+                          label: 'Kelurahan',
+                          hint: 'Pilih kelurahan sesuai alamat',
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return 'Input required';
+                            }
+                            return null;
+                          },
+                          onTap: _showVillage,
+                          readOnly: true,
+                          suffixIcon: Icon(Icons.keyboard_arrow_down_rounded)),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
                       Row(
                         children: [
                           Expanded(
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 45.0,
-                              child: ElevatedButton(
-                                onPressed: _batal,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey[200],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6.0),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'BATAL',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ),
+                            child: Input(
+                              controller: _rwCon,
+                              label: 'RW',
+                              hint: 'RW sesuai alamat',
+                              maxLines: 1,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Input required';
+                                }
+                                return null;
+                              },
+                              keyType: TextInputType.number,
                             ),
                           ),
-                          const SizedBox(
-                            width: 15.0,
+                          SizedBox(
+                            width: 22,
                           ),
                           Expanded(
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 45.0,
-                              child: ElevatedButton(
-                                onPressed: _simpan,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: kPrimaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6.0),
+                            child: Input(
+                              controller: _rtCon,
+                              label: 'RT',
+                              hint: 'RT sesuai alamat',
+                              maxLines: 1,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Input required';
+                                }
+                                return null;
+                              },
+                              keyType: TextInputType.number,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 32.0,
+                      ),
+                      Input(
+                        controller: _kodeposCon,
+                        label: 'Kode Pos',
+                        hint: 'Kode pos sesuai alamat',
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        keyType: TextInputType.number,
+                      ),
+                      const SizedBox(
+                        height: 32.0,
+                      ),
+                      FormField(
+                        builder: (state) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InputKontak(
+                              controller: _nomorHpCon,
+                              label: 'Nomor Handphone',
+                              onSaved: (value) {
+                                setState(() {
+                                  _nomorHp = value!.number;
+                                });
+                              },
+                              onChanged: (val) => state.didChange(val),
+                            ),
+                            if (state.hasError)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Input required',
+                                  style: TextStyle(
+                                      fontSize: 13, color: Colors.red[800]),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Text(
+                        'Kontak Darurat',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600),
+                      ),
+                      Divider(
+                        height: 22,
+                      ),
+                      Input(
+                        controller: _namaDarurat,
+                        label: 'Nama lengkap',
+                        hint: 'Nama lengkap suami/istri/saudara/orang tua',
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        textCap: TextCapitalization.words,
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      FormField(
+                        validator: (val) {
+                          if (val == null) {
+                            return 'Input required';
+                          }
+                          return null;
+                        },
+                        builder: (state) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InputKontak(
+                              controller: _nomorHpDaruratCon,
+                              label: 'Nomor Handphone',
+                              onSaved: (val) {
+                                setState(() {
+                                  _nomorHpDarurat = val!.number;
+                                });
+                              },
+                              onChanged: (val) => state.didChange(val),
+                            ),
+                            if (state.hasError)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Input required',
+                                  style: TextStyle(
+                                      fontSize: 13, color: Colors.red[800]),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 52.0,
+                      ),
+                      if (_editForm)
+                        ButtonEditMaster(
+                          update: _update,
+                          delete: _delete,
+                          batal: _batal,
+                        )
+                      else
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 45.0,
+                                child: ElevatedButton(
+                                  onPressed: _batal,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey[200],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6.0),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'BATAL',
+                                    style: TextStyle(color: Colors.black),
                                   ),
                                 ),
-                                child: const Text('SIMPAN'),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                  ],
+                            const SizedBox(
+                              width: 15.0,
+                            ),
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 45.0,
+                                child: ElevatedButton(
+                                  onPressed: _simpan,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: kPrimaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6.0),
+                                    ),
+                                  ),
+                                  child: const Text('SIMPAN'),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -533,8 +697,8 @@ class _TambahpasienpageState extends State<Tambahpasienpage> {
   }
 
   Widget _streamSave() {
-    return StreamBuilder<ApiResponse<ResponsePasienModel>>(
-      stream: _pasienBloc.pasienStream,
+    return StreamBuilder<ApiResponse<MrPasienSaveModel>>(
+      stream: _mrPasienSaveBloc.pasienSaveStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           switch (snapshot.data!.status) {

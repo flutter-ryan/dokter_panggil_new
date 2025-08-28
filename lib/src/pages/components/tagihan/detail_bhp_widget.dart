@@ -58,7 +58,7 @@ class _DetailBhpWidgetState extends State<DetailBhpWidget> {
   int? _selectedId;
   int _hargaModal = 0;
   int _tarifAplikasi = 0;
-  List<BarangLab> _bhpLab = [];
+  final List<BarangLab> _bhpLab = [];
 
   @override
   void initState() {

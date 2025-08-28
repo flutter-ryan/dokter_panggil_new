@@ -204,12 +204,15 @@ class _HomepageState extends State<Homepage> {
                 top: MediaQuery.of(context).padding.top + 12.0,
                 bottom: 12.0,
               ),
-              decoration: const BoxDecoration(color: kPrimaryColor, boxShadow: [
-                BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10,
-                    offset: Offset(1.0, 2.0))
-              ]),
+              decoration: const BoxDecoration(
+                color: kPrimaryColor,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: Offset(1.0, 2.0))
+                ],
+              ),
               child: Row(
                 children: [
                   Expanded(

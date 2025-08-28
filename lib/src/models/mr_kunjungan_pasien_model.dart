@@ -152,6 +152,7 @@ class MrKunjunganPasienRequestModel {
   String namaWali;
   String hubungan;
   String nomorWali;
+  int? idRuangan;
 
   MrKunjunganPasienRequestModel({
     required this.norm,
@@ -170,6 +171,7 @@ class MrKunjunganPasienRequestModel {
     required this.namaWali,
     required this.hubungan,
     required this.nomorWali,
+    this.idRuangan,
   });
 
   Map<String, dynamic> toJson() => {
@@ -189,6 +191,7 @@ class MrKunjunganPasienRequestModel {
         "namaWali": namaWali,
         "hubungan": hubungan,
         "nomorWali": nomorWali,
+        "idRuangan": idRuangan,
       };
 }
 
@@ -234,6 +237,7 @@ class MrKunjunganPasienPaketRequestModel {
   String resikoJatuh;
   String keputusanResikoJatuh;
   List<String> tokens;
+  int? idRuangan;
 
   MrKunjunganPasienPaketRequestModel({
     required this.norm,
@@ -252,6 +256,7 @@ class MrKunjunganPasienPaketRequestModel {
     required this.resikoJatuh,
     required this.keputusanResikoJatuh,
     required this.tokens,
+    this.idRuangan,
   });
 
   Map<String, dynamic> toJson() => {
@@ -271,5 +276,6 @@ class MrKunjunganPasienPaketRequestModel {
         "resikoJatuh": resikoJatuh,
         "keputusanResikoJatuh": keputusanResikoJatuh,
         "tokens": List<dynamic>.from(tokens.map((x) => x)),
+        "idRuangan": idRuangan,
       };
 }

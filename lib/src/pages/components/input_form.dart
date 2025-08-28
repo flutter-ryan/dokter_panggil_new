@@ -71,7 +71,7 @@ class Input extends StatelessWidget {
                 borderSide: BorderSide.none,
               ),
               hintText: hint,
-              hintStyle: TextStyle(color: Colors.grey[400]),
+              hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
               suffixIcon: suffixIcon,
             ),
             readOnly: readOnly,

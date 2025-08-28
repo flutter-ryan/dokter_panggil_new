@@ -142,6 +142,7 @@ class _PencarianPasianpageState extends State<PencarianPasianpage> {
                       controller: _filterCon,
                       focusNode: _filterFocus,
                       hint: 'Pencarian pasien',
+                      autofocus: true,
                       autocorrect: false,
                       suffixIcon: _isStream
                           ? InkWell(
@@ -349,13 +350,14 @@ class _PasienWidgetState extends State<PasienWidget> {
 
   void _showRiwayatPendaftarn() {
     showBarModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return LayananFinalPasien(
-            norm: _data.norm!,
-            bloc: _pasienKunjunganFinalBloc,
-          );
-        });
+      context: context,
+      builder: (context) {
+        return LayananFinalPasien(
+          norm: _data.norm!,
+          bloc: _pasienKunjunganFinalBloc,
+        );
+      },
+    );
   }
 
   void _edit() {
@@ -474,7 +476,9 @@ class _PasienWidgetState extends State<PasienWidget> {
             ],
           ),
           child: ButtonRoundedWidget(
-            onPressed: _daftarLayanan,
+            onPressed: widget.data.pasienAdministrativeCode == null
+                ? null
+                : _daftarLayanan,
             label: 'Daftar Layanan',
             backgroundColor: kPrimaryColor,
             foregroundColor: Colors.white,
@@ -512,6 +516,21 @@ class _PasienWidgetState extends State<PasienWidget> {
                     '${pasien!.namaPasien}',
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: pasien.idSatuSehat != null
+                          ? Colors.green
+                          : Colors.red,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Text(
+                      pasien.idSatuSehat != null
+                          ? 'ID Satusehat: ${pasien.idSatuSehat}'
+                          : 'Belum melakukan siknronisasi satu sehat',
+                      style: TextStyle(fontSize: 13, color: Colors.grey[50]),
+                    ),
                   ),
                   const SizedBox(
                     height: 8.0,

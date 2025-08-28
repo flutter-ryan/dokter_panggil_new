@@ -425,19 +425,34 @@ class _DetailPetugasWidgetState extends State<DetailPetugasWidget> {
                                   SizedBox(
                                     width: 8,
                                   ),
-                                ElevatedButton(
-                                  onPressed: perawat.status == 3
-                                      ? () => _batalFinalPetugas(
-                                          perawat.idPerawat, false)
-                                      : null,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(32.0),
+                                if (perawat.isTimbangTerima == 1)
+                                  SizedBox(
+                                    width: 72,
+                                    child: Text(
+                                      'Timbang Terima',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.red,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
+                                  )
+                                else
+                                  ElevatedButton(
+                                    onPressed: perawat.status == 3
+                                        ? () => _batalFinalPetugas(
+                                            perawat.idPerawat, false)
+                                        : null,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(32.0),
+                                      ),
+                                    ),
+                                    child: const Text('Batal'),
                                   ),
-                                  child: const Text('Batal'),
-                                ),
                               ],
                             )
                           : null,

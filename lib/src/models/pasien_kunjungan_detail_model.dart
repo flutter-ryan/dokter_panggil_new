@@ -798,6 +798,7 @@ class Perawat {
     this.status,
     this.profesi,
     this.isAdminAdd,
+    this.isTimbangTerima,
   });
 
   int? id;
@@ -807,6 +808,7 @@ class Perawat {
   int? status;
   String? profesi;
   int? isAdminAdd;
+  int? isTimbangTerima;
 
   factory Perawat.fromJson(Map<String, dynamic> json) => Perawat(
         id: json["id"],
@@ -816,6 +818,7 @@ class Perawat {
         status: json["status"],
         profesi: json["profesi"],
         isAdminAdd: json["is_admin_add"],
+        isTimbangTerima: json["is_timbang_terima"],
       );
 }
 
