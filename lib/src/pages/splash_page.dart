@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:dokter_panggil/src/pages/session_page.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/pages/session_page.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';

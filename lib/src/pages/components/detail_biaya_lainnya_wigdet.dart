@@ -1,15 +1,15 @@
-import 'package:dokter_panggil/src/blocs/kunjungan_biaya_lain_bloc.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_biaya_lain_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 

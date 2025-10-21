@@ -1,31 +1,31 @@
-import 'package:dokter_panggil/src/blocs/file_eresep_oral_bloc.dart';
-import 'package:dokter_panggil/src/blocs/mr_eresep_bloc.dart';
-import 'package:dokter_panggil/src/blocs/resep_oral_proses_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tagihan_resep_oral_update_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tranportasi_resep_bloc.dart';
-import 'package:dokter_panggil/src/models/file_eresep_oral_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/resep_oral_proses_model.dart';
-import 'package:dokter_panggil/src/models/tagihan_resep_oral_update_model.dart';
-import 'package:dokter_panggil/src/models/transportasi_resep_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_tagihan_resep.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/resep_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
-import 'package:dokter_panggil/src/pages/components/transaksi_resep.dart';
-import 'package:dokter_panggil/src/pages/components/transaksi_resep_mr.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/file_eresep_oral_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/mr_eresep_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/resep_oral_proses_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tagihan_resep_oral_update_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tranportasi_resep_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/file_eresep_oral_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/resep_oral_proses_model.dart';
+import 'package:admin_dokter_panggil/src/models/tagihan_resep_oral_update_model.dart';
+import 'package:admin_dokter_panggil/src/models/transportasi_resep_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_tagihan_resep.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/resep_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/transaksi_resep.dart';
+import 'package:admin_dokter_panggil/src/pages/components/transaksi_resep_mr.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_bottom_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
@@ -228,9 +228,14 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
   }
 
   Future<void> _share(MrEresepOral? data) async {
-    Share.share(
-        'ERESEP dokter panggil\n\nPasien ${data!.pasien}\n${Uri.parse(data.url!).toString()}',
-        subject: 'E-Resep Pasien ${data.pasien}');
+    SharePlus.instance.share(
+      ShareParams(
+        title: 'E-Resep Pasien ${data!.pasien}',
+        text:
+            'ERESEP dokter panggil\n\nPasien ${data.pasien}\n${Uri.parse(data.url!).toString()}',
+        subject: 'E-Resep Pasien ${data.pasien}',
+      ),
+    );
   }
 
   @override

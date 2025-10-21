@@ -1,17 +1,17 @@
-import 'package:dokter_panggil/src/blocs/current_user_bloc.dart';
-import 'package:dokter_panggil/src/blocs/current_user_update_bloc.dart';
-import 'package:dokter_panggil/src/models/current_user_model.dart';
-import 'package:dokter_panggil/src/models/current_user_update_model.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/current_user_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/current_user_update_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/current_user_model.dart';
+import 'package:admin_dokter_panggil/src/models/current_user_update_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 
 class CurrentUserPage extends StatefulWidget {
   const CurrentUserPage({super.key});

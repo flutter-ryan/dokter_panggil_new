@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/pages/components/title_quick_act.dart';
+import 'package:admin_dokter_panggil/src/pages/components/title_quick_act.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

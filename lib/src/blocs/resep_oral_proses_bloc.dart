@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/resep_oral_proses_model.dart';
-import 'package:dokter_panggil/src/repositories/resep_oral_proses_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/resep_oral_proses_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/resep_oral_proses_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class ResepOralProsesBloc {
@@ -37,7 +37,7 @@ class ResepOralProsesBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamResepOralProses?.close();
     _idResepOral.close();
     _status.close();

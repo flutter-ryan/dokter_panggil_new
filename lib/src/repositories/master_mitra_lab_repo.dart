@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/master_mitra_lab_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/master_mitra_lab_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class MasterMitraLabRepo {
   Future<MasterMitraLabModel> getMitraLab() async {

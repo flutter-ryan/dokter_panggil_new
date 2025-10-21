@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dokter_panggil/src/blocs/master_paket_create_bloc.dart';
-import 'package:dokter_panggil/src/models/master_paket_create_model.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_paket_create_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_paket_create_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 
 class PaketPencarianPage extends StatefulWidget {
   const PaketPencarianPage({super.key});
@@ -186,6 +186,18 @@ class _ListPaketState extends State<ListPaket> {
     _data = widget.data!;
   }
 
+  void _pilihPaket(MasterPaket paket) {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    FocusScope.of(context).requestFocus(FocusNode());
+    Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        if (!mounted) return;
+        Navigator.pop(context, paket);
+      },
+    );
+  }
+
   @override
   void didUpdateWidget(covariant ListPaket oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -216,17 +228,7 @@ class _ListPaketState extends State<ListPaket> {
               return ListTile(
                 contentPadding: const EdgeInsets.symmetric(
                     vertical: 12.0, horizontal: 22.0),
-                onTap: () {
-                  SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  Future.delayed(
-                    const Duration(milliseconds: 200),
-                    () {
-                      if (!mounted) return;
-                      Navigator.pop(context, paket);
-                    },
-                  );
-                },
+                onTap: () => _pilihPaket(paket),
                 leading: const Icon(Icons.search),
                 title: Text('${paket.namaPaket}'),
                 minLeadingWidth: 28,

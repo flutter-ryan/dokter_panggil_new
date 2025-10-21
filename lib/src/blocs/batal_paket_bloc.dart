@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/response_batal_paket_model.dart';
-import 'package:dokter_panggil/src/repositories/batal_paket_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/response_batal_paket_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/batal_paket_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class BatalPaketBloc {
@@ -29,7 +29,7 @@ class BatalPaketBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBatalPaket?.close();
     _kunjungan.close();
   }

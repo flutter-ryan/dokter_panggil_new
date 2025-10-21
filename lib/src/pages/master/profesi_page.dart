@@ -1,28 +1,28 @@
 import 'package:animate_icons/animate_icons.dart';
-import 'package:dokter_panggil/src/blocs/master_group_jabatan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/profesi_save_bloc.dart';
-import 'package:dokter_panggil/src/models/master_group_jabatan_model.dart';
-import 'package:dokter_panggil/src/models/profesi_filter_model.dart';
-import 'package:dokter_panggil/src/models/profesi_save_model.dart';
-import 'package:dokter_panggil/src/pages/components/button_edit_master.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/profesi_pencarian_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_group_jabatan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/profesi_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_group_jabatan_model.dart';
+import 'package:admin_dokter_panggil/src/models/profesi_filter_model.dart';
+import 'package:admin_dokter_panggil/src/models/profesi_save_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/button_edit_master.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/profesi_pencarian_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 
 class ProfesiPage extends StatefulWidget {
   const ProfesiPage({super.key});
@@ -149,6 +149,22 @@ class _ProfesiPageState extends State<ProfesiPage> {
     });
   }
 
+  void _cariProfesi() {
+    Navigator.push(
+      context,
+      SlideLeftRoute(
+        page: const ProfesiPencarianPage(),
+      ),
+    ).then((value) {
+      if (value != null) {
+        if (!mounted) return;
+        FocusScope.of(context).requestFocus(FocusNode());
+        var data = value as Profesi;
+        _edit(data);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _profesiCon.dispose();
@@ -175,19 +191,7 @@ class _ProfesiPageState extends State<ProfesiPage> {
                 subtitle: SearchInputForm(
                   isReadOnly: true,
                   hint: 'Pencarian profesi',
-                  onTap: () => Navigator.push(
-                    context,
-                    SlideLeftRoute(
-                      page: const ProfesiPencarianPage(),
-                    ),
-                  ).then((value) {
-                    if (value != null) {
-                      if (!mounted) return;
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      var data = value as Profesi;
-                      _edit(data);
-                    }
-                  }),
+                  onTap: _cariProfesi,
                 ),
                 closeButton: const ClosedButton(),
               ),

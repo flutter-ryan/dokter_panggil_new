@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_pegawai_save_model.dart';
-import 'package:dokter_panggil/src/repositories/master_pegawai_delete_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_pegawai_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_pegawai_delete_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MasterPegawaiDeleteBloc {
@@ -29,7 +29,7 @@ class MasterPegawaiDeleteBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterPegawaiDelete?.close();
     _idPegawai.close();
   }

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_jabatan_save_model.dart';
-import 'package:dokter_panggil/src/repositories/master_jabatan_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_jabatan_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_jabatan_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterJabatanSaveBloc {
@@ -35,7 +35,7 @@ class MasterJabatanSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamJabatanSave?.close();
     _group.close();
     _jabatan.close();

@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/master_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_model.dart';
 
 MasterTindakanLabCreateModel masterTindakanLabCreateModelFromJson(
         dynamic str) =>

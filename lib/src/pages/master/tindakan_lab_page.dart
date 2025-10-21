@@ -1,25 +1,25 @@
 import 'package:animate_icons/animate_icons.dart';
-import 'package:dokter_panggil/src/blocs/master_tindakan_lab_save_bloc.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_all_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_save_model.dart';
-import 'package:dokter_panggil/src/models/mitra_filter_model.dart';
-import 'package:dokter_panggil/src/pages/components/button_edit_master.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/mitra_select.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/tindakan_lab_pencarian_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_tindakan_lab_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_all_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_save_model.dart';
+import 'package:admin_dokter_panggil/src/models/mitra_filter_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/button_edit_master.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/mitra_select.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/tindakan_lab_pencarian_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TindakanLabPage extends StatefulWidget {
@@ -172,6 +172,22 @@ class _TindakanLabPageState extends State<TindakanLabPage> {
     });
   }
 
+  void _cariTindakan() {
+    Navigator.push(
+      context,
+      SlideLeftRoute(
+        page: const TindakanLabPencarianPage(),
+      ),
+    ).then((value) {
+      if (value != null) {
+        if (!mounted) return;
+        FocusScope.of(context).requestFocus(FocusNode());
+        var data = value as MasterTindakanLabAll;
+        _edit(data);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _masterTindakanLabSaveBloc.dispose();
@@ -192,19 +208,7 @@ class _TindakanLabPageState extends State<TindakanLabPage> {
             subtitle: SearchInputForm(
               isReadOnly: true,
               hint: 'Pencarian tindakan',
-              onTap: () => Navigator.push(
-                context,
-                SlideLeftRoute(
-                  page: const TindakanLabPencarianPage(),
-                ),
-              ).then((value) {
-                if (value != null) {
-                  if (!mounted) return;
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  var data = value as MasterTindakanLabAll;
-                  _edit(data);
-                }
-              }),
+              onTap: _cariTindakan,
             ),
             closeButton: const ClosedButton(),
           ),

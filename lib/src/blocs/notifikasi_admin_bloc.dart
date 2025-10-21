@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/notifikasi_admin_model.dart';
-import 'package:dokter_panggil/src/repositories/notifikasi_admin_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/notifikasi_admin_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/notifikasi_admin_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class NotifikasiAdminBloc {
   final _repo = NotifikasiAdminRepo();
@@ -24,7 +24,7 @@ class NotifikasiAdminBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamNotifikasiAdmin?.close();
   }
 }

@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/master_jabatan_model.dart';
-import 'package:dokter_panggil/src/models/master_role_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_jabatan_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_role_model.dart';
 
 MasterPegawaiFetchModel masterPegawaiFetchModelFromJson(dynamic str) =>
     MasterPegawaiFetchModel.fromJson(str);

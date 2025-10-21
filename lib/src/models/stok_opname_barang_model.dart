@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/stok_opname_model.dart';
+import 'package:admin_dokter_panggil/src/models/stok_opname_model.dart';
 
 StokOpnameBarangModel stokOpnameBarangModelFromJson(dynamic str) =>
     StokOpnameBarangModel.fromJson(str);

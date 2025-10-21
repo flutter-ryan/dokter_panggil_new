@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/pasien_filter_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_filter_model.dart';
 
 PasienPageModel pasienPageModelFromJson(dynamic str) =>
     PasienPageModel.fromJson(str);

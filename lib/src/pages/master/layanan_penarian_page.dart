@@ -1,22 +1,22 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dokter_panggil/src/blocs/tindakan_edit_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tindakan_filter_bloc.dart';
-import 'package:dokter_panggil/src/models/tindakan_edit_model.dart';
-import 'package:dokter_panggil/src/models/tindakan_filter_model.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/detail_tindakan.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/tindakan_edit_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tindakan_filter_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_edit_model.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_filter_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_tindakan.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 

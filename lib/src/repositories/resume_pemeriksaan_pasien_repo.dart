@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/resume_pemeriksaan_pasien_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/resume_pemeriksaan_pasien_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class ResumePemeriksaanPasienRepo {
   Future<ResponseResumePemeriksaanPasienModel> getResumePemeriksaanPasien(

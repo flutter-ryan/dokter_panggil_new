@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/pages/components/loading_shimmer.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_shimmer.dart';
 import 'package:flutter/material.dart';
 
 class LoadingCardLayanan extends StatelessWidget {

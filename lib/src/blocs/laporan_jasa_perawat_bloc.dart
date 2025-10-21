@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/laporan_jasa_perawat_model.dart';
-import 'package:dokter_panggil/src/models/laporan_jasa_perawat_save_model.dart';
-import 'package:dokter_panggil/src/repositories/laporan_jasa_perawat_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_perawat_model.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_perawat_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/laporan_jasa_perawat_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class LaporanJasaPerawatBloc {
@@ -60,7 +60,7 @@ class LaporanJasaPerawatBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamLaporanJasaPerawat?.close();
     _streamLaporanJasaPerawatSave?.close();
     _from.close();

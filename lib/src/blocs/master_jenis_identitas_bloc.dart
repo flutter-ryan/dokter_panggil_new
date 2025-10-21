@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_jenis_identitas_model.dart';
-import 'package:dokter_panggil/src/repositories/master_jenis_identitas_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_jenis_identitas_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_jenis_identitas_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class MasterJenisIdentitasBloc {
   final _repo = MasterJenisIdentitasRepo();
@@ -27,7 +27,7 @@ class MasterJenisIdentitasBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterJenisIdentitas?.close();
   }
 }

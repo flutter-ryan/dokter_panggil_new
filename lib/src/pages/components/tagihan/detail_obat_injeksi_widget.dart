@@ -1,25 +1,25 @@
 import 'package:animate_icons/animate_icons.dart';
-import 'package:dokter_panggil/src/blocs/kunjungan_obat_injeksi_update_bloc.dart';
-import 'package:dokter_panggil/src/blocs/mr_eresep_bloc.dart';
-import 'package:dokter_panggil/src/models/kunjungan_obat_injeksi_update_model.dart';
-import 'package:dokter_panggil/src/models/master_bhp_model.dart';
-import 'package:dokter_panggil/src/models/mr_eresep_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_obat_injeksi.dart';
-import 'package:dokter_panggil/src/pages/components/card_tagihan.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/detail_bhp_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_obat_injeksi_update_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/mr_eresep_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_obat_injeksi_update_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:admin_dokter_panggil/src/models/mr_eresep_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_obat_injeksi.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_tagihan.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/detail_bhp_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_bottom_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
@@ -193,9 +193,14 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
     ).then((value) async {
       if (value != null) {
         final data = value as MrEresep;
-        Share.share(
-            'ERESEP dokter panggil\n\nPasien ${data.namaPasien}\n${Uri.parse(data.url!).toString()}',
-            subject: 'E-Reseo ${data.namaPasien}');
+        SharePlus.instance.share(
+          ShareParams(
+            title: 'E-Resep ${data.namaPasien}',
+            text:
+                'ERESEP dokter panggil\n\nPasien ${data.namaPasien}\n${Uri.parse(data.url!).toString()}',
+            subject: 'E-Reseo ${data.namaPasien}',
+          ),
+        );
       }
     });
   }

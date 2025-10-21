@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/models/admin_kunjungan_pasien_delete_model.dart';
-import 'package:dokter_panggil/src/models/admin_kunjungan_pasien_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/admin_kunjungan_pasien_delete_model.dart';
+import 'package:admin_dokter_panggil/src/models/admin_kunjungan_pasien_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class AdminKunjunganPasienRepo {
   Future<AdminKunjunganPasienModel> getAdminKunjungan(

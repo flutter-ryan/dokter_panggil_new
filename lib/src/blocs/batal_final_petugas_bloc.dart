@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/batal_final_petugas_model.dart';
-import 'package:dokter_panggil/src/repositories/batal_final_petugas_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/batal_final_petugas_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/batal_final_petugas_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class BatalFinalPetugasBloc {
@@ -38,7 +38,7 @@ class BatalFinalPetugasBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBatalFinal?.close();
     _idKunjungan.close();
     _idPetugas.close();

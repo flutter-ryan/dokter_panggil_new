@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/admin_kunjungan_pasien_delete_model.dart';
-import 'package:dokter_panggil/src/models/admin_kunjungan_pasien_model.dart';
-import 'package:dokter_panggil/src/repositories/admin_kunjungan_pasien_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/admin_kunjungan_pasien_delete_model.dart';
+import 'package:admin_dokter_panggil/src/models/admin_kunjungan_pasien_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/admin_kunjungan_pasien_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class AdminKunjunganPasienBloc {
@@ -84,7 +84,7 @@ class AdminKunjunganPasienBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamAdminKunjungan?.close();
     _streamAdminKunjunganPasien?.close();
     _filter.close();

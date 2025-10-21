@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pasien_page_model.dart';
-import 'package:dokter_panggil/src/repositories/pasien_page_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_page_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pasien_page_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class PasienPageBloc {
   final _repo = PasienPageRepo();
@@ -43,7 +43,7 @@ class PasienPageBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPasienPage?.close();
   }
 }

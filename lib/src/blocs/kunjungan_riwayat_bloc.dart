@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_riwayat_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_riwayat_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_riwayat_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_riwayat_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class KunjunganRiwayatBloc {
   final KunjunganRiwayatRepo _repo = KunjunganRiwayatRepo();
@@ -25,7 +25,7 @@ class KunjunganRiwayatBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKunjunganRiwayat?.close();
   }
 }

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_obat_injeksi_update_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_obat_injeksi_update_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_obat_injeksi_update_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_obat_injeksi_update_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class KunjunganObatInjeksiUpdateBloc {
@@ -52,7 +52,7 @@ class KunjunganObatInjeksiUpdateBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamObatInjeksiUpdate?.close();
     _id.close();
     _barang.close();

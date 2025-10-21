@@ -1,11 +1,11 @@
-import 'package:dokter_panggil/src/blocs/pegawai_updatE_akun_bloc.dart';
-import 'package:dokter_panggil/src/models/pegawai_update_akun_model.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/pegawai_updatE_akun_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/pegawai_update_akun_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

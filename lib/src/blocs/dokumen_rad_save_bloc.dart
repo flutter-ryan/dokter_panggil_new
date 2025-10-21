@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/dokumen_rad_save_model.dart';
-import 'package:dokter_panggil/src/repositories/dokumen_rad_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_rad_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dokumen_rad_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DokumenRadSaveBloc {
@@ -54,7 +54,7 @@ class DokumenRadSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamDokumenRadSave?.close();
     _idDokumen.close();
     _idPengantar.close();

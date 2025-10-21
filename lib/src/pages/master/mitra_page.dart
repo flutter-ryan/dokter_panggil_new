@@ -1,22 +1,22 @@
-import 'package:dokter_panggil/src/blocs/mitra_bloc.dart';
-import 'package:dokter_panggil/src/models/mitra_filter_model.dart';
-import 'package:dokter_panggil/src/models/mitra_model.dart';
-import 'package:dokter_panggil/src/pages/components/button_edit_master.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/mitra_pencarian_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/mitra_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/mitra_filter_model.dart';
+import 'package:admin_dokter_panggil/src/models/mitra_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/button_edit_master.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/mitra_pencarian_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 
 class MitraPage extends StatefulWidget {
   const MitraPage({super.key});
@@ -122,6 +122,22 @@ class _MitraPageState extends State<MitraPage> {
     });
   }
 
+  void _pencarianMitra() {
+    Navigator.push(
+      context,
+      SlideLeftRoute(
+        page: const MitraPencarianPage(),
+      ),
+    ).then((value) {
+      if (value != null) {
+        var data = value as MitraFilter;
+        _edit(data);
+        if (!mounted) return;
+        FocusScope.of(context).requestFocus(FocusNode());
+      }
+    });
+  }
+
   @override
   void dispose() {
     _mitraCon.dispose();
@@ -149,18 +165,7 @@ class _MitraPageState extends State<MitraPage> {
                 subtitle: SearchInputForm(
                   isReadOnly: true,
                   hint: 'Pencarian mitra',
-                  onTap: () => Navigator.push(
-                    context,
-                    SlideLeftRoute(
-                      page: const MitraPencarianPage(),
-                    ),
-                  ).then((value) {
-                    if (value != null) {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      var data = value as MitraFilter;
-                      _edit(data);
-                    }
-                  }),
+                  onTap: _pencarianMitra,
                 ),
                 closeButton: const ClosedButton(),
               ),

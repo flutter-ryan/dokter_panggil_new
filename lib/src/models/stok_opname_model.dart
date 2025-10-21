@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/cetak_stok_opname_model.dart';
+import 'package:admin_dokter_panggil/src/models/cetak_stok_opname_model.dart';
 
 StokOpnameModel stokOpnameModelFromJson(dynamic str) =>
     StokOpnameModel.fromJson(str);

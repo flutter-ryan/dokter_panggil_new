@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tagihan_tindakan_lab_model.dart';
-import 'package:dokter_panggil/src/repositories/delete_tagihan_tindakan_lab_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/tagihan_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/delete_tagihan_tindakan_lab_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class DeleteTagihanTindakanLabBloc {
@@ -32,7 +32,7 @@ class DeleteTagihanTindakanLabBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamDeleteTagihanTindakanLab?.close();
     _id.close();
   }

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_resep_racikan_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_resep_racikan_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_resep_racikan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_resep_racikan_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class KunjunganResepRacikanBloc {
@@ -37,7 +37,7 @@ class KunjunganResepRacikanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKujunganResepRacikan?.close();
     _idDokter.close();
     _idKunjungan.close();

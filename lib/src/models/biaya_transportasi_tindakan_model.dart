@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/master_transportasi_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_transportasi_tindakan_model.dart';
 
 BiayaTransportasiTindakanModel biayaTransportasiTindakanModelFromJson(
         dynamic str) =>

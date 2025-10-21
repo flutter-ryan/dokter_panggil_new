@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_barang_lab_model.dart';
-import 'package:dokter_panggil/src/repositories/master_barang_lab_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_barang_lab_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_barang_lab_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MasterBarangLabBloc {
@@ -85,7 +85,7 @@ class MasterBarangLabBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterBarangLab?.close();
     _streamMasterBarangLabSave?.close();
     _barang.close();

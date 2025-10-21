@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/bhp_kategori_model.dart';
+import 'package:admin_dokter_panggil/src/models/bhp_kategori_model.dart';
 
 BarangFetchModel barangFetchModelFromJson(dynamic str) =>
     BarangFetchModel.fromJson(str);

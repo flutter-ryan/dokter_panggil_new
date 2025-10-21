@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/master_pegawai_fetch_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_pegawai_fetch_model.dart';
 
 DeletePegawaiModel deletePegawaiModelFromJson(dynamic str) =>
     DeletePegawaiModel.fromJson(str);

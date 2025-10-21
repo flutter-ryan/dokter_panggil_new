@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/blocs/auth_bloc.dart';
-import 'package:dokter_panggil/src/pages/login_page.dart';
-import 'package:dokter_panggil/src/pages/root_page.dart';
+import 'package:admin_dokter_panggil/src/blocs/auth_bloc.dart';
+import 'package:admin_dokter_panggil/src/pages/login_page.dart';
+import 'package:admin_dokter_panggil/src/pages/root_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 

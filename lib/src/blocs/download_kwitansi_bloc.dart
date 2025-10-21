@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/download_kwitansi_model.dart';
-import 'package:dokter_panggil/src/repositories/download_kwitansi_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/download_kwitansi_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/download_kwitansi_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class DownloadKwitansiBloc {
@@ -29,7 +29,7 @@ class DownloadKwitansiBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamDownloadKwitasi?.close();
     _id.close();
   }

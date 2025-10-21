@@ -1,7 +1,7 @@
-import 'package:dokter_panggil/src/models/master_bhp_model.dart';
-import 'package:dokter_panggil/src/models/master_pegawai_fetch_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_rad_create_mode.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_pegawai_fetch_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_rad_create_mode.dart';
 
 PasienKunjunganDetailModel pasienKunjunganDetailModelFromJson(dynamic str) =>
     PasienKunjunganDetailModel.fromJson(str);
@@ -574,7 +574,7 @@ class Tindakan {
         quantity: json["quantity"],
         tarif: json["tarif"],
         jasaDokter: json["jasa_dokter"],
-        jasaDokterPanggil: json["jasa_dokter_panggil"],
+        jasaDokterPanggil: json["jasa_admin_dokter_panggil"],
         bayarLangsung: json["bayar_langsung"],
         transportasi: json["transportasi"],
         gojek: json["gojek"],

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/barang_fetch_model.dart';
-import 'package:dokter_panggil/src/repositories/barang_fetch_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/barang_fetch_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/barang_fetch_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class BarangFetchBloc {
@@ -54,7 +54,7 @@ class BarangFetchBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBarangFetch!.close();
     _filter.close();
   }

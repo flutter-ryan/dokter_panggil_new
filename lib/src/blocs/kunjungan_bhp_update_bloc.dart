@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_bhp_update_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_bhp_update_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_bhp_update_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_bhp_update_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class KunjunganBhpUpdateBloc {
@@ -52,7 +52,7 @@ class KunjunganBhpUpdateBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKunjunganBhpUpdate?.close();
     _id.close();
     _barang.close();

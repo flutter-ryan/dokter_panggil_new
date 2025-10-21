@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/tindakan_edit_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_edit_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class TindakanEditRepo {
   Future<TindakanEditModel> editTindakan(int? id) async {

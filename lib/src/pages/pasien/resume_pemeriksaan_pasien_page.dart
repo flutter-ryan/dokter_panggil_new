@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/pages/pasien/cppt_pasien_widget.dart';
-import 'package:dokter_panggil/src/pages/pasien/rekam_medis_widget.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/cppt_pasien_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/rekam_medis_widget.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 
 class ResumePemeriksaanPasienPage extends StatefulWidget {

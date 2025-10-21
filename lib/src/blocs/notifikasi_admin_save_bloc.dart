@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/notifikasi_admin_save_model.dart';
-import 'package:dokter_panggil/src/repositories/notifikasi_admin_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/notifikasi_admin_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/notifikasi_admin_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class NotifikasiAdminSaveBloc {
@@ -33,7 +33,7 @@ class NotifikasiAdminSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamNotifikasiSave?.close();
     _idNotifikasi.close();
   }

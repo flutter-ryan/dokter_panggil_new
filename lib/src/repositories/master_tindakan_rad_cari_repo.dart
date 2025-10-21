@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/master_tindakan_rad_cari_modal.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_rad_cari_modal.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class MasterTindakanRadCariRepo {
   Future<ResponseMasterTindakanRadCariModel> cariTindakanRad(

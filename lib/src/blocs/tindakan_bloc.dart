@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tindakan_save_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/tindakan_delete_repo.dart';
-import 'package:dokter_panggil/src/repositories/tindakan_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/tindakan_update_repo.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/tindakan_delete_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/tindakan_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/tindakan_update_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class TindakanBloc {
@@ -116,7 +116,7 @@ class TindakanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterTindakan?.close();
     _tindakan.close();
     _tarifTindakan.close();

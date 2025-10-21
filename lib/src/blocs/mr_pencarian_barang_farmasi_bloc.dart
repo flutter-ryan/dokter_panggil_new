@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/mr_pencarian_barang_farmasi_model.dart';
-import 'package:dokter_panggil/src/repositories/mr_pencarian_barang_farmasi_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/mr_pencarian_barang_farmasi_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/mr_pencarian_barang_farmasi_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MrPencarianBarangFarmasiBloc {
@@ -57,7 +57,7 @@ class MrPencarianBarangFarmasiBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPencarianBarangFarmasi?.close();
     _filter.close();
   }

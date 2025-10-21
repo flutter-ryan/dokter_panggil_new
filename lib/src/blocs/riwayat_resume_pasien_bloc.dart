@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/riwayat_pasien_resume_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/riwayat_pasien_resume_repo.dart';
+import 'package:admin_dokter_panggil/src/models/riwayat_pasien_resume_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/riwayat_pasien_resume_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class RiwayatResumePasienBloc {
@@ -30,7 +30,7 @@ class RiwayatResumePasienBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamRiwayatResumePasien?.close();
     _norm.close();
   }

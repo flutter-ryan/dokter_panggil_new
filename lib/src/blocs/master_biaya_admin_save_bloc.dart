@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_biaya_admin_save_model.dart';
-import 'package:dokter_panggil/src/repositories/master_biaya_admin_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_biaya_admin_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_biaya_admin_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterBiayaAdminSaveBloc {
@@ -75,7 +75,7 @@ class MasterBiayaAdminSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBiayaAdminSave?.close();
     _id.close();
     _deskripsi.close();

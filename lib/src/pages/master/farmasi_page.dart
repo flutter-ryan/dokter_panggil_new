@@ -1,25 +1,25 @@
 import 'package:animate_icons/animate_icons.dart';
-import 'package:dokter_panggil/src/blocs/master_farmasi_bloc.dart';
-import 'package:dokter_panggil/src/models/master_farmasi_model.dart';
-import 'package:dokter_panggil/src/models/master_farmasi_paginate_model.dart';
-import 'package:dokter_panggil/src/models/mitra_filter_model.dart';
-import 'package:dokter_panggil/src/pages/components/button_edit_master.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/mitra_select.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/farmasi_pencarian_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_farmasi_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_farmasi_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_farmasi_paginate_model.dart';
+import 'package:admin_dokter_panggil/src/models/mitra_filter_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/button_edit_master.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/mitra_select.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/farmasi_pencarian_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class FarmasiPage extends StatefulWidget {
@@ -144,6 +144,23 @@ class _FarmasiPageState extends State<FarmasiPage> {
     _dialogStream();
   }
 
+  void _pencarianBarangFarmasi() {
+    Navigator.push(
+      context,
+      SlideLeftRoute(
+        page: const FarmasiPencarianPage(),
+      ),
+    ).then((value) {
+      if (!mounted) return;
+      if (value != null) {
+        if (!mounted) return;
+        FocusScope.of(context).requestFocus(FocusNode());
+        var data = value as BarangFarmasi;
+        _edit(data);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _mitraCon.dispose();
@@ -168,20 +185,7 @@ class _FarmasiPageState extends State<FarmasiPage> {
               subtitle: SearchInputForm(
                 isReadOnly: true,
                 hint: 'Pencarian barang farmasi',
-                onTap: () => Navigator.push(
-                  context,
-                  SlideLeftRoute(
-                    page: const FarmasiPencarianPage(),
-                  ),
-                ).then((value) {
-                  if (!mounted) return;
-                  if (value != null) {
-                    if (!mounted) return;
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    var data = value as BarangFarmasi;
-                    _edit(data);
-                  }
-                }),
+                onTap: _pencarianBarangFarmasi,
               ),
               closeButton: const ClosedButton(),
             ),

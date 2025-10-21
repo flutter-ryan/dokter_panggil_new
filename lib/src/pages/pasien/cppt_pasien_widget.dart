@@ -1,10 +1,10 @@
-import 'package:dokter_panggil/src/blocs/cppt_pasien_bloc.dart';
-import 'package:dokter_panggil/src/models/cppt_pasien_model.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/pasien/resume_pemeriksaan_pasien_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/cppt_pasien_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/cppt_pasien_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/resume_pemeriksaan_pasien_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 
 class CpptPasienWidget extends StatefulWidget {

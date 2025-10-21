@@ -112,7 +112,7 @@ class PaketTindakan {
         namaTindakan: json["nama_tindakan"],
         tarif: json["tarif"],
         jasaDokter: json["jasa_dokter"],
-        jasaDokterPanggil: json["jasa_dokter_panggil"],
+        jasaDokterPanggil: json["jasa_admin_dokter_panggil"],
         bayarLangsung: json["bayar_langsung"],
         transportasi: json["transportasi"],
         gojek: json["gojek"],

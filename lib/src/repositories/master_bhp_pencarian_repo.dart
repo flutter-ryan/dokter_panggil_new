@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/models/master_bhp_paginate_model.dart';
-import 'package:dokter_panggil/src/models/master_bhp_pencarian_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_paginate_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_pencarian_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class MasterBhpPencarianRepo {
   Future<MasterBhpPaginateModel> getPencarianMasterBhp(

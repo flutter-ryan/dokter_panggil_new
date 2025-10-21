@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_mitra_apotek_model.dart';
-import 'package:dokter_panggil/src/repositories/master_mitra_apotek_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_mitra_apotek_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_mitra_apotek_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class MasterMitraApotekBloc {
   final _repo = MasterMitraApotekRepo();
@@ -25,7 +25,7 @@ class MasterMitraApotekBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterMitraApotek?.close();
   }
 }

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pasien_model.dart';
-import 'package:dokter_panggil/src/repositories/pasien_delete_repo.dart';
-import 'package:dokter_panggil/src/repositories/pasien_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/pasien_update_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pasien_delete_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/pasien_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/pasien_update_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class PasienBloc {
@@ -116,7 +116,7 @@ class PasienBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPasien?.close();
     _id.close();
     _nik.close();

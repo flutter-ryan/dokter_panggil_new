@@ -1,11 +1,11 @@
-import 'package:dokter_panggil/src/blocs/auth_bloc.dart';
-import 'package:dokter_panggil/src/pages/barang/barang_page.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/home_page.dart';
-import 'package:dokter_panggil/src/pages/laporan_page.dart';
-import 'package:dokter_panggil/src/pages/master/master_page.dart';
-import 'package:dokter_panggil/src/pages/pasien/tambah_pasien_page.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/auth_bloc.dart';
+import 'package:admin_dokter_panggil/src/pages/barang/barang_page.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/home_page.dart';
+import 'package:admin_dokter_panggil/src/pages/laporan_page.dart';
+import 'package:admin_dokter_panggil/src/pages/master/master_page.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/tambah_pasien_page.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -156,12 +156,10 @@ class _RootpageState extends State<Rootpage> {
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
       stateManagement: true,
-      popAllScreensOnTapOfSelectedTab: true,
-      popActionScreens: PopActionScreensType.all,
-      navBarHeight: kBottomNavigationBarHeight + 6,
       navBarBuilder: (navBarConfig) {
         return Style1BottomNavBar(
           navBarConfig: navBarConfig,
+          height: kBottomNavigationBarHeight + 6,
           navBarDecoration: const NavBarDecoration(
             padding: EdgeInsets.only(top: 12.0, bottom: 0, left: 14, right: 14),
             boxShadow: [

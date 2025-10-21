@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/mr_dokumen_pengantar_rad_model.dart';
-import 'package:dokter_panggil/src/repositories/mr_dokumen_pengantar_rad_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/mr_dokumen_pengantar_rad_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/mr_dokumen_pengantar_rad_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MrDokumenPengantarRadBloc {
@@ -31,7 +31,7 @@ class MrDokumenPengantarRadBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamDokumenPengantarRad?.close();
     _idPengantar.close();
   }

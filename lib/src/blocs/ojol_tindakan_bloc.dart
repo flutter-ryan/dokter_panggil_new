@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/ojol_tindakan_model.dart';
-import 'package:dokter_panggil/src/repositories/ojol_tindakan_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/ojol_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/ojol_tindakan_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class OjolTindakanBloc {
@@ -40,7 +40,7 @@ class OjolTindakanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _srteamOjolTindakan?.close();
     _id.close();
     _tindakanKunjungan.close();

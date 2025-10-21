@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_paket_create_model.dart';
-import 'package:dokter_panggil/src/repositories/master_paket_create_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_paket_create_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_paket_create_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MasterPaketCreateBloc {
@@ -32,7 +32,7 @@ class MasterPaketCreateBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterPaketCreate?.close();
     _filter.close();
   }

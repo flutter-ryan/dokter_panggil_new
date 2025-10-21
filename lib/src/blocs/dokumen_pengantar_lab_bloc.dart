@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/dokumen_pengantar_lab_model.dart';
-import 'package:dokter_panggil/src/repositories/dokumen_pengantar_lab_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_pengantar_lab_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dokumen_pengantar_lab_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DokumenPengantarLabBloc {
@@ -62,7 +62,7 @@ class DokumenPengantarLabBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamDokumenPengantarLab?.close();
     _idKunjungan.close();
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/laporan_jasa_dokter_model.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_dokter_model.dart';
 
 String laporanJasaDokterSaveModelToJson(LaporanJasaDokterSaveModel data) =>
     json.encode(data.toJson());

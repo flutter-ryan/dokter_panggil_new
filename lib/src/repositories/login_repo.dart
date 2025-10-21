@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/login_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/login_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class LoginRepo {
   Future<ResponseLoginModel> login(LoginModel loginModel) async {

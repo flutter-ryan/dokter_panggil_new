@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/transaksi_bhp_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/transaksi_bhp_repo.dart';
+import 'package:admin_dokter_panggil/src/models/transaksi_bhp_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/transaksi_bhp_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class TransaksiBhpBloc {
@@ -37,7 +37,7 @@ class TransaksiBhpBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTransaksiBhp?.close();
     _idKunjungan.close();
     _barang.close();

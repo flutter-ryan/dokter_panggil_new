@@ -1,12 +1,12 @@
-import 'package:dokter_panggil/src/blocs/kunjungan_resep_bloc.dart';
-import 'package:dokter_panggil/src/models/kunjungan_resep_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/e_resep_widget.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_resep_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_resep_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/e_resep_widget.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 
 class ResepWidget extends StatefulWidget {
   const ResepWidget({

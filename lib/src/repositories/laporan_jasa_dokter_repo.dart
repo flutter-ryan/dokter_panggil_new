@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/models/laporan_jasa_dokter_model.dart';
-import 'package:dokter_panggil/src/models/laporan_jasa_dokter_save_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_dokter_model.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_dokter_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class LaporanJasaDokterRepo {
   Future<LaporanJasaDokterModel> createLaporanJasa() async {

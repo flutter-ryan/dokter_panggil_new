@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/master_group_jabatan_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_group_jabatan_model.dart';
 
 String profesiFilterModelToJson(ProfesiFilterModel data) =>
     json.encode(data.toJson());

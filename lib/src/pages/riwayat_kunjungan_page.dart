@@ -1,13 +1,13 @@
-import 'package:dokter_panggil/src/blocs/kunjungan_riwayat_all_bloc.dart';
-import 'package:dokter_panggil/src/models/kunjunga_pasien_all_model.dart';
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_kunjungan_pasien.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_widget_page.dart';
-import 'package:dokter_panggil/src/pages/components/title_quick_act.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_riwayat_all_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/kunjunga_pasien_all_model.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_kunjungan_pasien.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_widget_page.dart';
+import 'package:admin_dokter_panggil/src/pages/components/title_quick_act.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

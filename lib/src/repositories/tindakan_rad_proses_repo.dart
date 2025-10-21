@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/tindakan_rad_proses_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_rad_proses_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class TindakanRadProsesRepo {
   Future<TindakanRadProsesModel> prosesTindakanRad(

@@ -1,15 +1,15 @@
-import 'package:dokter_panggil/src/blocs/notifikasi_admin_bloc.dart';
-import 'package:dokter_panggil/src/blocs/notifikasi_admin_save_bloc.dart';
-import 'package:dokter_panggil/src/models/notifikasi_admin_model.dart';
-import 'package:dokter_panggil/src/models/notifikasi_admin_save_model.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/pasien/detail_layanan_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/notifikasi_admin_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/notifikasi_admin_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/notifikasi_admin_model.dart';
+import 'package:admin_dokter_panggil/src/models/notifikasi_admin_save_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/detail_layanan_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -113,7 +113,7 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
                       title: Text('${data.body}'),
                       tileColor: data.isRead == 0 ? Colors.green[100] : null,
                       leading: CircleAvatar(
-                        backgroundColor: kPrimaryColor.withOpacity(0.1),
+                        backgroundColor: kPrimaryColor.withValues(alpha: 0.1),
                         foregroundColor: kPrimaryColor,
                         child: Icon(Icons.campaign_rounded),
                       ),
@@ -171,6 +171,7 @@ class _NotifikasiPageState extends State<NotifikasiPage> {
                   });
                 });
               });
+              return SizedBox();
           }
         }
         return const SizedBox();

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_kategori_tindakan_model.dart';
-import 'package:dokter_panggil/src/repositories/master_kategori_tindakan_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_kategori_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_kategori_tindakan_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class MasterKategoriTindakanBloc {
   final _repo = MasterKategoriTindakanRepo();
@@ -27,7 +27,7 @@ class MasterKategoriTindakanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKategoriTindakan?.close();
   }
 }

@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/stok_opname_model.dart';
-import 'package:dokter_panggil/src/models/stok_opname_save_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/stok_opname_repo.dart';
+import 'package:admin_dokter_panggil/src/models/stok_opname_model.dart';
+import 'package:admin_dokter_panggil/src/models/stok_opname_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/stok_opname_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StokOpnameBloc {
@@ -53,7 +53,7 @@ class StokOpnameBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamStokOpname?.close();
     _streamStokOpnameFinal?.close();
     _idStokOpname.close();

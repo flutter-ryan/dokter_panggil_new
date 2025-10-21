@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tindakan_lab_tagihan_modal.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/tindakan_lab_tagihan_repo.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_lab_tagihan_modal.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/tindakan_lab_tagihan_repo.dart';
 
 class TindakanLabTagihanBloc {
   final _repo = TindakanLabTagihanRepo();
@@ -26,7 +26,7 @@ class TindakanLabTagihanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTindakanLabTagihan?.close();
   }
 }

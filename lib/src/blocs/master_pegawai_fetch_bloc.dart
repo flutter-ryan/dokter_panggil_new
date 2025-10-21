@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_pegawai_fetch_model.dart';
-import 'package:dokter_panggil/src/repositories/master_pegawai_fetch_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_pegawai_fetch_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_pegawai_fetch_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class MasterPegawaiFetchBloc {
   final _repo = MasterPegawaiFetchRepo();
@@ -25,7 +25,7 @@ class MasterPegawaiFetchBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterPegawai?.close();
   }
 }

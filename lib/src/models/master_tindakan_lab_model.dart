@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/master_mitra_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_mitra_lab_model.dart';
 
 MasterTindakanLabModel masterTindakanLabModelFromJson(dynamic str) =>
     MasterTindakanLabModel.fromJson(str);

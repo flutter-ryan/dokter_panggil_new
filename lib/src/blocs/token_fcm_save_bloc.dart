@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/token_fcm_save_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/token_fcm_save_repo.dart';
+import 'package:admin_dokter_panggil/src/models/token_fcm_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/token_fcm_save_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class TokenFcmSaveBloc {
@@ -30,7 +30,7 @@ class TokenFcmSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTokenFcmSave?.close();
     _token.close();
   }

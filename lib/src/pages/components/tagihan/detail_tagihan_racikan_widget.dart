@@ -1,31 +1,31 @@
-import 'package:dokter_panggil/src/blocs/delete_tagihan_resep_racikan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/file_eresep_racikan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/resep_racikan_proses_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tranportasi_resep_racikan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/update_kunjungan_resep_racikan_tagihan_bloc.dart';
-import 'package:dokter_panggil/src/models/delete_tagihan_resep_model.dart';
-import 'package:dokter_panggil/src/models/file_eresep_racikan_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/resep_racikan_proses_model.dart';
-import 'package:dokter_panggil/src/models/transportasi_resep_racikan_model.dart';
-import 'package:dokter_panggil/src/models/update_kunjungan_resep_tagihan_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_tagihan_resep.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/resep_racikan_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
-import 'package:dokter_panggil/src/pages/components/transaksi_resep_racikan.dart';
-import 'package:dokter_panggil/src/pages/components/transaksi_resep_racikan_mr.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/delete_tagihan_resep_racikan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/file_eresep_racikan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/resep_racikan_proses_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tranportasi_resep_racikan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/update_kunjungan_resep_racikan_tagihan_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/delete_tagihan_resep_model.dart';
+import 'package:admin_dokter_panggil/src/models/file_eresep_racikan_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/resep_racikan_proses_model.dart';
+import 'package:admin_dokter_panggil/src/models/transportasi_resep_racikan_model.dart';
+import 'package:admin_dokter_panggil/src/models/update_kunjungan_resep_tagihan_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_tagihan_resep.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/resep_racikan_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/transaksi_resep_racikan.dart';
+import 'package:admin_dokter_panggil/src/pages/components/transaksi_resep_racikan_mr.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_bottom_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -252,9 +252,13 @@ class _DetailTagihanRacikanWidgetState
   }
 
   Future<void> _shareResepRacikan(FileEresepRacikan resep) async {
-    Share.share(
-        'ERESEP dokter panggil\n\nPasien ${resep.pasien} ${Uri.parse(resep.url!).toString()}',
-        subject: 'E-Resep Racikan ${resep.pasien}');
+    SharePlus.instance.share(
+      ShareParams(
+          title: 'E-Resep Pasien ${resep.pasien}',
+          text:
+              'ERESEP dokter panggil\n\nPasien ${resep.pasien} ${Uri.parse(resep.url!).toString()}',
+          subject: 'E-Resep Racikan ${resep.pasien}'),
+    );
   }
 
   @override

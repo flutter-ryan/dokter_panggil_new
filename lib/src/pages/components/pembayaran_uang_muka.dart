@@ -1,20 +1,20 @@
-import 'package:dokter_panggil/src/blocs/konfirmasi_deposit_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_biaya_admin_bloc.dart';
-import 'package:dokter_panggil/src/models/konfirmasi_deposit_model.dart';
-import 'package:dokter_panggil/src/models/master_biaya_admin_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/detail_tagihan.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/list_tagihan_widget.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/konfirmasi_deposit_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_biaya_admin_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/konfirmasi_deposit_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_biaya_admin_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_tagihan.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/list_tagihan_widget.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 
 class PembayaranUangMuka extends StatefulWidget {
   const PembayaranUangMuka({

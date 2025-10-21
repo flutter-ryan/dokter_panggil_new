@@ -1,28 +1,28 @@
-import 'package:dokter_panggil/src/blocs/delete_tagihan_tindakan_lab_bloc.dart';
-import 'package:dokter_panggil/src/blocs/dokumen_pengantar_lab_bloc.dart';
-import 'package:dokter_panggil/src/blocs/kunjungan_tindakan_lab_save_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_tindakan_lab_create_bloc.dart';
-import 'package:dokter_panggil/src/blocs/transportasi_kunjungan_tindakan_lab_bloc.dart';
-import 'package:dokter_panggil/src/models/dokumen_pengantar_lab_model.dart';
-import 'package:dokter_panggil/src/models/kunjungan_tindakan_lab_save_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_create_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/transportasi_kunjungan_tindakan_lab_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_tagihan_lab.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/delete_tagihan_tindakan_lab_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/dokumen_pengantar_lab_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_tindakan_lab_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_tindakan_lab_create_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/transportasi_kunjungan_tindakan_lab_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_pengantar_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_tindakan_lab_save_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_create_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/transportasi_kunjungan_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_tagihan_lab.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
@@ -209,9 +209,14 @@ class _DetailTagihanLabWidgetState extends State<DetailTagihanLabWidget> {
   }
 
   Future<void> _shareDokumenPengantarLab(DokumenPengantarLab data) async {
-    Share.share(
-        'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Laboratorium\n\n${Uri.parse(data.linkDoc!).toString()}',
-        subject: 'E-Pengantar ${data.pasien!.namaPasien}');
+    SharePlus.instance.share(
+      ShareParams(
+        title: 'Pengantar Lab ${data.pasien!.namaPasien}',
+        text:
+            'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Laboratorium\n\n${Uri.parse(data.linkDoc!).toString()}',
+        subject: 'E-Pengantar ${data.pasien!.namaPasien}',
+      ),
+    );
   }
 
   @override

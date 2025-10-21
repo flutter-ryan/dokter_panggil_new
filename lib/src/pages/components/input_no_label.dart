@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 
 class InputNoLabel extends StatelessWidget {

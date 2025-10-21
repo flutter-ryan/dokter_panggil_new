@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/tagihan_resep_oral_update_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/tagihan_resep_oral_update_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class TagihanResepOralUpdateRepo {
   Future<TagihanResepOralUpdateModel> updateTagihanResepOral(

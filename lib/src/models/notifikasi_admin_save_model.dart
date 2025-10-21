@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/notifikasi_admin_model.dart';
+import 'package:admin_dokter_panggil/src/models/notifikasi_admin_model.dart';
 
 NotifikasiAdminSaveModel notifikasiAdminSaveModelFromJson(dynamic str) =>
     NotifikasiAdminSaveModel.fromJson(str);

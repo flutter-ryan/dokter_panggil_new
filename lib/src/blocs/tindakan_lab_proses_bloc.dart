@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tindakan_lab_proses_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/tindakan_lab_proses_repo.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_lab_proses_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/tindakan_lab_proses_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TindakanLabProsesBloc {
@@ -39,7 +39,7 @@ class TindakanLabProsesBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTindakanLabProses?.close();
     _idPengantar.close();
     _status.close();

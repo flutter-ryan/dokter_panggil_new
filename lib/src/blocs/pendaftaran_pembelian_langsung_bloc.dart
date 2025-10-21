@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pendaftaran_pembelian_langsug_save_model.dart';
-import 'package:dokter_panggil/src/repositories/pendaftaran_kunjungan_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_pembelian_langsug_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pendaftaran_kunjungan_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class PendaftaranPembelianLangsungBloc {
@@ -92,7 +92,7 @@ class PendaftaranPembelianLangsungBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPembelianLangsung?.close();
     _norm.close();
     _tanggal.close();

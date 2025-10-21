@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/master_farmasi_paginate_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_farmasi_paginate_model.dart';
 
 String barangFarmasiFilterModelToJson(BarangFarmasiFilterModel data) =>
     json.encode(data.toJson());

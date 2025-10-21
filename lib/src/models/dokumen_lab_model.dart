@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/dokumen_lab_save_model.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_lab_save_model.dart';
 
 DokumenLabModel dokumenLabModelFromJson(dynamic str) =>
     DokumenLabModel.fromJson(str);

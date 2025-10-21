@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_tindakan_lab_create_model.dart';
-import 'package:dokter_panggil/src/repositories/master_tindakan_lab_create_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_create_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_tindakan_lab_create_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class MasterTindakanLabCreateBloc {
   final _repo = MasterTindakanLabCreateRepo();
@@ -39,7 +39,7 @@ class MasterTindakanLabCreateBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTindakanLabCreate?.close();
   }
 }

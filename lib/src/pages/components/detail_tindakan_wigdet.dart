@@ -1,30 +1,31 @@
-import 'package:dokter_panggil/src/blocs/kunjungan_tindakan_update_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_transportasi_tindakan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/ojol_tindakan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/transportasi_tindakan_bloc.dart';
-import 'package:dokter_panggil/src/models/kunjungan_tindakan_update_model.dart';
-import 'package:dokter_panggil/src/models/master_transportasi_tindakan_model.dart';
-import 'package:dokter_panggil/src/models/ojol_tindakan_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/transportasi_tindakan_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_tagihan.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/detail_tagihan.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/detail_card_tagihan.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_tindakan_update_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_transportasi_tindakan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/ojol_tindakan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/transportasi_tindakan_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_tindakan_update_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_transportasi_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/models/ojol_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/transportasi_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_tagihan.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_tagihan.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/detail_card_tagihan.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:dokter_panggil/src/pages/components/badge.dart' as badge_custom;
+import 'package:admin_dokter_panggil/src/pages/components/badge.dart'
+    as badge_custom;
 
 class DetailTindakanWidget extends StatefulWidget {
   const DetailTindakanWidget({
@@ -670,15 +671,17 @@ class _FormTransportasiState extends State<FormTransportasi> {
   final _formKey = GlobalKey<FormState>();
   final NumberFormat _rupiah =
       NumberFormat.currency(symbol: 'Rp. ', locale: 'id', decimalDigits: 0);
-  int? _selectedTransport;
-  int _nilaiTransportasi = 0;
+  SelectedTransport? _selectedTransport;
   bool _isError = false;
 
   @override
   void initState() {
     super.initState();
     if (widget.data.dataTransportasi != null) {
-      _selectedTransport = widget.data.dataTransportasi!.id;
+      _selectedTransport = SelectedTransport(
+        id: widget.data.dataTransportasi!.id!,
+        nilai: widget.data.dataTransportasi!.biaya!,
+      );
       _jarak.text = '${widget.data.dataTransportasi!.jarak}';
     }
   }
@@ -704,7 +707,7 @@ class _FormTransportasiState extends State<FormTransportasi> {
       _transportasiTindakanBloc.idSink.add(widget.id);
       _transportasiTindakanBloc.tindakanKunjunganSink.add(widget.data.id!);
       _transportasiTindakanBloc.jarakSink.add(int.parse(_jarak.text));
-      _transportasiTindakanBloc.nilaiSink.add(_nilaiTransportasi);
+      _transportasiTindakanBloc.nilaiSink.add(_selectedTransport!.nilai);
       _transportasiTindakanBloc.simpanTransportasiTindakan();
       _showStreamTransportasiTindakan();
     }
@@ -793,24 +796,25 @@ class _FormTransportasiState extends State<FormTransportasi> {
               'Jenis Transportasi',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.transportasi.map((e) {
-                return RadioListTile<int?>(
-                  contentPadding: EdgeInsets.zero,
-                  value: e.id,
-                  groupValue: _selectedTransport,
-                  activeColor: kPrimaryColor,
-                  onChanged: (int? value) {
-                    setState(() {
-                      _selectedTransport = value;
-                      _nilaiTransportasi = e.nilai!;
-                      _isError = false;
-                    });
-                  },
-                  title: Text('${e.deskripsi} (${_rupiah.format(e.nilai)})'),
-                );
-              }).toList(),
+            RadioGroup<SelectedTransport>(
+              groupValue: _selectedTransport,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: widget.transportasi.map((e) {
+                  return RadioListTile<SelectedTransport?>(
+                    contentPadding: EdgeInsets.zero,
+                    value: SelectedTransport(id: e.id!, nilai: e.nilai!),
+                    activeColor: kPrimaryColor,
+                    title: Text('${e.deskripsi} (${_rupiah.format(e.nilai)})'),
+                  );
+                }).toList(),
+              ),
+              onChanged: (SelectedTransport? value) {
+                setState(() {
+                  _selectedTransport = value;
+                  _isError = false;
+                });
+              },
             ),
             if (_isError)
               const Text(
@@ -912,4 +916,14 @@ class TileTransportTindakan extends StatelessWidget {
       trailing: trailing,
     );
   }
+}
+
+class SelectedTransport {
+  int id;
+  int nilai;
+
+  SelectedTransport({
+    required this.id,
+    required this.nilai,
+  });
 }

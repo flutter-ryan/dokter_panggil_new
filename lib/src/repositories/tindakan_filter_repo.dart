@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/models/pencarian_master_tindakan_group_model.dart';
-import 'package:dokter_panggil/src/models/tindakan_filter_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/pencarian_master_tindakan_group_model.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_filter_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class TindakanFilterRepo {
   Future<ResponseTindakanFilterModel> filterTindakan(

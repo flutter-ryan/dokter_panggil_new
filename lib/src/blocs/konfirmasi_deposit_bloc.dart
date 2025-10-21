@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/konfirmasi_deposit_model.dart';
-import 'package:dokter_panggil/src/repositories/konfirmasi_deposit_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/konfirmasi_deposit_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/konfirmasi_deposit_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class KonfirmasiDepositBloc {
@@ -54,7 +54,7 @@ class KonfirmasiDepositBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKonfirmasiDeposit?.close();
     _idKunjungan.close();
     _status.close();

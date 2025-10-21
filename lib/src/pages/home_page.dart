@@ -1,31 +1,31 @@
 import 'dart:io';
 
-import 'package:dokter_panggil/src/blocs/auth_bloc.dart';
-import 'package:dokter_panggil/src/blocs/kunjungan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/kunjungan_final_bloc.dart';
-import 'package:dokter_panggil/src/models/kunjungan_final_model.dart';
-import 'package:dokter_panggil/src/models/kunjungan_model.dart';
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
-import 'package:dokter_panggil/src/pages/admin_area.dart';
-import 'package:dokter_panggil/src/pages/akun_page.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/detail_layanan_widget.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/loading_card_vert_layanan.dart';
-import 'package:dokter_panggil/src/pages/kunjungan_page.dart';
-import 'package:dokter_panggil/src/pages/notifikasi_page.dart';
-import 'package:dokter_panggil/src/pages/pasien/detail_layanan_page.dart';
-import 'package:dokter_panggil/src/pages/pasien/pencarian_pasien_page.dart';
-import 'package:dokter_panggil/src/pages/current_user_page.dart';
-import 'package:dokter_panggil/src/pages/riwayat_kunjungan_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/local_notification_service.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/auth_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_final_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_final_model.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_model.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
+import 'package:admin_dokter_panggil/src/pages/admin_area.dart';
+import 'package:admin_dokter_panggil/src/pages/akun_page.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_layanan_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_card_vert_layanan.dart';
+import 'package:admin_dokter_panggil/src/pages/kunjungan_page.dart';
+import 'package:admin_dokter_panggil/src/pages/notifikasi_page.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/detail_layanan_page.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/pencarian_pasien_page.dart';
+import 'package:admin_dokter_panggil/src/pages/current_user_page.dart';
+import 'package:admin_dokter_panggil/src/pages/riwayat_kunjungan_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/local_notification_service.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -128,9 +128,13 @@ class _HomepageState extends State<Homepage> {
     ).then((value) async {
       if (value != null) {
         var data = value as KwitansiSimpan;
-        Share.share(
-            'Hai pasien ${data.pasien!.namaPasien},\nTap tautan ini untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
-            subject: 'Kwitansi ${data.pasien!.namaPasien}');
+        SharePlus.instance.share(
+          ShareParams(
+              title: 'Kwitansi Pembayaran ${data.pasien!.namaPasien}',
+              text:
+                  'Hai pasien ${data.pasien!.namaPasien},\nTap tautan ini untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
+              subject: 'Kwitansi ${data.pasien!.namaPasien}'),
+        );
       }
     });
   }
@@ -645,9 +649,13 @@ class _KunjunganPasienState extends State<KunjunganPasien> {
       if (value != null) {
         var data = value as KwitansiSimpan;
         Future.delayed(const Duration(milliseconds: 500), () {
-          Share.share(
-              'Hai pasien ${data.pasien!.namaPasien},\nTap tautan dibawah untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
-              subject: 'Kwitansi ${data.pasien!.namaPasien}');
+          SharePlus.instance.share(
+            ShareParams(
+                title: 'Kwitansi pembayaran ${data.pasien!.namaPasien}',
+                text:
+                    'Hai pasien ${data.pasien!.namaPasien},\nTap tautan dibawah untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
+                subject: 'Kwitansi ${data.pasien!.namaPasien}'),
+          );
         });
       }
     });

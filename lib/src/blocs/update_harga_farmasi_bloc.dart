@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/update_harga_farmasi_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/update_harga_farmasi_repo.dart';
+import 'package:admin_dokter_panggil/src/models/update_harga_farmasi_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/update_harga_farmasi_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class UpdateHargaFarmasiBloc {
@@ -35,7 +35,7 @@ class UpdateHargaFarmasiBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamUpdateHargaFarmasi?.close();
     _id.close();
     _hargaModal.close();

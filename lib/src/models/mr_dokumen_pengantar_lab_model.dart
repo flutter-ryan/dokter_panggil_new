@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/dokumen_pengantar_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_pengantar_lab_model.dart';
 
 MrDokumenPengantarLabModel mrDokumenPengantarLabModelFromJson(dynamic str) =>
     MrDokumenPengantarLabModel.fromJson(str);

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_bhp_by_category_model.dart';
-import 'package:dokter_panggil/src/repositories/master_bhp_by_category_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_by_category_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_bhp_by_category_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterBhpByCategoryBloc {
@@ -29,7 +29,7 @@ class MasterBhpByCategoryBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBhpByCategory?.close();
     _categoryId.close();
   }

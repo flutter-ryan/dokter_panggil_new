@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_all_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_all_model.dart';
 
 String masterTindakanLabSaveModelToJson(MasterTindakanLabSaveModel data) =>
     json.encode(data.toJson());

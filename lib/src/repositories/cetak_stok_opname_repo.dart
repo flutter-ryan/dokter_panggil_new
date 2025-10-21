@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/cetak_stok_opname_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/cetak_stok_opname_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class CetakStokOpnameRepo {
   Future<CetakStokOpnameModel> cetakStokOpname(int? idStokOpname,

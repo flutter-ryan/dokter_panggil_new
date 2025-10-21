@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tambah_perawat_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/tambah_perawat_repo.dart';
+import 'package:admin_dokter_panggil/src/models/tambah_perawat_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/tambah_perawat_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TambahPerawatBloc {
@@ -35,7 +35,7 @@ class TambahPerawatBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTambahPerawat?.close();
     _idKunjungan.close();
     _idPetugas.close();

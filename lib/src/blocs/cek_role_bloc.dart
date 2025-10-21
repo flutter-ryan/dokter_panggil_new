@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/cek_role_model.dart';
-import 'package:dokter_panggil/src/repositories/cek_role_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/cek_role_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/cek_role_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class CekRoleBloc {
   final _repo = CekRoleRepo();
@@ -24,7 +24,7 @@ class CekRoleBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamCekRole?.close();
   }
 }

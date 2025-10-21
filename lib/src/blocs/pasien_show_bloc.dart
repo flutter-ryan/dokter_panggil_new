@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pasien_show_model.dart';
-import 'package:dokter_panggil/src/repositories/pasien_show_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_show_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pasien_show_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class PasienShowBloc {
@@ -28,7 +28,7 @@ class PasienShowBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPasienShow?.isClosed;
     _idCon.close();
   }

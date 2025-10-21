@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_biaya_admin_emr_model.dart';
-import 'package:dokter_panggil/src/repositories/master_biaya_admin_emr_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_biaya_admin_emr_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_biaya_admin_emr_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MasterBiayaAdminEmrBloc {
@@ -31,7 +31,7 @@ class MasterBiayaAdminEmrBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBiayaAdminEmr?.close();
     _layanan.close();
   }

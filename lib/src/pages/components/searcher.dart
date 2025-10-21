@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
 import 'package:flutter/material.dart';
 
 class Searcher extends StatelessWidget {

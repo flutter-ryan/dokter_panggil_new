@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/transaksi_resep_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/transaksi_resep_racikan_repo.dart';
+import 'package:admin_dokter_panggil/src/models/transaksi_resep_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/transaksi_resep_racikan_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TransaksiResepRacikanBloc {
@@ -49,7 +49,7 @@ class TransaksiResepRacikanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTransaksiResepRacikan?.close();
     _idKunjungan.close();
     _barangMitra.close();

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_bhp_model.dart';
-import 'package:dokter_panggil/src/repositories/master_bhp_delete_repo.dart';
-import 'package:dokter_panggil/src/repositories/master_bhp_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/master_bhp_update_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_bhp_delete_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_bhp_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_bhp_update_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterBhpBloc {
@@ -97,7 +97,7 @@ class MasterBhpBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterBhp?.close();
     _nama.close();
     _minStok.close();

@@ -1,6 +1,5 @@
-
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -22,8 +21,13 @@ class _EresepWidgetState extends State<EresepWidget> {
   final _nomor = TextEditingController();
 
   void _kirimResep(String url) async {
-    Share.share('Hai $_namaApotek, E-RESEP\n${Uri.parse(url)}',
-        subject: 'E-Resep $_namaApotek');
+    SharePlus.instance.share(
+      ShareParams(
+        title: 'E-Resep Potek $_namaApotek',
+        text: 'Hai $_namaApotek, E-RESEP\n${Uri.parse(url)}',
+        subject: 'E-Resep $_namaApotek',
+      ),
+    );
   }
 
   bool validateAndSave() {

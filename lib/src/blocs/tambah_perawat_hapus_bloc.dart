@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tambah_perawat_hapus_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/tambah_perawat_repo.dart';
+import 'package:admin_dokter_panggil/src/models/tambah_perawat_hapus_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/tambah_perawat_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TambahPerawatHapusBloc {
@@ -29,7 +29,7 @@ class TambahPerawatHapusBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamHapusPerawat?.close();
     _idKofirmasiPerawat.close();
   }

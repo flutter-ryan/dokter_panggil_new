@@ -1,9 +1,9 @@
-import 'package:dokter_panggil/src/pages/components/menu_master.dart';
-import 'package:dokter_panggil/src/pages/master/laporan/laporan_harian_page.dart';
-import 'package:dokter_panggil/src/pages/master/laporan/laporan_jasa_dokter_page.dart';
-import 'package:dokter_panggil/src/pages/master/laporan/laporan_jasa_perawat_page.dart';
-import 'package:dokter_panggil/src/pages/master/laporan/laporan_pelayanan.dart';
-import 'package:dokter_panggil/src/pages/master/master_page.dart';
+import 'package:admin_dokter_panggil/src/pages/components/menu_master.dart';
+import 'package:admin_dokter_panggil/src/pages/master/laporan/laporan_harian_page.dart';
+import 'package:admin_dokter_panggil/src/pages/master/laporan/laporan_jasa_dokter_page.dart';
+import 'package:admin_dokter_panggil/src/pages/master/laporan/laporan_jasa_perawat_page.dart';
+import 'package:admin_dokter_panggil/src/pages/master/laporan/laporan_pelayanan.dart';
+import 'package:admin_dokter_panggil/src/pages/master/master_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

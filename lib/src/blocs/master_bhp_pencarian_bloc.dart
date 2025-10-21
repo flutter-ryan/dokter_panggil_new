@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_bhp_paginate_model.dart';
-import 'package:dokter_panggil/src/models/master_bhp_pencarian_model.dart';
-import 'package:dokter_panggil/src/repositories/master_bhp_pencarian_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_paginate_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_pencarian_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_bhp_pencarian_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MasterBhpPencarianBloc {
@@ -57,7 +57,7 @@ class MasterBhpPencarianBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPencarianMasterBhp?.close();
     _namaBarang.close();
   }

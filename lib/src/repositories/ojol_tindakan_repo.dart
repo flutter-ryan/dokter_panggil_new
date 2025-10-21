@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/ojol_tindakan_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/ojol_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class OjolTindakanRepo {
   Future<ResponseOjolTindakanModel> saveOjolTindakan(

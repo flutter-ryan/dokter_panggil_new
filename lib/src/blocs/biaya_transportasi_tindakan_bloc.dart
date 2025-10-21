@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/biaya_transportasi_tindakan_model.dart';
-import 'package:dokter_panggil/src/repositories/biaya_transportasi_tindakan_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/biaya_transportasi_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/biaya_transportasi_tindakan_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class BiayaTransportasiTindakanBloc {
@@ -86,7 +86,7 @@ class BiayaTransportasiTindakanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBiayaTransportasiTindakan?.close();
     _biaya.close();
     _jenis.close();

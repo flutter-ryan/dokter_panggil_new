@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/barang_farmasi_filter_model.dart';
-import 'package:dokter_panggil/src/repositories/barnag_farmasi_filter_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/barang_farmasi_filter_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/barnag_farmasi_filter_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class BarangFarmasiFilterBloc {
@@ -32,7 +32,7 @@ class BarangFarmasiFilterBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBarangFarmasi?.close();
     _filter.close();
   }

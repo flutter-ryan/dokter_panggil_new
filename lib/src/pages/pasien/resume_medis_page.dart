@@ -1,9 +1,9 @@
-import 'package:dokter_panggil/src/blocs/resume_medis_pasien_bloc.dart';
-import 'package:dokter_panggil/src/models/kunjungan_pasien_resume_model.dart';
-import 'package:dokter_panggil/src/models/resume_medis_pasien_model.dart';
-import 'package:dokter_panggil/src/pages/pasien/resume_pemeriksaan_pasien_page.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/resume_medis_pasien_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_pasien_resume_model.dart';
+import 'package:admin_dokter_panggil/src/models/resume_medis_pasien_model.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/resume_pemeriksaan_pasien_page.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 
 class ResumeMedisPage extends StatefulWidget {

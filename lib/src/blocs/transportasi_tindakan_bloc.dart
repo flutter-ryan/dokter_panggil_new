@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/transportasi_tindakan_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/transportasi_tindakan_repo.dart';
+import 'package:admin_dokter_panggil/src/models/transportasi_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/transportasi_tindakan_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class TransportasiTindakanBloc {
@@ -59,7 +59,7 @@ class TransportasiTindakanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _srteamTransportasiTindakan?.close();
     _id.close();
     _tindakanKunjungan.close();

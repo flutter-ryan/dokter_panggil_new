@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pegawai_dokter_model.dart';
-import 'package:dokter_panggil/src/repositories/pegawai_profesi_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pegawai_dokter_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pegawai_profesi_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class PegawaiProfesiBloc {
@@ -50,7 +50,7 @@ class PegawaiProfesiBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPegawaiProfesi?.close();
     _filter.close();
     _groupId.close();

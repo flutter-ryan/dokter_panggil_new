@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/mitra_filter_model.dart';
-import 'package:dokter_panggil/src/repositories/mitra_filter_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/mitra_filter_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/mitra_filter_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MitraFilterBloc {
@@ -34,7 +34,7 @@ class MitraFilterBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamFilterMitra?.close();
     _filter.close();
   }

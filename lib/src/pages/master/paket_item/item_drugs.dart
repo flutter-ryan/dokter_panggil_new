@@ -1,13 +1,13 @@
 import 'package:cart_stepper/cart_stepper.dart';
-import 'package:dokter_panggil/src/blocs/master_paket_bloc.dart';
-import 'package:dokter_panggil/src/models/master_paket_create_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_paket_widget.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/paket_item/show_bhp_drugs.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_right_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_paket_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_paket_create_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_paket_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/paket_item/show_bhp_drugs.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_right_route.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 
 class ItemDrugs extends StatefulWidget {

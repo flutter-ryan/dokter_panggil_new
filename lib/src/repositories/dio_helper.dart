@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_exception.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_exception.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DioHelper {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/profesi_filter_model.dart';
-import 'package:dokter_panggil/src/repositories/profesi_filter_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/profesi_filter_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/profesi_filter_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class ProfesiFilterBloc {
@@ -31,7 +31,7 @@ class ProfesiFilterBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamProfesiFilter?.close();
     _filter.close();
   }

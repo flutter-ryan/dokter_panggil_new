@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
 
 String dokumenPengantarLabModelToJson(DokumenPengantarLabModel data) =>
     json.encode(data.toJson());

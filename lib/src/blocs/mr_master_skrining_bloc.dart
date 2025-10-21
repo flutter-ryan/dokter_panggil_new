@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/mr_master_skrining_model.dart';
-import 'package:dokter_panggil/src/repositories/mr_Master_skrining_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/mr_master_skrining_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/mr_Master_skrining_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MrMasterSkriningBloc {
@@ -31,7 +31,7 @@ class MrMasterSkriningBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterSkrining?.close();
     _filter.close();
   }

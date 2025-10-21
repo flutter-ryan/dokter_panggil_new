@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_model.dart';
 
 MasterBhpKategoriModel masterBhpKategoriModelFromJson(dynamic str) =>
     MasterBhpKategoriModel.fromJson(str);

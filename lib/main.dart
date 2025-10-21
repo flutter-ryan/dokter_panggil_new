@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dokter_panggil/src/pages/splash_page.dart';
-import 'package:dokter_panggil/src/source/local_notification_service.dart';
+import 'package:admin_dokter_panggil/src/pages/splash_page.dart';
+import 'package:admin_dokter_panggil/src/source/local_notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';

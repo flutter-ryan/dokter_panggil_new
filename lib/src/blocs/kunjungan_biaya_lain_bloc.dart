@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_biaya_lain_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_biaya_lain_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_biaya_lain_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_biaya_lain_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class KunjunganBiayaLainBloc {
@@ -55,7 +55,7 @@ class KunjunganBiayaLainBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBiayaLain?.close();
     _idKunjungan.close();
     _nilai.close();

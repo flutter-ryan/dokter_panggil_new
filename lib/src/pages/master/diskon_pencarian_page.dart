@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:dokter_panggil/src/blocs/master_diskon_create_bloc.dart';
-import 'package:dokter_panggil/src/models/master_diskon_create_model.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_diskon_create_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_diskon_create_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

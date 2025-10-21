@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_tindakan_lab_model.dart';
-import 'package:dokter_panggil/src/repositories/master_tindakan_lab_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_tindakan_lab_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterTindakanLabBloc {
@@ -29,7 +29,7 @@ class MasterTindakanLabBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTindakanLab?.close();
     _idMitra.close();
   }

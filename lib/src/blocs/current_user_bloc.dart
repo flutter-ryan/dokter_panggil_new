@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/current_user_model.dart';
-import 'package:dokter_panggil/src/repositories/current_user_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/current_user_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/current_user_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class CurrentUserBloc {
   final _repo = CurrentUserRepo();
@@ -25,7 +25,7 @@ class CurrentUserBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamCurrentUser?.close();
   }
 }

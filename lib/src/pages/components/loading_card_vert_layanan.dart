@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/pages/components/loading_shimmer.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_shimmer.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 
 class LoadingCardVertLayanan extends StatelessWidget {

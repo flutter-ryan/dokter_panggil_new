@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_paket_update_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_paket_delete_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_paket_update_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_paket_delete_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class KunjunganPaketDeleteBloc {
@@ -30,7 +30,7 @@ class KunjunganPaketDeleteBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKunjunganPaketDelete?.close();
     _idKunjungan.close();
   }

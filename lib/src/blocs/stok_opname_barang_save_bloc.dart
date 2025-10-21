@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/stok_opname_barang_model.dart';
-import 'package:dokter_panggil/src/models/stok_opname_barang_save_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/stok_opname_barang_save_repo.dart';
+import 'package:admin_dokter_panggil/src/models/stok_opname_barang_model.dart';
+import 'package:admin_dokter_panggil/src/models/stok_opname_barang_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/stok_opname_barang_save_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StokOpnameBarangSaveBloc {
@@ -66,7 +66,7 @@ class StokOpnameBarangSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamStokOpnameBarangSave?.close();
     _streamStokOpnameBarang?.close();
     _idStokBarang.close();

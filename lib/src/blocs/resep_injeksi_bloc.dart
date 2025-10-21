@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/resep_injeksi_model.dart';
-import 'package:dokter_panggil/src/repositories/resep_injeksi_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/resep_injeksi_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/resep_injeksi_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ResepInjeksiBloc {
@@ -34,7 +34,7 @@ class ResepInjeksiBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamResepInjeksi?.close();
     _idKunjungan.close();
     _idDokter.close();

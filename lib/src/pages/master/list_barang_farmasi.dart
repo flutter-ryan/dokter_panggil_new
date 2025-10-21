@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/blocs/master_farmasi_paginate_bloc.dart';
-import 'package:dokter_panggil/src/models/master_farmasi_paginate_model.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_farmasi_paginate_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_farmasi_paginate_model.dart';
 import 'package:flutter/material.dart';
 
 class ListBarangFarmasi extends StatefulWidget {

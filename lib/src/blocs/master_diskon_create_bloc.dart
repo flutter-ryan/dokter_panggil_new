@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_diskon_create_model.dart';
-import 'package:dokter_panggil/src/repositories/master_diskon_create_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_diskon_create_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_diskon_create_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterDiskonCreateBloc {
@@ -32,7 +32,7 @@ class MasterDiskonCreateBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _filter.close();
     _streamMasterDiskon?.close();
   }

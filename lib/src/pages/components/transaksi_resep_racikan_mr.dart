@@ -1,21 +1,21 @@
-import 'package:dokter_panggil/src/blocs/file_eresep_racikan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tagihan_resep_racikan_save_bloc.dart';
-import 'package:dokter_panggil/src/models/file_eresep_racikan_model.dart';
-import 'package:dokter_panggil/src/models/master_bhp_paginate_model.dart';
-import 'package:dokter_panggil/src/models/mr_pencarian_barang_farmasi_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/tagihan_resep_racikan_save_model.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/list_master_bhp_paginate.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/mr_pencarian_barang_farmasi.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/file_eresep_racikan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tagihan_resep_racikan_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/file_eresep_racikan_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_paginate_model.dart';
+import 'package:admin_dokter_panggil/src/models/mr_pencarian_barang_farmasi_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/tagihan_resep_racikan_save_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/list_master_bhp_paginate.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/mr_pencarian_barang_farmasi.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
@@ -208,9 +208,14 @@ class _TransaksiResepRacikanMrState extends State<TransaksiResepRacikanMr> {
       if (value != null) {
         final resep = value as FileEresepRacikan;
         Future.delayed(const Duration(milliseconds: 500), () async {
-          Share.share(
-              'ERESEP dokter panggil\n\nPasien ${resep.pasien}\n${Uri.parse(resep.url!).toString()}',
-              subject: 'E-Resep ${resep.pasien}');
+          SharePlus.instance.share(
+            ShareParams(
+              title: 'E-Resep Racikan ${resep.pasien}',
+              text:
+                  'ERESEP dokter panggil\n\nPasien ${resep.pasien}\n${Uri.parse(resep.url!).toString()}',
+              subject: 'E-Resep ${resep.pasien}',
+            ),
+          );
         });
       }
     });

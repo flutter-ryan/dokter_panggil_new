@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/resume_medis_pasien_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/resume_medis_pasien_model.dart';
 
 String resumePemeriksaanPasienModelToJson(ResumePemeriksaanPasienModel data) =>
     json.encode(data.toJson());

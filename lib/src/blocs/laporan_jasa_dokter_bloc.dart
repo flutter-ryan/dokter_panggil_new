@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/laporan_jasa_dokter_model.dart';
-import 'package:dokter_panggil/src/models/laporan_jasa_dokter_save_model.dart';
-import 'package:dokter_panggil/src/repositories/laporan_jasa_dokter_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_dokter_model.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_dokter_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/laporan_jasa_dokter_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class LaporanJasaDokterBloc {
@@ -59,7 +59,7 @@ class LaporanJasaDokterBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamLaporanJasaDokter?.close();
     _streamLaporanJasaDokterSave?.close();
     _from.close();

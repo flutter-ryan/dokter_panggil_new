@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tindakan_create_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/tindakan_create_repo.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_create_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/tindakan_create_repo.dart';
 
 class TindakanCreateBloc {
   final _repo = TindakanCreateRepo();
@@ -24,7 +24,7 @@ class TindakanCreateBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTindakanCreate?.close();
   }
 }

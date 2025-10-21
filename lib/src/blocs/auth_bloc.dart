@@ -35,7 +35,7 @@ class AuthBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _isSessionValid.close();
   }
 }

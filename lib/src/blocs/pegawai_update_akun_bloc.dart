@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pegawai_update_akun_model.dart';
-import 'package:dokter_panggil/src/repositories/pegawai_update_akun_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pegawai_update_akun_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pegawai_update_akun_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class PegawaiUpdateAkunBloc {
@@ -42,7 +42,7 @@ class PegawaiUpdateAkunBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamUpdateAkun?.close();
     _password.close();
   }

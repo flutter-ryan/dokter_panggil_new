@@ -1,12 +1,11 @@
-import 'package:dokter_panggil/src/blocs/auth_bloc.dart';
-import 'package:dokter_panggil/src/blocs/login_bloc.dart';
-import 'package:dokter_panggil/src/models/login_model.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:admin_dokter_panggil/src/blocs/auth_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/login_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/login_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -37,12 +36,13 @@ class _LoginpageState extends State<Loginpage> {
     if (validateAndSave()) {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
       FocusScope.of(context).unfocus();
-      final fcmToken = await FirebaseMessaging.instance.getToken();
       _loginBloc.emailSink.add(_email!);
       _loginBloc.passwordSink.add(_password!);
-      if (fcmToken != null) {
-        _loginBloc.tokenFcmSink.add(fcmToken);
-      }
+      // final fcmToken = await FirebaseMessaging.instance.getToken();
+      // if (fcmToken != null) {
+      //   _loginBloc.tokenFcmSink.add(fcmToken);
+      // }
+
       _loginBloc.login();
       _showStreamLogin();
     }
@@ -124,152 +124,156 @@ class _LoginpageState extends State<Loginpage> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Form(
-                  key: _formKey,
-                  child: Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Hei,\nLogin sekarang',
-                          style: TextStyle(
-                              fontSize: 22.0, fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          height: 18.0,
-                        ),
-                        const Text(
-                            'Silahkan login dengan menggunakan akun Anda'),
-                        const SizedBox(
-                          height: 52,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 18,
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Hei,\nLogin sekarang',
+                            style: TextStyle(
+                                fontSize: 22.0, fontWeight: FontWeight.w600),
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.blueGrey[50],
-                            border: Border.all(color: Colors.grey, width: 0.5),
-                            borderRadius: BorderRadius.circular(10.0),
+                          const SizedBox(
+                            height: 18.0,
                           ),
-                          child: Row(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.envelope,
-                                color: Colors.grey[600],
-                                size: 20.0,
-                              ),
-                              const SizedBox(
-                                width: 15.0,
-                              ),
-                              Expanded(
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    hintText: 'Alamat email',
-                                    border: InputBorder.none,
+                          const Text(
+                              'Silahkan login dengan menggunakan akun Anda'),
+                          const SizedBox(
+                            height: 52,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 18,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey[50],
+                              border:
+                                  Border.all(color: Colors.grey, width: 0.5),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Row(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.envelope,
+                                  color: Colors.grey[600],
+                                  size: 20.0,
+                                ),
+                                const SizedBox(
+                                  width: 15.0,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    decoration: const InputDecoration(
+                                      hintText: 'Alamat email',
+                                      border: InputBorder.none,
+                                    ),
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return 'Input required';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (val) => _email = val,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
                                   ),
-                                  validator: (val) {
-                                    if (val!.isEmpty) {
-                                      return 'Input required';
-                                    }
-                                    return null;
-                                  },
-                                  onSaved: (val) => _email = val,
-                                  keyboardType: TextInputType.emailAddress,
-                                  textInputAction: TextInputAction.next,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 22.0,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 18,
+                          const SizedBox(
+                            height: 22.0,
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.blueGrey[50],
-                            border: Border.all(color: Colors.grey, width: 0.5),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Row(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.lock,
-                                color: Colors.grey[600],
-                                size: 20.0,
-                              ),
-                              const SizedBox(
-                                width: 15.0,
-                              ),
-                              Expanded(
-                                child: TextFormField(
-                                  obscureText: !_visibility,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Password',
-                                    border: InputBorder.none,
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 18,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey[50],
+                              border:
+                                  Border.all(color: Colors.grey, width: 0.5),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Row(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.lock,
+                                  color: Colors.grey[600],
+                                  size: 20.0,
+                                ),
+                                const SizedBox(
+                                  width: 15.0,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    obscureText: !_visibility,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Password',
+                                      border: InputBorder.none,
+                                    ),
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return 'Input required';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (val) => _password = val,
                                   ),
-                                  validator: (val) {
-                                    if (val!.isEmpty) {
-                                      return 'Input required';
-                                    }
-                                    return null;
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _visibility = !_visibility;
+                                    });
                                   },
-                                  onSaved: (val) => _password = val,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _visibility = !_visibility;
-                                  });
-                                },
-                                icon: _visibility
-                                    ? const Icon(Icons.visibility_off)
-                                    : const Icon(Icons.visibility),
-                                color: Colors.grey[600],
-                              )
-                            ],
+                                  icon: _visibility
+                                      ? const Icon(Icons.visibility_off)
+                                      : const Icon(Icons.visibility),
+                                  color: Colors.grey[600],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 62.0,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 55,
-                          child: ElevatedButton(
-                            onPressed: _login,
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                backgroundColor: kPrimaryColor),
-                            child: const Text('MASUK'),
+                          const SizedBox(
+                            height: 62.0,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 18.0,
-                        ),
-                        Center(
-                          child: Text(
-                            'Hubungi admin drp jika Anda tidak dapat melakukan login pada aplikasi',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey[400]),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 55,
+                            child: ElevatedButton(
+                              onPressed: _login,
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  backgroundColor: kPrimaryColor),
+                              child: const Text('MASUK'),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 12.0,
-                        )
-                      ],
+                          const SizedBox(
+                            height: 18.0,
+                          ),
+                          Center(
+                            child: Text(
+                              'Hubungi admin drp jika Anda tidak dapat melakukan login pada aplikasi',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.grey[400]),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 12.0,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

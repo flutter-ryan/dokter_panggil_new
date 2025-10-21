@@ -1,31 +1,31 @@
-import 'package:dokter_panggil/src/blocs/download_kwitansi_bloc.dart';
-import 'package:dokter_panggil/src/blocs/kunjungan_final_bayar_bloc.dart';
-import 'package:dokter_panggil/src/models/download_kwitansi_model.dart';
-import 'package:dokter_panggil/src/models/kunjungan_final_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/detail_biaya_lainnya_wigdet.dart';
-import 'package:dokter_panggil/src/pages/components/detail_paket_widget.dart';
-import 'package:dokter_panggil/src/pages/components/detail_tindakan_rad_widget.dart';
-import 'package:dokter_panggil/src/pages/components/final_tagihan_page.dart';
-import 'package:dokter_panggil/src/pages/components/pembayaran_uang_muka.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/detail_bhp_widget.dart';
-import 'package:dokter_panggil/src/pages/components/detail_identitas_widget.dart';
-import 'package:dokter_panggil/src/pages/components/detail_petugas_widget.dart';
-import 'package:dokter_panggil/src/pages/components/detail_tindakan_wigdet.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/detail_obat_injeksi_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/detail_tagihan_lab_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/detail_tagihan_racikan_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/detail_tagihan_resep_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/list_tagihan_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/new_detail_tagihan_lab_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/new_detail_tagihan_rad_widget.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/download_kwitansi_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_final_bayar_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/download_kwitansi_model.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_final_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_biaya_lainnya_wigdet.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_paket_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_tindakan_rad_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/final_tagihan_page.dart';
+import 'package:admin_dokter_panggil/src/pages/components/pembayaran_uang_muka.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/detail_bhp_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_identitas_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_petugas_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_tindakan_wigdet.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/detail_obat_injeksi_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/detail_tagihan_lab_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/detail_tagihan_racikan_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/detail_tagihan_resep_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/list_tagihan_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/new_detail_tagihan_lab_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/new_detail_tagihan_rad_widget.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_bottom_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -79,6 +79,7 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
             child: ListTagihanWidget(
               data: _data,
               finalTagihan: finalTagihan,
+              tagihanSementara: !finalTagihan,
               type: widget.type,
               isSummary: true,
             ),
@@ -229,15 +230,22 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
   }
 
   Future<void> _shareDeposit(DetailKunjungan data) async {
-    Share.share(
-        'Hai pasien ${data.pasien!.namaPasien}, Tap tautan berikut untuk mengunduh kwitansi pembayaranmu ${Uri.parse(data.urlDeposit!).toString()}',
-        subject: 'Deposit ${data.pasien!.namaPasien}');
+    SharePlus.instance.share(
+      ShareParams(
+        title: 'Deposit ${data.pasien!.namaPasien}',
+        text:
+            'Hai pasien ${data.pasien!.namaPasien}, Tap tautan berikut untuk mengunduh kwitansi pembayaranmu ${Uri.parse(data.urlDeposit!).toString()}',
+        subject: 'Deposit ${data.pasien!.namaPasien}',
+      ),
+    );
   }
 
   Future<void> _shareKwitansi(DownloadKwitansiModel data) async {
-    Share.share(
-        'Hai pasien ${data.data!.nama},\nTap tautan ini untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.data!.url!).toString()}',
-        subject: 'Kwitansi ${data.data!.nama}');
+    SharePlus.instance.share(ShareParams(
+        title: 'Kwitanis Pembayaran ${data.data!.nama}',
+        text:
+            'Hai pasien ${data.data!.nama},\nTap tautan ini untuk mengunduh kwitansi pembayaranmu\n\n${Uri.parse(data.data!.url!).toString()}',
+        subject: 'Kwitansi ${data.data!.nama}'));
   }
 
   @override

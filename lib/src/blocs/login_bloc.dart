@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/login_model.dart';
-import 'package:dokter_panggil/src/repositories/login_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/login_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/login_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class LoginBloc {
@@ -37,7 +37,7 @@ class LoginBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamLogin?.close();
     _email.close();
     _password.close();

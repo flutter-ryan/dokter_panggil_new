@@ -1,12 +1,12 @@
-import 'package:dokter_panggil/src/models/master_jabatan_model.dart';
-import 'package:dokter_panggil/src/pages/components/button_edit_master.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/master/profesi_pencarian_page.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/models/master_jabatan_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/button_edit_master.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/master/profesi_pencarian_page.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -51,6 +51,22 @@ class _JabatanPageState extends State<JabatanPage> {
     //
   }
 
+  void _pencarianProfesi() {
+    Navigator.push(
+      context,
+      SlideLeftRoute(
+        page: const ProfesiPencarianPage(),
+      ),
+    ).then((value) {
+      if (value != null) {
+        if (!mounted) return;
+        FocusScope.of(context).requestFocus(FocusNode());
+        var data = value as Jabatan;
+        _edit(data.id, data.namaJabatan);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _group.dispose();
@@ -77,19 +93,7 @@ class _JabatanPageState extends State<JabatanPage> {
                 subtitle: SearchInputForm(
                   isReadOnly: true,
                   hint: 'Pencarian profesi',
-                  onTap: () => Navigator.push(
-                    context,
-                    SlideLeftRoute(
-                      page: const ProfesiPencarianPage(),
-                    ),
-                  ).then((value) {
-                    if (value != null) {
-                      if (!mounted) return;
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      var data = value as Jabatan;
-                      _edit(data.id, data.namaJabatan);
-                    }
-                  }),
+                  onTap: _pencarianProfesi,
                 ),
                 closeButton: const ClosedButton(),
               ),

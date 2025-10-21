@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/transportasi_resep_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/transportasi_resep_repo.dart';
+import 'package:admin_dokter_panggil/src/models/transportasi_resep_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/transportasi_resep_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class TransportasiResepBloc {
@@ -38,7 +38,7 @@ class TransportasiResepBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTransportasiResep?.close();
     _idKunjungan.close();
     _biaya.close();

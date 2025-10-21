@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/update_kunjungan_resep_tagihan_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/update_kunjungan_resep_tagihan_repo.dart';
+import 'package:admin_dokter_panggil/src/models/update_kunjungan_resep_tagihan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/update_kunjungan_resep_tagihan_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class UpdateKunjunganResepTagihanBloc {
@@ -36,7 +36,7 @@ class UpdateKunjunganResepTagihanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streaUpdateTagihanResep?.close();
     _id.close();
     _jumlah.close();

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_tindakan_rad_cari_modal.dart';
-import 'package:dokter_panggil/src/repositories/master_tindakan_rad_cari_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_rad_cari_modal.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_tindakan_rad_cari_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterTindakanRadCariBloc {
@@ -32,7 +32,7 @@ class MasterTindakanRadCariBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterTindakanRadCari?.close();
     _filter.close();
   }

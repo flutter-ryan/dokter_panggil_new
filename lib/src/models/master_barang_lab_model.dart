@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/master_bhp_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_model.dart';
 
 MasterBarangLabModel masterBarangLabModelFromJson(dynamic str) =>
     MasterBarangLabModel.fromJson(str);

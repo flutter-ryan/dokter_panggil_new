@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/mr_petugas_konsul_save_model.dart';
-import 'package:dokter_panggil/src/repositories/mr_petugas_konsul_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/mr_petugas_konsul_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/mr_petugas_konsul_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MrPetugasKonsulSaveBloc {
@@ -58,7 +58,7 @@ class MrPetugasKonsulSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPetugasKonsulSave?.close();
     _idKunjungan.close();
     _idPetugas.close();

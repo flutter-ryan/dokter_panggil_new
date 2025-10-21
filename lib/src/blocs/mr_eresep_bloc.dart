@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/mr_eresep_model.dart';
-import 'package:dokter_panggil/src/repositories/mr_eresep_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/mr_eresep_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/mr_eresep_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MrEresepBloc {
@@ -45,7 +45,7 @@ class MrEresepBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamEresep?.close();
     _idResep.close();
   }

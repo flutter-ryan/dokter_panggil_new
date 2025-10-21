@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/master_diskon_create_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_diskon_create_model.dart';
 
 String masterDiskonSaveModelToJson(MasterDiskonSaveModel data) =>
     json.encode(data.toJson());

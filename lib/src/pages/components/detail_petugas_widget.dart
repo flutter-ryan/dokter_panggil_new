@@ -1,23 +1,24 @@
-import 'package:dokter_panggil/src/blocs/batal_final_petugas_bloc.dart';
-import 'package:dokter_panggil/src/blocs/mr_petugas_konsul_save_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tambah_perawat_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tambah_perawat_hapus_bloc.dart';
-import 'package:dokter_panggil/src/models/batal_final_petugas_model.dart';
-import 'package:dokter_panggil/src/models/mr_petugas_konsul_save_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/pegawai_dokter_model.dart';
-import 'package:dokter_panggil/src/models/tambah_perawat_hapus_model.dart';
-import 'package:dokter_panggil/src/models/tambah_perawat_model.dart';
-import 'package:dokter_panggil/src/pages/components/badge.dart' as badge_custom;
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/pasien/pilih_petugas_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/batal_final_petugas_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/mr_petugas_konsul_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tambah_perawat_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tambah_perawat_hapus_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/batal_final_petugas_model.dart';
+import 'package:admin_dokter_panggil/src/models/mr_petugas_konsul_save_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/pegawai_dokter_model.dart';
+import 'package:admin_dokter_panggil/src/models/tambah_perawat_hapus_model.dart';
+import 'package:admin_dokter_panggil/src/models/tambah_perawat_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/badge.dart'
+    as badge_custom;
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/pilih_petugas_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DetailPetugasWidget extends StatefulWidget {

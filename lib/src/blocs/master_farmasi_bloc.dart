@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_farmasi_model.dart';
-import 'package:dokter_panggil/src/repositories/master_farmasi_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_farmasi_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_farmasi_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterFarmasiBloc {
@@ -79,7 +79,7 @@ class MasterFarmasiBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterFarmasi?.close();
     _barang.close();
     _harga.close();

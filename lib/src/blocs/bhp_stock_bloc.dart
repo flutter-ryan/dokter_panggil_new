@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/bhp_stock_model.dart';
-import 'package:dokter_panggil/src/repositories/bhp_stock_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/bhp_stock_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/bhp_stock_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class BhpStockBloc {
@@ -39,7 +39,7 @@ class BhpStockBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamBhpStock!.close();
     _id.close();
     _action.close();

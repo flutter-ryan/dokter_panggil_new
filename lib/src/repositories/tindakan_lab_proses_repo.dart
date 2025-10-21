@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/tindakan_lab_proses_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_lab_proses_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class TindakanLabProsesRepo {
   Future<TindakanLabProsesModel> prosesTindakanLab(

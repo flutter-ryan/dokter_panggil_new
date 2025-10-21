@@ -1,7 +1,7 @@
-import 'package:dokter_panggil/src/models/pasien_kunjungan_model.dart';
-import 'package:dokter_panggil/src/pages/pasien/detail_layanan_page.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_model.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/detail_layanan_page.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 
 class CardLayananPasien extends StatelessWidget {

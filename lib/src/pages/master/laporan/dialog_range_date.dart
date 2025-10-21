@@ -1,5 +1,5 @@
 // import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

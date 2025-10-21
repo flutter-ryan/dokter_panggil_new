@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/diagnosa_model.dart';
-import 'package:dokter_panggil/src/repositories/diagnosa_delete_repo.dart';
-import 'package:dokter_panggil/src/repositories/diagnosa_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/diagnosa_update_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/diagnosa_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/diagnosa_delete_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/diagnosa_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/diagnosa_update_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class DiagnosaBloc {
@@ -74,7 +74,7 @@ class DiagnosaBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterDiagnosa?.close();
     _id.close();
     _diagnosa.close();

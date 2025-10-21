@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/pages/components/close_button_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button_widget.dart';
 import 'package:flutter/material.dart';
 
 class ListJenisKelamin extends StatelessWidget {

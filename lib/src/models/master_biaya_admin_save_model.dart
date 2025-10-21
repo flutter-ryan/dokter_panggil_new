@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/master_biaya_admin_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_biaya_admin_model.dart';
 
 String masterBiayaAdminSaveModelToJson(MasterBiayaAdminSaveModel data) =>
     json.encode(data.toJson());

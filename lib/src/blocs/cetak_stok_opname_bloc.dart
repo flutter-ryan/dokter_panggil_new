@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/cetak_stok_opname_model.dart';
-import 'package:dokter_panggil/src/repositories/cetak_stok_opname_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/cetak_stok_opname_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/cetak_stok_opname_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CetakStokOpnameBloc {
@@ -38,7 +38,7 @@ class CetakStokOpnameBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamCetakStokOpname?.close();
     _idStokOpname.close();
     _from.close();

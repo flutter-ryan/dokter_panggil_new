@@ -1,35 +1,35 @@
 import 'dart:async';
 
 import 'package:animate_icons/animate_icons.dart';
-import 'package:dokter_panggil/src/blocs/master_jabatan_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_pegawai_save_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_role_bloc.dart';
-import 'package:dokter_panggil/src/blocs/pegawai_edit_bloc.dart';
-import 'package:dokter_panggil/src/blocs/pegawai_search_bloc.dart';
-import 'package:dokter_panggil/src/models/master_jabatan_model.dart';
-import 'package:dokter_panggil/src/models/master_pegawai_fetch_model.dart';
-import 'package:dokter_panggil/src/models/master_pegawai_save_model.dart';
-import 'package:dokter_panggil/src/models/master_role_model.dart';
-import 'package:dokter_panggil/src/models/pegawai_edit_model.dart';
-import 'package:dokter_panggil/src/models/pegawai_search_model.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/list_jabatan_widget.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/searcher.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/profile_pegawai_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_jabatan_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_pegawai_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_role_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/pegawai_edit_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/pegawai_search_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_jabatan_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_pegawai_fetch_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_pegawai_save_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_role_model.dart';
+import 'package:admin_dokter_panggil/src/models/pegawai_edit_model.dart';
+import 'package:admin_dokter_panggil/src/models/pegawai_search_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/list_jabatan_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/searcher.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/profile_pegawai_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_bottom_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -814,6 +814,16 @@ class _RoleUserState extends State<RoleUser> {
     _selected = widget.selectedIdRole!;
   }
 
+  void _pilihRole(MasterRole role) {
+    setState(() {
+      _selected = role.id!;
+    });
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (!mounted) return;
+      Navigator.pop(context, role);
+    });
+  }
+
   @override
   void dispose() {
     _masterRoleBloc.dispose();
@@ -865,16 +875,7 @@ class _RoleUserState extends State<RoleUser> {
                         itemBuilder: (context, i) {
                           var role = snapshot.data!.data![i];
                           return ListTile(
-                            onTap: () {
-                              setState(() {
-                                _selected = role.id!;
-                              });
-                              Future.delayed(const Duration(milliseconds: 100),
-                                  () {
-                                if (!mounted) return;
-                                Navigator.pop(context, role);
-                              });
-                            },
+                            onTap: () => _pilihRole(role),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 22.0, vertical: 8.0),
                             title: Text('${role.deskripsi}'),

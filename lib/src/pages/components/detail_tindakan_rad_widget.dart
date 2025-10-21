@@ -1,20 +1,19 @@
-
-import 'package:dokter_panggil/src/blocs/dokumen_pengantar_rad_bloc.dart';
-import 'package:dokter_panggil/src/models/dokumen_pengantar_rad_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/card_tagihan_lab.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/dokumen_pengantar_rad_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_pengantar_rad_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_tagihan_lab.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:share_plus/share_plus.dart';
 
 class DetailTindakanRadWidget extends StatefulWidget {
@@ -104,9 +103,13 @@ class _DetailTindakanRadWidgetState extends State<DetailTindakanRadWidget> {
   }
 
   Future<void> _shareDokumenPengantarLab(DokumenPengantarRad data) async {
-    Share.share(
-        'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Radiologi\n\n${Uri.parse(data.linkDoc!).toString()}',
-        subject: 'E-Pengantar ${data.pasien!.namaPasien}');
+    SharePlus.instance.share(
+      ShareParams(
+          title: 'Dokumen pengantar Lab ${data.pasien!.namaPasien}',
+          text:
+              'Hai, ${data.pasien!.namaPasien}.\nDokumen ini adalah Pengantar Radiologi\n\n${Uri.parse(data.linkDoc!).toString()}',
+          subject: 'E-Pengantar ${data.pasien!.namaPasien}'),
+    );
   }
 
   @override

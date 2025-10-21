@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tagihan_resep_racikan_save_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/tagihan_resep_racikan_save_repo.dart';
+import 'package:admin_dokter_panggil/src/models/tagihan_resep_racikan_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/tagihan_resep_racikan_save_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class TagihanResepRacikanSaveBloc {
@@ -45,7 +45,7 @@ class TagihanResepRacikanSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTagihanRacikan?.close();
     _barangMitra.close();
     _barangMentari.close();

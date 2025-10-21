@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_eresep_create_model.dart';
-import 'package:dokter_panggil/src/models/kunjungan_eresep_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_eresep_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_eresep_create_model.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_eresep_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_eresep_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class KunjunganEresepBloc {
@@ -80,7 +80,7 @@ class KunjunganEresepBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamEresep?.close();
     _id.close();
     _idPegawai.close();

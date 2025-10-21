@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_farmasi_paginate_model.dart';
-import 'package:dokter_panggil/src/repositories/master_farmasi_mitra_paginate_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_farmasi_paginate_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_farmasi_mitra_paginate_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterFarmasiMitraPaginateBloc {
@@ -49,7 +49,7 @@ class MasterFarmasiMitraPaginateBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterFarmasiMitra?.close();
     _idMitra.close();
   }

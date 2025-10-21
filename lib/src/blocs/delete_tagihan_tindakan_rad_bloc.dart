@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/tagihan_tindakan_rad_model.dart';
-import 'package:dokter_panggil/src/repositories/delete_tagihan_tindakan_rad_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/tagihan_tindakan_rad_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/delete_tagihan_tindakan_rad_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class DeleteTagihanTindakanRadBloc {
@@ -31,7 +31,7 @@ class DeleteTagihanTindakanRadBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamDeleteTagihanRad?.close();
     _idTagihanRad.close();
   }

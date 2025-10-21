@@ -1,18 +1,18 @@
 import 'dart:io';
 
-import 'package:dokter_panggil/src/blocs/laporan_jasa_dokter_bloc.dart';
-import 'package:dokter_panggil/src/models/laporan_jasa_dokter_model.dart';
-import 'package:dokter_panggil/src/models/laporan_jasa_dokter_save_model.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/laporan/card_laporan_jasa.dart';
-import 'package:dokter_panggil/src/pages/master/laporan/dialog_range_date.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/laporan_jasa_dokter_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_dokter_model.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_jasa_dokter_save_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/laporan/card_laporan_jasa.dart';
+import 'package:admin_dokter_panggil/src/pages/master/laporan/dialog_range_date.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 

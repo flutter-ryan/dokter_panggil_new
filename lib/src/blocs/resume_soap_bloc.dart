@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/resume_soap_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/resume_soap_repo.dart';
+import 'package:admin_dokter_panggil/src/models/resume_soap_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/resume_soap_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class ResumeSoapBloc {
@@ -34,7 +34,7 @@ class ResumeSoapBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamResumeSoap?.close();
     _idKunjungan.close();
     _idPetugas.close();

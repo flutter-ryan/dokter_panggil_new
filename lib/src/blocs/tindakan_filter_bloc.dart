@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pencarian_master_tindakan_group_model.dart';
-import 'package:dokter_panggil/src/models/tindakan_filter_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/tindakan_filter_repo.dart';
+import 'package:admin_dokter_panggil/src/models/pencarian_master_tindakan_group_model.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_filter_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/tindakan_filter_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class TindakanFilterBloc {
@@ -53,7 +53,7 @@ class TindakanFilterBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamTindakanFilter?.close();
     _filter.close();
     _idGroup.close();

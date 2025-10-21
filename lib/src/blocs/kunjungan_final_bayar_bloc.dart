@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_final_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_final_bayar_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_final_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_final_bayar_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class KunjunganFinalBayarBloc {
@@ -48,7 +48,7 @@ class KunjunganFinalBayarBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKunjunganFinal?.close();
     _id.close();
     _biaya.close();

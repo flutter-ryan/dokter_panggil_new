@@ -1,15 +1,14 @@
-
-import 'package:dokter_panggil/src/blocs/kunjungan_eresep_bloc.dart';
-import 'package:dokter_panggil/src/models/kunjungan_eresep_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_eresep_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_eresep_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 
 class EresepWidget extends StatefulWidget {
@@ -78,9 +77,14 @@ class _EresepWidgetState extends State<EresepWidget> {
   }
 
   Future<void> _share(Eresep data) async {
-    Share.share(
-        'ERESEP dokter panggil\nPasien ${data.namaPasien}\n\n${Uri.parse(data.url!).toString()}',
-        subject: 'E-Resep ${data.namaPasien}');
+    SharePlus.instance.share(
+      ShareParams(
+        title: 'E-Resep Pasien ${data.namaPasien}',
+        text:
+            'ERESEP dokter panggil\nPasien ${data.namaPasien}\n\n${Uri.parse(data.url!).toString()}',
+        subject: 'E-Resep ${data.namaPasien}',
+      ),
+    );
   }
 
   @override

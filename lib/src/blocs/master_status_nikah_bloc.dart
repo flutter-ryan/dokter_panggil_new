@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_status_nikah_model.dart';
-import 'package:dokter_panggil/src/repositories/master_status_nikah_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_status_nikah_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_status_nikah_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class MasterStatusNikahBloc {
   final _repo = MasterStatusNikahRepo();
@@ -26,7 +26,7 @@ class MasterStatusNikahBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterStatusNikah?.close();
   }
 }

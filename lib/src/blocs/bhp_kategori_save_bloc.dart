@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/bhp_kategori_save_model.dart';
-import 'package:dokter_panggil/src/repositories/bhp_kategori_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/bhp_kategori_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/bhp_kategori_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class BhpKategoriSaveBloc {
@@ -36,7 +36,7 @@ class BhpKategoriSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _id.close();
     _kategori.close();
     _streamBhpKategoriSave.close();

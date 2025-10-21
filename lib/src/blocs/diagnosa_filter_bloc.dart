@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/diagnosa_filter_model.dart';
-import 'package:dokter_panggil/src/repositories/diagnosa_filter_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/diagnosa_filter_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/diagnosa_filter_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class DiagnosaFilterBloc {
@@ -32,7 +32,7 @@ class DiagnosaFilterBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamDiagnosaFilter?.close();
     _filter.close();
   }

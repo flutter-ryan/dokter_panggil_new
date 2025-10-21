@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/models/stok_opname_barang_model.dart';
-import 'package:dokter_panggil/src/models/stok_opname_barang_save_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/stok_opname_barang_model.dart';
+import 'package:admin_dokter_panggil/src/models/stok_opname_barang_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class StokOpnameBarangSaveRepo {
   Future<StokOpnameBarangSaveModel> updateStokOpname(

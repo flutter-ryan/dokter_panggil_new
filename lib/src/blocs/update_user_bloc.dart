@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/update_user_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/update_user_repo.dart';
+import 'package:admin_dokter_panggil/src/models/update_user_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/update_user_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class UpdateUserBloc {
@@ -51,7 +51,7 @@ class UpdateUserBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamUpdateUser?.close();
     _id.close();
     _name.close();

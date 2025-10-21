@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/hubungan_fetch_model.dart';
-import 'package:dokter_panggil/src/repositories/hubungan_fetch_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/hubungan_fetch_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/hubungan_fetch_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class HubunganFetchBloc {
   final HubunganFetchRepo _repo = HubunganFetchRepo();
@@ -25,7 +25,7 @@ class HubunganFetchBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamHubunganFetch?.close();
   }
 }

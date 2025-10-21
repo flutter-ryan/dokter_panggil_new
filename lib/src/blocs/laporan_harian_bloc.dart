@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/laporan_harian_model.dart';
-import 'package:dokter_panggil/src/repositories/laporan_harian_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/laporan_harian_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/laporan_harian_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LaporanHarianBloc {
@@ -60,7 +60,7 @@ class LaporanHarianBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamLaporanHarianRequest?.close();
     _from.close();
     _to.close();

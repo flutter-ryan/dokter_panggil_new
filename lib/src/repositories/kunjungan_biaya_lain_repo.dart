@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/models/kunjungan_biaya_lain_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_biaya_lain_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class KunjunganBiayaLainRepo {
   Future<PasienKunjunganDetailModel> saveBiayaLain(

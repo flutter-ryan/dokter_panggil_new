@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
 
 KunjunganPasienAllModel kunjunganPasienAllModelFromJson(dynamic str) =>
     KunjunganPasienAllModel.fromJson(str);

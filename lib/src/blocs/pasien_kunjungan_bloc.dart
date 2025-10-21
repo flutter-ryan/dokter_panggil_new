@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pasien_kunjungan_model.dart';
-import 'package:dokter_panggil/src/repositories/pasien_kunjungan_aktif_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pasien_kunjungan_aktif_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class PasienKunjunganBloc {
@@ -30,7 +30,7 @@ class PasienKunjunganBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPasienKunjungan?.close();
     _norm.close();
   }

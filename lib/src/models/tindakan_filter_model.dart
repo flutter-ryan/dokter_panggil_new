@@ -54,7 +54,7 @@ class TindakanFilter {
         id: json["id"],
         namaTindakan: json["nama_tindakan"],
         jasaDokter: json["jasa_dokter"],
-        jasaDokterPanggil: json["jasa_dokter_panggil"],
+        jasaDokterPanggil: json["jasa_admin_dokter_panggil"],
         tarif: json["tarif"],
       );
 }

@@ -1,20 +1,20 @@
-import 'package:dokter_panggil/src/blocs/master_tindakan_rad_save_bloc.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_rad_create_mode.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_rad_save_model.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/tindakan_rad_pencarian_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_tindakan_rad_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_rad_create_mode.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_rad_save_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/tindakan_rad_pencarian_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 
 class TindakanRadiologiPage extends StatefulWidget {
   const TindakanRadiologiPage({super.key});
@@ -115,6 +115,22 @@ class _TindakanRadiologiPageState extends State<TindakanRadiologiPage> {
     });
   }
 
+  void _cariTindakanRadiologi() {
+    Navigator.push(
+      context,
+      SlideLeftRoute(
+        page: const TindakanRadPencarianPage(),
+      ),
+    ).then((value) {
+      if (value != null) {
+        if (!mounted) return;
+        FocusScope.of(context).requestFocus(FocusNode());
+        var data = value as MasterTindakanRad;
+        _edit(data);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _namaTindakan.dispose();
@@ -134,19 +150,7 @@ class _TindakanRadiologiPageState extends State<TindakanRadiologiPage> {
             subtitle: SearchInputForm(
               isReadOnly: true,
               hint: 'Pencarian tindakan radiologi',
-              onTap: () => Navigator.push(
-                context,
-                SlideLeftRoute(
-                  page: const TindakanRadPencarianPage(),
-                ),
-              ).then((value) {
-                if (value != null) {
-                  if (!mounted) return;
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  var data = value as MasterTindakanRad;
-                  _edit(data);
-                }
-              }),
+              onTap: _cariTindakanRadiologi,
             ),
             closeButton: const ClosedButton(),
           ),

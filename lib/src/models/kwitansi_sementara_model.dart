@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
 
 KwitansiSementaraModel kwitansiSementaraModelFromJson(dynamic str) =>
     KwitansiSementaraModel.fromJson(str);

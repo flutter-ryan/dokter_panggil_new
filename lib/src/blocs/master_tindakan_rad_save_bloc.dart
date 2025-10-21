@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_tindakan_rad_save_model.dart';
-import 'package:dokter_panggil/src/repositories/master_tindakan_rad_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_rad_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_tindakan_rad_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MasterTindakanRadSaveBloc {
@@ -78,7 +78,7 @@ class MasterTindakanRadSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterTindakanRadSave?.close();
     _namaTindakan.close();
     _hargaModal.close();

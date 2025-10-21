@@ -1,8 +1,8 @@
-import 'package:dokter_panggil/src/pages/master/layanan_page.dart';
-import 'package:dokter_panggil/src/pages/master/pegawai_page.dart';
-import 'package:dokter_panggil/src/pages/master/profesi_page.dart';
-import 'package:dokter_panggil/src/pages/master/tindakan_lab_page.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/pages/master/layanan_page.dart';
+import 'package:admin_dokter_panggil/src/pages/master/pegawai_page.dart';
+import 'package:admin_dokter_panggil/src/pages/master/profesi_page.dart';
+import 'package:admin_dokter_panggil/src/pages/master/tindakan_lab_page.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

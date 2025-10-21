@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/resume_pemeriksaan_pasien_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/resume_pemeriksaan_pasien_repo.dart';
+import 'package:admin_dokter_panggil/src/models/resume_pemeriksaan_pasien_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/resume_pemeriksaan_pasien_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ResumePemeriksaanPasienBloc {
@@ -38,7 +38,7 @@ class ResumePemeriksaanPasienBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamResumePemeriksaanPasien?.close();
     _idKunjungan.close();
     _idPetugas.close();

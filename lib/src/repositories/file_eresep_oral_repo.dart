@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/file_eresep_oral_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/file_eresep_oral_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class FileEresepOralRepo {
   Future<FileEresepOralModel> eresepOral(int idResep) async {

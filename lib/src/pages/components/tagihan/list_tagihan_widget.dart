@@ -1,25 +1,25 @@
-import 'package:dokter_panggil/src/blocs/kwitansi_sementara_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_biaya_admin_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_biaya_admin_emr_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_diskon_create_bloc.dart';
-import 'package:dokter_panggil/src/models/kwitansi_sementara_model.dart';
-import 'package:dokter_panggil/src/models/master_biaya_admin_emr_model.dart';
-import 'package:dokter_panggil/src/models/master_biaya_admin_model.dart';
-import 'package:dokter_panggil/src/models/master_diskon_create_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/components/close_button_widget.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/detail_tagihan.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/list_biaya_admin_emr.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/kwitansi_sementara_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_biaya_admin_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_biaya_admin_emr_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_diskon_create_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/kwitansi_sementara_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_biaya_admin_emr_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_biaya_admin_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_diskon_create_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/detail_tagihan.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/list_biaya_admin_emr.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -30,12 +30,14 @@ class ListTagihanWidget extends StatefulWidget {
     super.key,
     this.data,
     this.finalTagihan = false,
+    this.tagihanSementara = false,
     this.type = 'create',
     this.isSummary = false,
   });
 
   final DetailKunjungan? data;
   final bool finalTagihan;
+  final bool tagihanSementara;
   final String type;
   final bool isSummary;
 
@@ -76,6 +78,7 @@ class _ListTagihanWidgetState extends State<ListTagihanWidget> {
       return ListBiayaAdmin(
         dataKunjungan: _data,
         finalTagihan: widget.finalTagihan,
+        tagihanSementara: widget.tagihanSementara,
         type: widget.type,
       );
     }
@@ -127,12 +130,14 @@ class ListBiayaAdmin extends StatefulWidget {
     this.dataKunjungan,
     this.data,
     this.finalTagihan = false,
+    this.tagihanSementara = false,
     this.type = 'create',
   });
 
   final DetailKunjungan? dataKunjungan;
   final List<MasterBiayaAdmin>? data;
   final bool finalTagihan;
+  final bool tagihanSementara;
   final String type;
 
   @override
@@ -343,6 +348,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
 
   void _kirimInvoiceSementara() {
     _kwitansiSementaraBloc.idKunjungSink.add(widget.dataKunjungan!.id!);
+    _kwitansiSementaraBloc.biayaAdminSink.add(totalBiaya);
     _kwitansiSementaraBloc.getKwitansiSementara();
     _showStreamKwitansiSementara();
   }
@@ -363,9 +369,14 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
   }
 
   Future<void> _share(KwitansiSementara data) async {
-    Share.share(
-        'Hai pasien ${data.pasien == null ? '-' : data.pasien?.namaPasien},\nTap tautan dibawah untuk mengunduh kwitansi sementara pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
-        subject: 'Kwitansi Sementara ${data.pasien?.namaPasien}');
+    SharePlus.instance.share(
+      ShareParams(
+        title: 'Kwitansi Sementara ${data.pasien?.namaPasien}',
+        text:
+            'Hai pasien ${data.pasien == null ? '-' : data.pasien?.namaPasien},\nTap tautan dibawah untuk mengunduh kwitansi sementara pembayaranmu\n\n${Uri.parse(data.url!).toString()}',
+        subject: 'Kwitansi Sementara ${data.pasien?.namaPasien}',
+      ),
+    );
   }
 
   @override
@@ -374,14 +385,9 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.finalTagihan)
-          Expanded(
-            child: _detailFinalTagihan(context),
-          )
-        else
-          Flexible(
-            child: _detailFinalTagihan(context),
-          ),
+        Expanded(
+          child: _detailFinalTagihan(context),
+        ),
         if (widget.finalTagihan)
           Container(
             padding: const EdgeInsets.fromLTRB(22.0, 22, 22, 12),
@@ -428,7 +434,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
               ),
             ),
           ),
-        if (widget.type == 'view' || !widget.finalTagihan)
+        if (widget.type == 'view' || widget.tagihanSementara)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 22.0),
             child: Detailtagihan(
@@ -453,11 +459,18 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                       style: TextStyle(
                           fontSize: 13.0, fontWeight: FontWeight.w600),
                     ),
-                    Text(
-                      _noRupiah.format(_data.total),
-                      style: const TextStyle(
-                          fontSize: 13.0, fontWeight: FontWeight.w600),
-                    ),
+                    if (widget.tagihanSementara)
+                      Text(
+                        _noRupiah.format(_data.total! + totalBiaya),
+                        style: const TextStyle(
+                            fontSize: 13.0, fontWeight: FontWeight.w600),
+                      )
+                    else
+                      Text(
+                        _noRupiah.format(_data.total),
+                        style: const TextStyle(
+                            fontSize: 13.0, fontWeight: FontWeight.w600),
+                      ),
                   ],
                 ),
               ),
@@ -697,7 +710,9 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
           const Divider(
             color: Colors.grey,
           ),
-          if (_data.diskon != null || widget.finalTagihan)
+          if (_data.diskon != null ||
+              widget.finalTagihan ||
+              widget.tagihanSementara)
             Detailtagihan(
               namaTagihan: const Text(
                 'Sub Total',
@@ -872,7 +887,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
 
   Widget _listBiayaAdmin(BuildContext context) {
     double widthBox = 100;
-    if (!widget.finalTagihan) {
+    if (!widget.finalTagihan && !widget.tagihanSementara) {
       return _listBiayaAdminFinal(context);
     }
     return Column(

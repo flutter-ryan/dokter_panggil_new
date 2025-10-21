@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/mitra_model.dart';
-import 'package:dokter_panggil/src/repositories/mitra_delete_repo.dart';
-import 'package:dokter_panggil/src/repositories/mitra_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/mitra_update_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/mitra_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/mitra_delete_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/mitra_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/mitra_update_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class MitraBloc {
@@ -82,7 +82,7 @@ class MitraBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterMitra?.close();
     _id.close();
     _mitra.close();

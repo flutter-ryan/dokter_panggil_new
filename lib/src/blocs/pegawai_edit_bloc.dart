@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pegawai_edit_model.dart';
-import 'package:dokter_panggil/src/repositories/pegawai_edit_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pegawai_edit_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pegawai_edit_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class PegawaiEditBloc {
@@ -29,7 +29,7 @@ class PegawaiEditBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPegawaiEdit?.close();
     _id.close();
   }

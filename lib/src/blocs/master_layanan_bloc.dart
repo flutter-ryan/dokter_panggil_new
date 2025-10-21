@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_layanan_model.dart';
-import 'package:dokter_panggil/src/repositories/master_layanan_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_layanan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_layanan_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class MasterLayananBloc {
   final _repo = MasterLayananRepo();
@@ -25,7 +25,7 @@ class MasterLayananBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterLayanan?.close();
   }
 }

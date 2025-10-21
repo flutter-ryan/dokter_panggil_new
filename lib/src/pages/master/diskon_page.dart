@@ -1,22 +1,22 @@
-import 'package:dokter_panggil/src/blocs/master_diskon_save_bloc.dart';
-import 'package:dokter_panggil/src/models/master_diskon_create_model.dart';
-import 'package:dokter_panggil/src/models/master_diskon_save_model.dart';
-import 'package:dokter_panggil/src/pages/components/button_edit_master.dart';
-import 'package:dokter_panggil/src/pages/components/close_button.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/header.dart';
-import 'package:dokter_panggil/src/pages/components/input_form.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/master/diskon_pencarian_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_diskon_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_diskon_create_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_diskon_save_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/button_edit_master.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/header.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/master/diskon_pencarian_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 
 class DiskonPage extends StatefulWidget {
   const DiskonPage({super.key});
@@ -117,6 +117,23 @@ class _DiskonPageState extends State<DiskonPage> {
     });
   }
 
+  void _tambahDiskon() {
+    Navigator.push(
+      context,
+      SlideLeftRoute(
+        page: const DiskonPencarianPage(),
+      ),
+    ).then((value) {
+      if (value != null) {
+        var data = value as MasterDiskon;
+        if (!mounted) return;
+        FocusScope.of(context).requestFocus(FocusNode());
+        _formKey.currentState!.reset();
+        _edit(data);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _masterDiskonSaveBloc.dispose();
@@ -143,20 +160,7 @@ class _DiskonPageState extends State<DiskonPage> {
                 subtitle: SearchInputForm(
                   hint: 'Pencarian diskon',
                   isReadOnly: true,
-                  onTap: () => Navigator.push(
-                    context,
-                    SlideLeftRoute(
-                      page: const DiskonPencarianPage(),
-                    ),
-                  ).then((value) {
-                    if (value != null) {
-                      if (!mounted) return;
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      var data = value as MasterDiskon;
-                      _formKey.currentState!.reset();
-                      _edit(data);
-                    }
-                  }),
+                  onTap: _tambahDiskon,
                 ),
                 closeButton: const ClosedButton(),
               ),

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/master_pegawai_fetch_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_pegawai_fetch_model.dart';
 
 String updateInfoPegawaiModelToJson(UpdateInfoPegawaiModel data) =>
     json.encode(data.toJson());

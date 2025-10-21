@@ -1,20 +1,20 @@
-import 'package:dokter_panggil/src/blocs/master_barang_lab_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_tindakan_lab_all_bloc.dart';
-import 'package:dokter_panggil/src/models/barang_fetch_model.dart';
-import 'package:dokter_panggil/src/models/master_barang_lab_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_all_model.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/marker_bottom_sheet.dart';
-import 'package:dokter_panggil/src/pages/components/search_widget_page.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_barang_lab_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_tindakan_lab_all_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/barang_fetch_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_barang_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_all_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/marker_bottom_sheet.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_widget_page.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 
 class ListTindakanBarangLab extends StatefulWidget {
   const ListTindakanBarangLab({
@@ -64,7 +64,7 @@ class _ListTindakanBarangLabState extends State<ListTindakanBarangLab> {
           Container(
             margin: const EdgeInsets.all(22),
             decoration: BoxDecoration(
-              color: kPrimaryColor.withOpacity(0.1),
+              color: kPrimaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: ListTile(

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_jabatan_model.dart';
-import 'package:dokter_panggil/src/repositories/master_jabatan_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_jabatan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_jabatan_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class MasterJabatanBloc {
   final _repo = MasterJabatanRepo();
@@ -25,7 +25,7 @@ class MasterJabatanBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterJabatan?.close();
   }
 }

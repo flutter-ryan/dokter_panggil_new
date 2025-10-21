@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/dokumen_pengantar_rad_model.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_pengantar_rad_model.dart';
 
 MrDokumenPengantarRadModel mrDokumenPengantarRadModelFromJson(dynamic str) =>
     MrDokumenPengantarRadModel.fromJson(str);

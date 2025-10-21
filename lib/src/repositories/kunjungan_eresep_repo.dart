@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/models/kunjungan_eresep_create_model.dart';
-import 'package:dokter_panggil/src/models/kunjungan_eresep_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_eresep_create_model.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_eresep_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class KunjunganEresepRepo {
   Future<KunjunganEresepModel> getEresep(int id) async {

@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/pasien_show_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_show_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class PasienShowRepo {
   Future<PasienShowModel> pasienShow(int? id) async {

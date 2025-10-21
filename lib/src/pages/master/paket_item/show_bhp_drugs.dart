@@ -1,14 +1,14 @@
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/input_no_label.dart';
-import 'package:dokter_panggil/src/pages/master/list_master_bhp_paket.dart';
-import 'package:dokter_panggil/src/pages/master/paket_item/item_drugs.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/input_no_label.dart';
+import 'package:admin_dokter_panggil/src/pages/master/list_master_bhp_paket.dart';
+import 'package:admin_dokter_panggil/src/pages/master/paket_item/item_drugs.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 
 class ShowBhpDrugs extends StatefulWidget {
   const ShowBhpDrugs({super.key});

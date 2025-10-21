@@ -1,35 +1,35 @@
-import 'package:dokter_panggil/src/blocs/delete_tagihan_tindakan_lab_bloc.dart';
-import 'package:dokter_panggil/src/blocs/dokumen_pengantar_lab_bloc.dart';
-import 'package:dokter_panggil/src/blocs/kunjungan_tindakan_lab_save_bloc.dart';
-import 'package:dokter_panggil/src/blocs/master_tindakan_lab_create_bloc.dart';
-import 'package:dokter_panggil/src/blocs/mr_dokumen_pengantar_lab_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tagihan_tindakan_lab_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tindakan_lab_proses_bloc.dart';
-import 'package:dokter_panggil/src/blocs/tindakan_lab_tagihan_bloc.dart';
-import 'package:dokter_panggil/src/models/dokumen_pengantar_lab_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_model.dart';
-import 'package:dokter_panggil/src/models/mr_dokumen_pengantar_lab_model.dart';
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/models/tagihan_tindakan_lab_model.dart';
-import 'package:dokter_panggil/src/models/tindakan_lab_proses_model.dart';
-import 'package:dokter_panggil/src/models/tindakan_lab_tagihan_modal.dart';
-import 'package:dokter_panggil/src/pages/components/card_tagihan_lab.dart';
-import 'package:dokter_panggil/src/pages/components/confirm_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
-import 'package:dokter_panggil/src/pages/components/error_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/success_dialog.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
-import 'package:dokter_panggil/src/pages/components/tagihan/upload_hasil_lab.dart';
-import 'package:dokter_panggil/src/pages/components/transaksi_tindakan_lab.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
-import 'package:dokter_panggil/src/source/transition/slide_bottom_route.dart';
-import 'package:dokter_panggil/src/source/transition/slide_left_route.dart';
+import 'package:admin_dokter_panggil/src/blocs/delete_tagihan_tindakan_lab_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/dokumen_pengantar_lab_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/kunjungan_tindakan_lab_save_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_tindakan_lab_create_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/mr_dokumen_pengantar_lab_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tagihan_tindakan_lab_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tindakan_lab_proses_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/tindakan_lab_tagihan_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_pengantar_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/mr_dokumen_pengantar_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/tagihan_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_lab_proses_model.dart';
+import 'package:admin_dokter_panggil/src/models/tindakan_lab_tagihan_modal.dart';
+import 'package:admin_dokter_panggil/src/pages/components/card_tagihan_lab.dart';
+import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/tile_obat_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/tagihan/upload_hasil_lab.dart';
+import 'package:admin_dokter_panggil/src/pages/components/transaksi_tindakan_lab.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_bottom_route.dart';
+import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/source/transition/animated_dialog.dart';
+import 'package:admin_dokter_panggil/src/source/transition/animated_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -154,9 +154,14 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
   }
 
   Future<void> _shareDokumenPengantarLab(DokumenPengantarLab data) async {
-    Share.share(
-        'Hai, ${data.pasien!.namaPasien}.\n\nDokumen ini adalah Pengantar Laboratorium\n${Uri.parse(data.linkDoc!).toString()}',
-        subject: 'E-Pengantar ${data.pasien!.namaPasien}');
+    SharePlus.instance.share(
+      ShareParams(
+        title: 'Pengantar Lab ${data.pasien!.namaPasien}',
+        text:
+            'Hai, ${data.pasien!.namaPasien}.\n\nDokumen ini adalah Pengantar Laboratorium\n${Uri.parse(data.linkDoc!).toString()}',
+        subject: 'E-Pengantar ${data.pasien!.namaPasien}',
+      ),
+    );
   }
 
   void _showTindakanLab() {

@@ -1,6 +1,6 @@
-import 'package:dokter_panggil/src/models/tambah_perawat_hapus_model.dart';
-import 'package:dokter_panggil/src/models/tambah_perawat_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/tambah_perawat_hapus_model.dart';
+import 'package:admin_dokter_panggil/src/models/tambah_perawat_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class TambahPerawatRepo {
   Future<TambahPerawatModel> tambahPerawat(

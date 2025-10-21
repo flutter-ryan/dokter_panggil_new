@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/master_village_model.dart';
-import 'package:dokter_panggil/src/repositories/master_village_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/master_village_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/master_village_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MasterVillageBloc {
@@ -31,7 +31,7 @@ class MasterVillageBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamMasterVillage?.close();
     _filter.close();
   }

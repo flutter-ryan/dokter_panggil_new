@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
-import 'package:dokter_panggil/src/pages/pasien/resume_pemeriksaan_pasien_page.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/resume_pemeriksaan_pasien_page.dart';
 import 'package:flutter/material.dart';
 
 class ResumeResep extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/update_info_pegawai_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/update_info_pegawai_repo.dart';
+import 'package:admin_dokter_panggil/src/models/update_info_pegawai_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/update_info_pegawai_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class UpdateInfoPegawaiBloc {
@@ -38,7 +38,7 @@ class UpdateInfoPegawaiBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _nama.close();
     _profesi.close();
     _id.close();

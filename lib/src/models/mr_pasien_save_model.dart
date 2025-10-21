@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/master_village_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_village_model.dart';
 
 MrPasienSaveModel mrPasienSaveModelFromJson(dynamic str) =>
     MrPasienSaveModel.fromJson(str);

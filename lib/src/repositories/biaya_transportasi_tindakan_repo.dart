@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/biaya_transportasi_tindakan_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/biaya_transportasi_tindakan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class BiayaTransportasiTindakanRepo {
   Future<BiayaTransportasiTindakanModel> getTransportasiTindakan(int id) async {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_nonkonsul_save_model.dart';
-import 'package:dokter_panggil/src/repositories/pendaftaran_kunjungan_nonkonsul_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_nonkonsul_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pendaftaran_kunjungan_nonkonsul_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class PendaftaranKunjunganNonkonsulSaveBloc {
@@ -68,7 +68,7 @@ class PendaftaranKunjunganNonkonsulSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKunjunganNonkonsul?.close();
     _norm.close();
     _jam.close();

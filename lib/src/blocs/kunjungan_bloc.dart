@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjungan_model.dart';
-import 'package:dokter_panggil/src/repositories/kunjungan_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/kunjungan_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 
 class KunjunganBloc {
   final KunjunganRepo _repo = KunjunganRepo();
@@ -25,7 +25,7 @@ class KunjunganBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamKunjungan?.close();
   }
 }

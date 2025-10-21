@@ -1,14 +1,14 @@
-import 'package:dokter_panggil/src/blocs/master_tindakan_lab_create_bloc.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_create_model.dart';
-import 'package:dokter_panggil/src/models/master_tindakan_lab_model.dart';
-import 'package:dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:dokter_panggil/src/pages/components/search_input_form.dart';
-import 'package:dokter_panggil/src/pages/master/paket_page.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/source/config.dart';
-import 'package:dokter_panggil/src/source/size_config.dart';
+import 'package:admin_dokter_panggil/src/blocs/master_tindakan_lab_create_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_create_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_tindakan_lab_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
+import 'package:admin_dokter_panggil/src/pages/master/paket_page.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:dokter_panggil/src/pages/components/error_response.dart';
+import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 
 class ListMasterTindakanLabPaket extends StatefulWidget {
   const ListMasterTindakanLabPaket({

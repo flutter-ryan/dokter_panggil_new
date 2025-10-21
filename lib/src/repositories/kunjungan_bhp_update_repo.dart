@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/kunjungan_bhp_update_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/kunjungan_bhp_update_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class KunjunganBhpUpdateRepo {
   Future<ResponseKunjunganBhpUpdateModel> updateKunjunganBhp(

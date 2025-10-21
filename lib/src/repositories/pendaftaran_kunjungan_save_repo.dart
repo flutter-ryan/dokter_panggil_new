@@ -1,7 +1,7 @@
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_paket_save_mode.dart';
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
-import 'package:dokter_panggil/src/models/pendaftaran_pembelian_langsug_save_model.dart';
-import 'package:dokter_panggil/src/repositories/dio_helper.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_paket_save_mode.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_pembelian_langsug_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/dio_helper.dart';
 
 class PendaftaranKunjunganSaveRepo {
   Future<ResponsePendaftaranKunjunganSaveModel> saveKunjungan(

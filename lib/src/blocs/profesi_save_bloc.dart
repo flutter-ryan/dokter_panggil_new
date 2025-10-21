@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/profesi_save_model.dart';
-import 'package:dokter_panggil/src/repositories/profesi_delete_repo.dart';
-import 'package:dokter_panggil/src/repositories/profesi_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/profesi_update_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/profesi_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/profesi_delete_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/profesi_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/profesi_update_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/subjects.dart';
 
 class ProfesiSaveBloc {
@@ -76,7 +76,7 @@ class ProfesiSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamProfesiSave?.close();
     _profesi.close();
     _group.close();

@@ -1,5 +1,5 @@
-import 'package:dokter_panggil/src/models/master_identitas_model.dart';
-import 'package:dokter_panggil/src/models/master_village_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_identitas_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_village_model.dart';
 
 PasienShowModel pasienShowModelFromJson(dynamic str) =>
     PasienShowModel.fromJson(str);

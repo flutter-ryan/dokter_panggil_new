@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/cppt_pasien_model.dart';
-import 'package:dokter_panggil/src/repositories/cppt_pasien_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/cppt_pasien_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/cppt_pasien_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CpptPasienBloc {
@@ -34,7 +34,7 @@ class CpptPasienBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamCpptPasien?.close();
     _idKunjungan.close();
     _idPegawai.close();

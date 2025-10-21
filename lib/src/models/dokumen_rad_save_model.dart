@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/dokumen_rad_model.dart';
+import 'package:admin_dokter_panggil/src/models/dokumen_rad_model.dart';
 
 DokumenRadSaveModel dokumenRadSaveModelFromJson(dynamic str) =>
     DokumenRadSaveModel.fromJson(str);

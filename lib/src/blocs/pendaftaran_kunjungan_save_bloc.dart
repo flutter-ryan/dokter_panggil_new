@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_paket_save_mode.dart';
-import 'package:dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
-import 'package:dokter_panggil/src/repositories/pendaftaran_kunjungan_save_repo.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_paket_save_mode.dart';
+import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/pendaftaran_kunjungan_save_repo.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PendaftaranKunjunganSaveBloc {
@@ -131,7 +131,7 @@ class PendaftaranKunjunganSaveBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamPendaftaranSave?.close();
     _norm.close();
     _tanggal.close();

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/kunjunga_pasien_all_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/riwayat_kunjungan_all_repo.dart';
+import 'package:admin_dokter_panggil/src/models/kunjunga_pasien_all_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/riwayat_kunjungan_all_repo.dart';
 
 class KunjunganRiwayatAllBloc {
   KunjunganPasienAllModel? kunjungan;
@@ -48,7 +48,7 @@ class KunjunganRiwayatAllBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamRiwayatKunjungan?.close();
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dokter_panggil/src/models/pasien_show_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_show_model.dart';
 
 String pasienModelToJson(PasienModel data) => json.encode(data.toJson());
 

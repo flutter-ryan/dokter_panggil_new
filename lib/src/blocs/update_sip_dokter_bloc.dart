@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:dokter_panggil/src/models/update_sip_dokter_model.dart';
-import 'package:dokter_panggil/src/repositories/responseApi/api_response.dart';
-import 'package:dokter_panggil/src/repositories/update_sip_dokter_repo.dart';
+import 'package:admin_dokter_panggil/src/models/update_sip_dokter_model.dart';
+import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
+import 'package:admin_dokter_panggil/src/repositories/update_sip_dokter_repo.dart';
 import 'package:rxdart/subjects.dart';
 
 class UpdateSipDokterBloc {
@@ -38,7 +38,7 @@ class UpdateSipDokterBloc {
     }
   }
 
-  dispose() {
+  void dispose() {
     _streamUpdateSip?.close();
     _nomor.close();
     _tanggal.close();

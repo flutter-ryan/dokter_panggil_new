@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:dokter_panggil/src/models/master_bhp_model.dart';
-import 'package:dokter_panggil/src/pages/components/button_circle_widget.dart';
-import 'package:dokter_panggil/src/pages/components/button_rounded_widget.dart';
-import 'package:dokter_panggil/src/pages/components/list_master_bhp_category.dart';
-import 'package:dokter_panggil/src/source/config.dart';
+import 'package:admin_dokter_panggil/src/models/master_bhp_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/button_circle_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/button_rounded_widget.dart';
+import 'package:admin_dokter_panggil/src/pages/components/list_master_bhp_category.dart';
+import 'package:admin_dokter_panggil/src/source/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';

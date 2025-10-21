@@ -1,4 +1,4 @@
-import 'package:dokter_panggil/src/models/master_jabatan_model.dart';
+import 'package:admin_dokter_panggil/src/models/master_jabatan_model.dart';
 import 'package:flutter/material.dart';
 
 class ListJabatanWidget extends StatefulWidget {
