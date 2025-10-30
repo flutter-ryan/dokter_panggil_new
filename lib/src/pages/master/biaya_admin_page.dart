@@ -368,58 +368,53 @@ class _FormBiayaAdminWidgetState extends State<FormBiayaAdminWidget> {
             const SizedBox(
               height: 12.0,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.3, color: Colors.grey),
-                      borderRadius: BorderRadius.circular(12.0),
-                      color: Colors.grey[200],
-                    ),
-                    child: Center(
-                      child: RadioListTile(
-                        value: 'rupiah',
-                        activeColor: kPrimaryColor,
-                        groupValue: _groupJenisBiaya,
-                        onChanged: (newval) {
-                          setState(() {
-                            _groupJenisBiaya = '$newval';
-                            _biaya.clear();
-                          });
-                        },
-                        title: const Text('Rupiah'),
+            RadioGroup<String>(
+              groupValue: _groupJenisBiaya,
+              onChanged: (String? newval) {
+                setState(() {
+                  _groupJenisBiaya = '$newval';
+                  _biaya.clear();
+                });
+              },
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 0.3, color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12.0),
+                        color: Colors.grey[200],
+                      ),
+                      child: Center(
+                        child: RadioListTile<String>(
+                          value: 'rupiah',
+                          activeColor: kPrimaryColor,
+                          title: const Text('Rupiah'),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 12.0,
-                ),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.3, color: Colors.grey),
-                      borderRadius: BorderRadius.circular(12.0),
-                      color: Colors.grey[200],
-                    ),
-                    child: Center(
-                      child: RadioListTile(
-                        value: 'persen',
-                        groupValue: _groupJenisBiaya,
-                        activeColor: kPrimaryColor,
-                        onChanged: (newval) {
-                          setState(() {
-                            _groupJenisBiaya = '$newval';
-                            _biaya.clear();
-                          });
-                        },
-                        title: const Text('Persen'),
+                  const SizedBox(
+                    width: 12.0,
+                  ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 0.3, color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12.0),
+                        color: Colors.grey[200],
+                      ),
+                      child: Center(
+                        child: RadioListTile<String>(
+                          value: 'persen',
+                          activeColor: kPrimaryColor,
+                          title: const Text('Persen'),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(
               height: 22.0,

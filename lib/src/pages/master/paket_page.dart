@@ -691,59 +691,54 @@ class _PaketPageState extends State<PaketPage> {
           const SizedBox(
             height: 12.0,
           ),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 0.3, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.grey[200],
-                  ),
-                  child: Center(
-                    child: RadioListTile(
-                      value: 'nominal',
-                      activeColor: kPrimaryColor,
-                      groupValue: _groupJenisHarga,
-                      onChanged: (newval) {
-                        setState(() {
-                          _groupJenisHarga = '$newval';
-                          _harga.clear();
-                          _persen.clear();
-                        });
-                      },
-                      title: const Text('Nominal'),
+          RadioGroup<String>(
+            groupValue: _groupJenisHarga,
+            onChanged: (newval) {
+              setState(() {
+                _groupJenisHarga = '$newval';
+                _harga.clear();
+                _persen.clear();
+              });
+            },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.3, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Colors.grey[200],
+                    ),
+                    child: Center(
+                      child: RadioListTile<String>(
+                        value: 'nominal',
+                        activeColor: kPrimaryColor,
+                        title: const Text('Nominal'),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 12.0,
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 0.3, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.grey[200],
-                  ),
-                  child: Center(
-                    child: RadioListTile(
-                      value: 'persen',
-                      groupValue: _groupJenisHarga,
-                      activeColor: kPrimaryColor,
-                      onChanged: (newval) {
-                        setState(() {
-                          _groupJenisHarga = '$newval';
-                          _harga.text = "0";
-                        });
-                      },
-                      title: const Text('Persen'),
+                const SizedBox(
+                  width: 12.0,
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.3, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Colors.grey[200],
+                    ),
+                    child: Center(
+                      child: RadioListTile<String>(
+                        value: 'persen',
+                        activeColor: kPrimaryColor,
+                        title: const Text('Persen'),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

@@ -211,28 +211,29 @@ class _MitraPageState extends State<MitraPage> {
                       'Jenis Mitra',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    RadioListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0.0),
-                      value: 'farmasi',
-                      groupValue: _jenisGroup,
-                      onChanged: (value) {
-                        setState(() {
-                          _jenisGroup = value as String;
-                        });
-                      },
-                      title: const Text('Farmasi'),
-                    ),
-                    RadioListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0.0),
-                      value: 'tindakan_lab',
-                      groupValue: _jenisGroup,
-                      onChanged: (value) {
-                        setState(() {
-                          _jenisGroup = value as String;
-                        });
-                      },
-                      title: const Text('Tindakan lab'),
-                    ),
+                    RadioGroup<String>(
+                        groupValue: _jenisGroup,
+                        onChanged: (value) {
+                          setState(() {
+                            _jenisGroup = value as String;
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            RadioListTile<String>(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 0.0),
+                              value: 'farmasi',
+                              title: const Text('Farmasi'),
+                            ),
+                            RadioListTile<String>(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 0.0),
+                              value: 'tindakan_lab',
+                              title: const Text('Tindakan lab'),
+                            ),
+                          ],
+                        )),
                     const SizedBox(
                       height: 22.0,
                     ),

@@ -20,7 +20,7 @@ import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:admin_dokter_panggil/src/pages/components/search_input_form.dart';
 import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
 import 'package:admin_dokter_panggil/src/pages/pasien/edit_pasien_page.dart';
-import 'package:admin_dokter_panggil/src/pages/pasien/new_riwayat_pasien.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/mr_riwayat_pasien.dart';
 import 'package:admin_dokter_panggil/src/pages/pasien/pendaftaran_layanan_page.dart';
 import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:admin_dokter_panggil/src/source/config.dart';
@@ -517,21 +517,21 @@ class _PasienWidgetState extends State<PasienWidget> {
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.w600),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: pasien.idSatuSehat != null
-                          ? Colors.green
-                          : Colors.red,
-                      borderRadius: BorderRadius.circular(18),
+                  if (pasien.idSatuSehat != null)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: pasien.idSatuSehat != null
+                            ? Colors.green
+                            : Colors.red,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Text(
+                        'ID Satusehat: ${pasien.idSatuSehat}',
+                        style: TextStyle(fontSize: 13, color: Colors.grey[50]),
+                      ),
                     ),
-                    child: Text(
-                      pasien.idSatuSehat != null
-                          ? 'ID Satusehat: ${pasien.idSatuSehat}'
-                          : 'Belum melakukan siknronisasi satu sehat',
-                      style: TextStyle(fontSize: 13, color: Colors.grey[50]),
-                    ),
-                  ),
                   const SizedBox(
                     height: 8.0,
                   ),
@@ -591,16 +591,17 @@ class _PasienWidgetState extends State<PasienWidget> {
             padding: const EdgeInsets.only(top: 8.0),
             child: ElevatedButton.icon(
               onPressed: () => Navigator.push(
-                  context,
-                  SlideBottomRoute(
-                    page: NewRiwayatPasien(pasien: pasien),
-                  )),
+                context,
+                SlideBottomRoute(
+                  page: MrRiwayatPasien(pasien: pasien),
+                ),
+              ),
               icon: const FaIcon(FontAwesomeIcons.paste),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple,
                 minimumSize: const Size(double.infinity, 45),
               ),
-              label: const Text('Resume Medis'),
+              label: const Text('Riwayat Medis'),
             ),
           ),
         const SizedBox(

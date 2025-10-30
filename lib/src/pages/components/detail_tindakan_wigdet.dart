@@ -768,10 +768,16 @@ class _FormTransportasiState extends State<FormTransportasi> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Transportasi ${widget.data.namaTindakan}',
-              style:
-                  const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Transportasi\n${widget.data.namaTindakan}',
+                    style: const TextStyle(
+                        fontSize: 18.0, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 32.0,
@@ -798,10 +804,16 @@ class _FormTransportasiState extends State<FormTransportasi> {
             ),
             RadioGroup<SelectedTransport>(
               groupValue: _selectedTransport,
+              onChanged: (SelectedTransport? value) {
+                setState(() {
+                  _selectedTransport = value!;
+                  _isError = false;
+                });
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: widget.transportasi.map((e) {
-                  return RadioListTile<SelectedTransport?>(
+                  return RadioListTile(
                     contentPadding: EdgeInsets.zero,
                     value: SelectedTransport(id: e.id!, nilai: e.nilai!),
                     activeColor: kPrimaryColor,
@@ -809,12 +821,6 @@ class _FormTransportasiState extends State<FormTransportasi> {
                   );
                 }).toList(),
               ),
-              onChanged: (SelectedTransport? value) {
-                setState(() {
-                  _selectedTransport = value;
-                  _isError = false;
-                });
-              },
             ),
             if (_isError)
               const Text(
@@ -926,4 +932,14 @@ class SelectedTransport {
     required this.id,
     required this.nilai,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SelectedTransport &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

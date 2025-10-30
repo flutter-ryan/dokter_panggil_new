@@ -194,50 +194,46 @@ class _DiskonPageState extends State<DiskonPage> {
                       const SizedBox(
                         height: 12.0,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: RadioListTile(
-                              contentPadding: EdgeInsets.zero,
-                              value: 0,
-                              groupValue: _persen,
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  color: Colors.grey,
-                                  width: 0.3,
+                      RadioGroup<int>(
+                        groupValue: _persen,
+                        onChanged: (int? value) {
+                          setState(() {
+                            _persen = value!;
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: RadioListTile<int>(
+                                contentPadding: EdgeInsets.zero,
+                                value: 0,
+                                shape: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.3,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                                borderRadius: BorderRadius.circular(12.0),
+                                title: const Text('Nominal'),
                               ),
-                              onChanged: (int? value) {
-                                setState(() {
-                                  _persen = value!;
-                                });
-                              },
-                              title: const Text('Nominal'),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 8.0,
-                          ),
-                          Expanded(
-                            child: RadioListTile(
-                              contentPadding: EdgeInsets.zero,
-                              value: 1,
-                              groupValue: _persen,
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                    color: Colors.grey, width: 0.3),
-                                borderRadius: BorderRadius.circular(12.0),
+                            const SizedBox(
+                              width: 8.0,
+                            ),
+                            Expanded(
+                              child: RadioListTile<int>(
+                                contentPadding: EdgeInsets.zero,
+                                value: 1,
+                                shape: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                      color: Colors.grey, width: 0.3),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                title: const Text('Persen'),
                               ),
-                              onChanged: (int? value) {
-                                setState(() {
-                                  _persen = value!;
-                                });
-                              },
-                              title: const Text('Persen'),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 32.0,

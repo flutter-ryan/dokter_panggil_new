@@ -301,48 +301,44 @@ class _TindakanLabPageState extends State<TindakanLabPage> {
                   const SizedBox(
                     height: 12.0,
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile(
-                          contentPadding: EdgeInsets.zero,
-                          value: 1,
-                          groupValue: _jenisTindakan,
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                                color: Colors.grey, width: 0.3),
-                            borderRadius: BorderRadius.circular(12.0),
+                  RadioGroup<int>(
+                    groupValue: _jenisTindakan,
+                    onChanged: (int? value) {
+                      setState(() {
+                        _jenisTindakan = value!;
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            value: 1,
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  color: Colors.grey, width: 0.3),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            title: const Text('Konsul'),
                           ),
-                          onChanged: (int? value) {
-                            setState(() {
-                              _jenisTindakan = value!;
-                            });
-                          },
-                          title: const Text('Konsul'),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 8.0,
-                      ),
-                      Expanded(
-                        child: RadioListTile(
-                          contentPadding: EdgeInsets.zero,
-                          value: 0,
-                          groupValue: _jenisTindakan,
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                                color: Colors.grey, width: 0.3),
-                            borderRadius: BorderRadius.circular(12.0),
+                        const SizedBox(
+                          width: 8.0,
+                        ),
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            value: 0,
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  color: Colors.grey, width: 0.3),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            title: const Text('Non Konsul'),
                           ),
-                          onChanged: (int? value) {
-                            setState(() {
-                              _jenisTindakan = value!;
-                            });
-                          },
-                          title: const Text('Non Konsul'),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 52.0,

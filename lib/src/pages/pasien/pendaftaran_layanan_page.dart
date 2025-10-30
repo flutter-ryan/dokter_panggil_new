@@ -259,7 +259,6 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
           _isDokter = data.isDokter!;
           _isPerawat = data.isPerawat!;
         });
-
         _mrKunjunganPasienBloc.layananSink.add(data.id!);
       }
     });
@@ -301,6 +300,7 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
       _mrKunjunganPasienBloc.keluhanSink.add(_keluhanCon.text);
       _mrKunjunganPasienBloc.namaWaliSink.add(_namaWali.text);
       _mrKunjunganPasienBloc.nomorWaliSink.add(_nomorWali.text);
+      // _mrKunjunganPasienBloc.layananSink.add(_layananCon.text);
       _mrKunjunganPasienBloc.tokensSink.add(_tokens);
       if (bayar == 1) {
         _mrKunjunganPasienBloc.statusSink.add(4);
@@ -997,49 +997,39 @@ class _FormPendaftaranLayananState extends State<FormPendaftaranLayanan> {
             }
             return null;
           },
-          builder: (state) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RadioListTile(
-                value: 'Tidak beresiko',
-                groupValue: state.value,
-                title: const Text('Tidak Beresiko'),
-                contentPadding: EdgeInsets.zero,
-                onChanged: (newValue) {
-                  state.didChange(newValue);
-                  _mrKunjunganPasienBloc.resikoJatuh.add('');
-                  _mrKunjunganPasienBloc.keputusanResikoJatuhSink.add('');
-                },
-              ),
-              RadioListTile(
-                value: 'Menggunakan Alat Bantu',
-                groupValue: state.value,
-                title: const Text('Menggunakan Alat Bantu'),
-                contentPadding: EdgeInsets.zero,
-                onChanged: (newValue) {
-                  state.didChange(newValue);
-                },
-              ),
-              RadioListTile(
-                value: 'Gangguan Saat Jalan',
-                groupValue: state.value,
-                title: const Text('Gangguan Saat Jalan'),
-                contentPadding: EdgeInsets.zero,
-                onChanged: (newValue) {
-                  state.didChange(newValue);
-                },
-              ),
-              RadioListTile(
-                value: 'Menggunakan Penutup Mata (Salah Satu/Keduanya)',
-                groupValue: state.value,
-                title: const Text(
-                    'Menggunakan Penutup Mata (Salah Satu/Keduanya)'),
-                contentPadding: EdgeInsets.zero,
-                onChanged: (newValue) {
-                  state.didChange(newValue);
-                },
-              )
-            ],
+          builder: (state) => RadioGroup<String>(
+            groupValue: '${state.value}',
+            onChanged: (newValue) {
+              state.didChange(newValue);
+              _mrKunjunganPasienBloc.resikoJatuh.add('');
+              _mrKunjunganPasienBloc.keputusanResikoJatuhSink.add('');
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RadioListTile(
+                  value: 'Tidak beresiko',
+                  title: const Text('Tidak Beresiko'),
+                  contentPadding: EdgeInsets.zero,
+                ),
+                RadioListTile(
+                  value: 'Menggunakan Alat Bantu',
+                  title: const Text('Menggunakan Alat Bantu'),
+                  contentPadding: EdgeInsets.zero,
+                ),
+                RadioListTile(
+                  value: 'Gangguan Saat Jalan',
+                  title: const Text('Gangguan Saat Jalan'),
+                  contentPadding: EdgeInsets.zero,
+                ),
+                RadioListTile(
+                  value: 'Menggunakan Penutup Mata (Salah Satu/Keduanya)',
+                  title: const Text(
+                      'Menggunakan Penutup Mata (Salah Satu/Keduanya)'),
+                  contentPadding: EdgeInsets.zero,
+                )
+              ],
+            ),
           ),
         ),
       ],
