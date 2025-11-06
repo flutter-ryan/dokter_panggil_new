@@ -1,7 +1,6 @@
 import 'package:admin_dokter_panggil/src/models/pendaftaran_kunjungan_save_model.dart';
 import 'package:admin_dokter_panggil/src/pages/pasien/detail_layanan_page.dart';
 import 'package:admin_dokter_panggil/src/source/config.dart';
-import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 
 class CardKunjunganPasien extends StatefulWidget {
@@ -24,12 +23,18 @@ class _CardKunjunganPasienState extends State<CardKunjunganPasien> {
   void _pilihKunjungan() {
     Navigator.push(
       context,
-      SlideLeftRoute(
-        page: DetailLayananPage(
+      MaterialPageRoute(
+        builder: (_) => DetailLayananPage(
           id: widget.kunjungan.id!,
           type: widget.type,
         ),
       ),
+      // SlideLeftRoute(
+      //   page: DetailLayananPage(
+      //     id: widget.kunjungan.id!,
+      //     type: widget.type,
+      //   ),
+      // ),
     ).then((value) {
       if (value != null) {
         var data = value as Kunjungan;

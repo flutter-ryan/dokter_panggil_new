@@ -1,13 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:admin_dokter_panggil/src/models/mr_pengkajian_telemedicine_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/dashboard_card_widget.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:path/path.dart' as p;
 
 class MrDokumentasiForm extends StatefulWidget {
   const MrDokumentasiForm({

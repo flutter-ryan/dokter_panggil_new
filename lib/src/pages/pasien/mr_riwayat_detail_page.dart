@@ -1,9 +1,9 @@
-import 'package:admin_dokter_panggil/src/blocs/mr_riwayat_detail_bloc.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
+import 'package:admin_dokter_panggil/src/blocs/mr_menu_bloc.dart';
+import 'package:admin_dokter_panggil/src/models/mr_menu_model.dart';
 import 'package:admin_dokter_panggil/src/models/mr_riwayat_kunjungan_model.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
-import 'package:admin_dokter_panggil/src/pages/pasien/mr_detail_riwayat.dart';
 import 'package:admin_dokter_panggil/src/pages/pasien/mr_riwayat_pasien/mr_body_riwayat_widget.dart';
 import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:admin_dokter_panggil/src/source/color_style.dart';
@@ -23,22 +23,22 @@ class MrRiwayatDetailPage extends StatefulWidget {
 }
 
 class _MrRiwayatDetailPageState extends State<MrRiwayatDetailPage> {
-  final _mrRiwayatdetailBloc = MrRiwayatDetailBloc();
+  final _mrMenuBloc = MrMenuBloc();
 
   @override
   void initState() {
     super.initState();
-    _getDetail();
+    _getMenu();
   }
 
-  void _getDetail() {
-    _mrRiwayatdetailBloc.idKunjunganSink.add(widget.data!.idKunjungan!);
-    _mrRiwayatdetailBloc.getRiwayatDetail();
+  void _getMenu() {
+    _mrMenuBloc.idKunjunganSink.add(widget.data!.idKunjungan!);
+    _mrMenuBloc.getMrMenu();
   }
 
   @override
   void dispose() {
-    _mrRiwayatdetailBloc.dispose();
+    _mrMenuBloc.dispose();
     super.dispose();
   }
 
@@ -46,14 +46,34 @@ class _MrRiwayatDetailPageState extends State<MrRiwayatDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Riwayat pasien',
+        title: Row(
+          children: [
+            SvgPicture.asset(
+              'images/calendar.svg',
+              height: 24,
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                '${widget.data!.tanggal}',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+          ],
         ),
+        leadingWidth: 12,
+        leading: Container(),
         centerTitle: false,
         foregroundColor: Colors.black,
         backgroundColor: kBgRedLightColor,
         systemOverlayStyle: kSystemOverlayLight,
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: CloseButtonWidget(),
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: Padding(
@@ -109,8 +129,8 @@ class _MrRiwayatDetailPageState extends State<MrRiwayatDetailPage> {
   }
 
   Widget _buildStreamRiwayatDetail(BuildContext context) {
-    return StreamBuilder<ApiResponse<MrRiwayatDetailModel>>(
-      stream: _mrRiwayatdetailBloc.riwayatDetailStream,
+    return StreamBuilder<ApiResponse<List<MrMenu>>>(
+      stream: _mrMenuBloc.mrMenuStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           switch (snapshot.data!.status) {
@@ -128,24 +148,9 @@ class _MrRiwayatDetailPageState extends State<MrRiwayatDetailPage> {
                 ),
               );
             case Status.completed:
-              return Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(color: kBgRedLightColor),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 32),
-                      leading: SvgPicture.asset('images/calendar.svg'),
-                      visualDensity: VisualDensity.compact,
-                      title: Text('${widget.data!.tanggal}'),
-                      minLeadingWidth: 12,
-                    ),
-                  ),
-                  Expanded(
-                    child: DetailRiwayatPasien(
-                      data: snapshot.data!.data!.data,
-                    ),
-                  ),
-                ],
+              return DetailRiwayatPasien(
+                data: snapshot.data!.data,
+                riwayatKunjungan: widget.data,
               );
           }
         }
@@ -159,9 +164,11 @@ class DetailRiwayatPasien extends StatefulWidget {
   const DetailRiwayatPasien({
     super.key,
     this.data,
+    this.riwayatKunjungan,
   });
 
-  final MrRiwayatDetail? data;
+  final List<MrMenu>? data;
+  final MrRiwayatKunjungan? riwayatKunjungan;
 
   @override
   State<DetailRiwayatPasien> createState() => _DetailRiwayatPasienState();
@@ -169,99 +176,18 @@ class DetailRiwayatPasien extends StatefulWidget {
 
 class _DetailRiwayatPasienState extends State<DetailRiwayatPasien>
     with SingleTickerProviderStateMixin {
-  MrRiwayatDetail? _detailRiwayat;
   late TabController _controller;
-  final List<TabTileModel> _listTab = [];
+  List<MrMenu> _menus = [];
 
   @override
   void initState() {
     super.initState();
-    _detailRiwayat = widget.data;
-    _initRiwayatTab();
+    _initMenu();
   }
 
-  void _initRiwayatTab() {
-    _listTab.clear();
-    _listTab.add(TabTileModel(id: 0, title: 'Mr.0', subtitle: 'Screening'));
-    if (_detailRiwayat!.mr1! && !_detailRiwayat!.mr3!) {
-      _listTab.add(
-        TabTileModel(id: 2, title: 'Mr.1', subtitle: 'Pengkajian Telemedicine'),
-      );
-    }
-    if (_detailRiwayat!.mr2!) {
-      _listTab.add(
-        TabTileModel(id: 3, title: 'Mr.2', subtitle: 'Resume Medis'),
-      );
-    }
-    if (_detailRiwayat!.mr3!) {
-      _listTab.add(
-        TabTileModel(id: 4, title: 'Mr.3', subtitle: 'Pengkajian Dokter'),
-      );
-    }
-    if (_detailRiwayat!.mr4!) {
-      _listTab.add(
-        TabTileModel(id: 5, title: 'Mr.4', subtitle: 'Pengkajian Perawat'),
-      );
-    }
-    if (_detailRiwayat!.mr5!) {
-      _listTab.add(
-        TabTileModel(id: 6, title: 'Mr.5', subtitle: 'Discharge Planning'),
-      );
-    }
-    if (_detailRiwayat!.mr6!) {
-      _listTab.add(
-        TabTileModel(id: 7, title: 'Mr.6', subtitle: 'CPPT'),
-      );
-    }
-    if (_detailRiwayat!.mr7!) {
-      _listTab.add(
-        TabTileModel(
-            id: 8, title: 'Mr.7', subtitle: 'Impelementasi Keperawatan'),
-      );
-    }
-    if (_detailRiwayat!.mr8!) {
-      _listTab.add(
-        TabTileModel(id: 9, title: 'Mr.8', subtitle: 'Observasi Komprehensif'),
-      );
-    }
-    if (_detailRiwayat!.mr9!) {
-      _listTab.add(
-        TabTileModel(id: 10, title: 'Mr.9', subtitle: 'Daftar Pengobatan'),
-      );
-    }
-    if (_detailRiwayat!.mr10!) {
-      _listTab.add(
-        TabTileModel(id: 12, title: 'Mr.10', subtitle: 'Formulir Edukasi'),
-      );
-    }
-    if (_detailRiwayat!.mr11!) {
-      _listTab.add(
-        TabTileModel(id: 13, title: 'Mr.11', subtitle: 'Consent Tindakan'),
-      );
-    }
-    if (_detailRiwayat!.mr12!) {
-      _listTab.add(
-        TabTileModel(
-            id: 14, title: 'Mr.12', subtitle: 'Tindakan Anestesi Bedah'),
-      );
-    }
-    if (_detailRiwayat!.mr13!) {
-      _listTab.add(
-        TabTileModel(id: 15, title: 'Mr.13', subtitle: 'Rujukan'),
-      );
-    }
-    if (_detailRiwayat!.mr14!) {
-      _listTab.add(
-        TabTileModel(id: 16, title: 'Mr.14', subtitle: 'Timbang Terima'),
-      );
-    }
-    if (_detailRiwayat!.mr15!) {
-      _listTab.add(
-        TabTileModel(id: 17, title: 'Mr.15', subtitle: 'Penghentian Layanan'),
-      );
-    }
-    _listTab.sort((a, b) => a.id!.compareTo(b.id!));
-    _controller = TabController(length: _listTab.length, vsync: this);
+  void _initMenu() {
+    _menus = widget.data!.where((menu) => menu.visible).toList();
+    _controller = TabController(length: _menus.length, vsync: this);
   }
 
   @override
@@ -288,7 +214,7 @@ class _DetailRiwayatPasienState extends State<DetailRiwayatPasien>
             indicatorWeight: 2,
             labelPadding: const EdgeInsets.symmetric(horizontal: 8.0),
             tabs: [
-              ..._listTab.map(
+              ..._menus.map(
                 (tab) => TabCustomWidget(
                   title: tab.title,
                   subtitle: tab.subtitle,
@@ -301,10 +227,10 @@ class _DetailRiwayatPasienState extends State<DetailRiwayatPasien>
           child: TabBarView(
             controller: _controller,
             children: [
-              ..._listTab.map(
+              ..._menus.map(
                 (tab) => MrBodyRiwayatWidget(
                   tileModel: tab,
-                  data: _detailRiwayat,
+                  riwayatKunjungan: widget.riwayatKunjungan,
                 ),
               ),
             ],
@@ -313,25 +239,6 @@ class _DetailRiwayatPasienState extends State<DetailRiwayatPasien>
       ],
     );
   }
-}
-
-class TabTileModel {
-  TabTileModel({
-    this.id,
-    this.title,
-    this.subtitle,
-    this.isShow = true,
-    this.page,
-    this.color,
-    this.textColor,
-  });
-  final int? id;
-  final String? title;
-  final String? subtitle;
-  final bool isShow;
-  final Widget? page;
-  final Color? color;
-  final Color? textColor;
 }
 
 class TabCustomWidget extends StatelessWidget {

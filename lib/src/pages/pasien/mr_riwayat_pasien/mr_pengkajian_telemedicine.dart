@@ -1,6 +1,5 @@
 import 'package:admin_dokter_panggil/src/blocs/mr_pengkajian_telemedicine_bloc.dart';
 import 'package:admin_dokter_panggil/src/models/mr_pengkajian_telemedicine_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/dashboard_card_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/dashboard_sub_form_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
@@ -24,10 +23,10 @@ import 'package:flutter/material.dart';
 class MrPengkajianTelemedicine extends StatefulWidget {
   const MrPengkajianTelemedicine({
     super.key,
-    this.data,
+    this.idKunjungan,
   });
 
-  final MrRiwayatDetail? data;
+  final int? idKunjungan;
 
   @override
   State<MrPengkajianTelemedicine> createState() =>
@@ -44,7 +43,7 @@ class _MrPengkajianTelemedicineState extends State<MrPengkajianTelemedicine> {
   }
 
   void _getPengkajianTelemedicine() {
-    _mrPengkajianTelemedicineBloc.idKunjunganSink.add(widget.data!.id!);
+    _mrPengkajianTelemedicineBloc.idKunjunganSink.add(widget.idKunjungan!);
     _mrPengkajianTelemedicineBloc.getPengkajianTelemedicine();
   }
 
@@ -76,7 +75,7 @@ class _MrPengkajianTelemedicineState extends State<MrPengkajianTelemedicine> {
             case Status.completed:
               return PengkajianTelemedicineWidget(
                 data: snapshot.data!.data!.data,
-                idKunjungan: widget.data!.id,
+                idKunjungan: widget.idKunjungan,
               );
           }
         }

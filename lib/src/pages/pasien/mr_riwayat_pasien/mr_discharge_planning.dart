@@ -1,6 +1,5 @@
 import 'package:admin_dokter_panggil/src/blocs/mr_kunjungan_discharge_planning_bloc.dart';
 import 'package:admin_dokter_panggil/src/models/mr_kunjungan_discharge_planning_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/dashboard_card_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
@@ -11,10 +10,10 @@ import 'package:flutter/material.dart';
 class MrDischargePlanning extends StatefulWidget {
   const MrDischargePlanning({
     super.key,
-    this.data,
+    this.idKunjungan,
   });
 
-  final MrRiwayatDetail? data;
+  final int? idKunjungan;
 
   @override
   State<MrDischargePlanning> createState() => _MrDischargePlanningState();
@@ -30,7 +29,7 @@ class _MrDischargePlanningState extends State<MrDischargePlanning> {
   }
 
   void _getDischargePlanning() {
-    _mrKunjunganDischargePlanningBloc.idKunjunganSink.add(widget.data!.id!);
+    _mrKunjunganDischargePlanningBloc.idKunjunganSink.add(widget.idKunjungan!);
     _mrKunjunganDischargePlanningBloc.getDischargePlanning();
   }
 

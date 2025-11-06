@@ -1,6 +1,5 @@
 import 'package:admin_dokter_panggil/src/blocs/mr_kunjungan_resume_medis_bloc.dart';
 import 'package:admin_dokter_panggil/src/models/mr_kunjungan_resume_medis_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/deskripsi_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
@@ -11,10 +10,10 @@ import 'package:flutter/material.dart';
 class MrResumeMedis extends StatefulWidget {
   const MrResumeMedis({
     super.key,
-    this.data,
+    this.idKunjungan,
   });
 
-  final MrRiwayatDetail? data;
+  final int? idKunjungan;
 
   @override
   State<MrResumeMedis> createState() => _MrResumeMedisState();
@@ -30,7 +29,7 @@ class _MrResumeMedisState extends State<MrResumeMedis> {
   }
 
   void _getResumeMedis() {
-    _mrKunjunganResumeMedisBloc.idKunjunganSink.add(widget.data!.id!);
+    _mrKunjunganResumeMedisBloc.idKunjunganSink.add(widget.idKunjungan!);
     _mrKunjunganResumeMedisBloc.getResumeMedis();
   }
 

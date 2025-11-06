@@ -1,6 +1,5 @@
 import 'package:admin_dokter_panggil/src/blocs/mr_kunjungan_persetujuan_pasien_bloc.dart';
 import 'package:admin_dokter_panggil/src/models/mr_kunjungan_persetujuan_pasien_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/card_file_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
@@ -14,11 +13,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class MrPersetujuan extends StatefulWidget {
   const MrPersetujuan({
     super.key,
-    this.data,
+    this.idKunjungan,
     this.isPerawat = false,
   });
 
-  final MrRiwayatDetail? data;
+  final int? idKunjungan;
   final bool isPerawat;
 
   @override
@@ -35,8 +34,7 @@ class _MrPersetujuanState extends State<MrPersetujuan> {
   }
 
   void _getPersetujuan() {
-    _mrKunjunganPersetujuanPasienBloc.idKunjunganSink
-        .add(widget.data!.kunjungan!.id!);
+    _mrKunjunganPersetujuanPasienBloc.idKunjunganSink.add(widget.idKunjungan!);
     _mrKunjunganPersetujuanPasienBloc.getPersetujuan();
   }
 
@@ -68,42 +66,6 @@ class _MrPersetujuanState extends State<MrPersetujuan> {
         }
         return const SizedBox();
       },
-    );
-  }
-
-  Widget _buildPilihanPersetujuan(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(22),
-            child: Text(
-              'Pilih Persetujuan',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          ListTile(
-            onTap: () => Navigator.pop(context, 'observasi'),
-            title: const Text('Persetujuan Observasi'),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 22, vertical: 6),
-            trailing: const Icon(Icons.keyboard_arrow_right),
-          ),
-          const Divider(
-            height: 0,
-          ),
-          ListTile(
-            onTap: () => Navigator.pop(context, 'rawatInap'),
-            title: const Text('Persetujuan Rawat Inap'),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 22, vertical: 6),
-            trailing: const Icon(Icons.keyboard_arrow_right),
-          )
-        ],
-      ),
     );
   }
 }

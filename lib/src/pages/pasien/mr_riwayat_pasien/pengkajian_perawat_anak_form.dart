@@ -1,6 +1,6 @@
 import 'package:admin_dokter_panggil/src/models/mr_kunjungan_pengkajian_perawat_model.dart';
 import 'package:admin_dokter_panggil/src/models/mr_pengkajian_perawat_anak_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_show_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/dashboard_card_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/deskripsi_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/inline_deskripsi_widget.dart';
@@ -21,7 +21,7 @@ class PengkajianPerawatAnakForm extends StatefulWidget {
 
   final int? idKunjungan;
   final MrPengkajianPerawatAnak? data;
-  final PasienRiwayatAdmin pasien;
+  final Pasien pasien;
   final bool isPerawat;
 
   @override

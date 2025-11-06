@@ -1,6 +1,5 @@
 import 'package:admin_dokter_panggil/src/blocs/mr_kunjungan_skrining_bloc.dart';
 import 'package:admin_dokter_panggil/src/models/mr_kunjungan_skrining_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/dashboard_card_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
@@ -11,10 +10,10 @@ import 'package:flutter/material.dart';
 class MrScreening extends StatefulWidget {
   const MrScreening({
     super.key,
-    this.data,
+    this.idKunjungan,
   });
 
-  final MrRiwayatDetail? data;
+  final int? idKunjungan;
 
   @override
   State<MrScreening> createState() => _MrScreeningState();
@@ -30,7 +29,7 @@ class _MrScreeningState extends State<MrScreening> {
   }
 
   void _getSkrining() {
-    _mrKunjunganSkriningBloc.idKunjunganSink.add(widget.data!.id!);
+    _mrKunjunganSkriningBloc.idKunjunganSink.add(widget.idKunjungan!);
     _mrKunjunganSkriningBloc.getSkrining();
   }
 

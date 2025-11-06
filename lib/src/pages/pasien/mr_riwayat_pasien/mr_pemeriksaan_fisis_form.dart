@@ -1,5 +1,5 @@
 import 'package:admin_dokter_panggil/src/models/mr_pengkajian_dokter_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/pasien_show_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/dashboard_card_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/deskripsi_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/inline_deskripsi_widget.dart';
@@ -14,7 +14,7 @@ class MrPemeriksaanFisisForm extends StatefulWidget {
   });
 
   final int? idKunjungan;
-  final PasienRiwayatAdmin? pasien;
+  final Pasien? pasien;
   final MrKunjunganPemeriksaanFisis? mrKunjunganPemeriksaanFisis;
 
   @override
@@ -46,18 +46,18 @@ class _MrPemeriksaanFisisFormState extends State<MrPemeriksaanFisisForm> {
                   const SizedBox(
                     height: 8.0,
                   ),
-                  if (!widget.pasien!.isDewasa! &&
+                  if (!widget.pasien!.isDewasa &&
                       _pemeriksaanFisis!.fisikAnak != null)
                     const Text(
                       'Fisik Anak',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  if (!widget.pasien!.isDewasa! &&
+                  if (!widget.pasien!.isDewasa &&
                       _pemeriksaanFisis!.fisikAnak != null)
                     const SizedBox(
                       height: 12,
                     ),
-                  if (!widget.pasien!.isDewasa! &&
+                  if (!widget.pasien!.isDewasa &&
                       _pemeriksaanFisis!.fisikAnak != null)
                     Row(
                       children: [
@@ -91,30 +91,30 @@ class _MrPemeriksaanFisisFormState extends State<MrPemeriksaanFisisForm> {
                           )
                       ],
                     ),
-                  if (!widget.pasien!.isDewasa! &&
+                  if (!widget.pasien!.isDewasa &&
                       _pemeriksaanFisis!.fisikAnak != null)
                     const SizedBox(
                       height: 12,
                     ),
-                  if (!widget.pasien!.isDewasa! &&
+                  if (!widget.pasien!.isDewasa &&
                       _pemeriksaanFisis!.fisikAnak?.statusGizi != null)
                     DeskripsiWidget(
                       title: 'Status Gizi',
                       body: Text('${_pemeriksaanFisis!.fisikAnak?.statusGizi}'),
                     ),
-                  if (!widget.pasien!.isDewasa! &&
+                  if (!widget.pasien!.isDewasa &&
                       _pemeriksaanFisis!.fisikAnak?.statusGizi != null)
                     const SizedBox(
                       height: 12,
                     ),
-                  if (!widget.pasien!.isDewasa! &&
+                  if (!widget.pasien!.isDewasa &&
                       _pemeriksaanFisis!.fisikAnak != null)
                     DeskripsiWidget(
                       title: 'Keadaan Umum',
                       body:
                           Text('${_pemeriksaanFisis!.fisikAnak?.keadaanUmum}'),
                     ),
-                  if (!widget.pasien!.isDewasa! &&
+                  if (!widget.pasien!.isDewasa &&
                       _pemeriksaanFisis!.fisikAnak != null)
                     const Divider(),
                   const Text(

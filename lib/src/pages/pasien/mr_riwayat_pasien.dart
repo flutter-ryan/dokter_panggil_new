@@ -3,11 +3,11 @@ import 'package:admin_dokter_panggil/src/models/mr_riwayat_kunjungan_model.dart'
 import 'package:admin_dokter_panggil/src/models/pasien_show_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/bullet_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/button_rounded_icon_widget.dart';
-import 'package:admin_dokter_panggil/src/pages/components/button_rounded_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:admin_dokter_panggil/src/pages/components/tile_data_card.dart';
 import 'package:admin_dokter_panggil/src/pages/pasien/mr_riwayat_detail_page.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/resume_nonmr_page.dart';
 import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:admin_dokter_panggil/src/source/color_style.dart';
 import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
@@ -53,14 +53,14 @@ class _MrRiwayatPasienState extends State<MrRiwayatPasien> {
         ),
       );
     } else {
-      // Navigator.push(
-      //   context,
-      //   SlideLeftRoute(
-      //     page: ResumeNonmrPage(
-      //       idKunjungan: data.idKunjungan,
-      //     ),
-      //   ),
-      // );
+      Navigator.push(
+        context,
+        SlideLeftRoute(
+          page: ResumeNonmrPage(
+            idKunjungan: data.idKunjungan,
+          ),
+        ),
+      );
     }
   }
 

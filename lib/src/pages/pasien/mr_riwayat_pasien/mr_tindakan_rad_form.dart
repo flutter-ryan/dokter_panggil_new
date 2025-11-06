@@ -6,7 +6,6 @@ import 'package:admin_dokter_panggil/src/pages/pasien/mr_riwayat_pasien/resep_ca
 import 'package:admin_dokter_panggil/src/source/transition/slide_left_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path/path.dart' as p;
 

@@ -1,20 +1,20 @@
 import 'package:admin_dokter_panggil/src/blocs/mr_kunjungan_cppt_bloc.dart';
 import 'package:admin_dokter_panggil/src/models/mr_kunjungan_cppt_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/mr_riwayat_kunjungan_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
+import 'package:admin_dokter_panggil/src/pages/pasien/mr_riwayat_pasien/mr_cppt_list_widget.dart';
 import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:admin_dokter_panggil/src/source/color_style.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MrCppt extends StatefulWidget {
   const MrCppt({
     super.key,
-    this.data,
+    this.riwayatKunjungan,
   });
 
-  final MrRiwayatDetail? data;
+  final MrRiwayatKunjungan? riwayatKunjungan;
 
   @override
   State<MrCppt> createState() => _MrCpptState();
@@ -30,7 +30,8 @@ class _MrCpptState extends State<MrCppt> {
   }
 
   void _getMrCppt() {
-    _mrKunjunganCpptBloc.idKunjunganSink.add(widget.data!.id!);
+    _mrKunjunganCpptBloc.idKunjunganSink
+        .add(widget.riwayatKunjungan!.idKunjungan!);
     _mrKunjunganCpptBloc.getCppt();
   }
 
@@ -61,7 +62,7 @@ class _MrCpptState extends State<MrCppt> {
               );
             case Status.completed:
               return MrCpptWidget(
-                dataDashboard: widget.data,
+                dataDashboard: widget.riwayatKunjungan,
                 data: snapshot.data!.data!.data,
               );
           }
@@ -80,7 +81,7 @@ class MrCpptWidget extends StatefulWidget {
   });
 
   final List<DataCppt>? data;
-  final MrRiwayatDetail? dataDashboard;
+  final MrRiwayatKunjungan? dataDashboard;
 
   @override
   State<MrCpptWidget> createState() => _MrCpptWidgetState();
@@ -147,74 +148,11 @@ class _MrCpptWidgetState extends State<MrCpptWidget> {
                 child: MrCpptListWidget(
                   dataCppt: _dataCppt,
                   dataDashboard: widget.dataDashboard,
-                  controller: _controller,
                 ),
               ),
             ],
           ),
         ),
-        if (widget.dataDashboard!.isPerawat! || widget.dataDashboard!.isDokter!)
-          StreamBuilder<ScrollButtonState>(
-            stream: _scrollBloc.state,
-            initialData: ScrollButtonState(isVisible: true),
-            builder: (context, snapshot) => Positioned(
-              bottom: 18,
-              right: 18,
-              child: AnimatedSlide(
-                duration: const Duration(milliseconds: 300),
-                offset:
-                    snapshot.data!.isVisible ? Offset.zero : const Offset(0, 2),
-                child: AnimatedOpacity(
-                  opacity: snapshot.data!.isVisible ? 1 : 0,
-                  duration: const Duration(milliseconds: 300),
-                  child: FloatingActionButton(
-                    onPressed: _pilihanCppt,
-                    backgroundColor: kSecondaryColor,
-                    child: const Icon(
-                      Icons.add_rounded,
-                      size: 28,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          )
-      ],
-    );
-  }
-
-  Widget _pilihanCpptWidget(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(22.0),
-          child: Text(
-            'Pilih Salah Satu',
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-          ),
-        ),
-        ListTile(
-          title: const Text('SOAP'),
-          onTap: () => Navigator.pop(context, 'soap'),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
-          trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-        ),
-        const Divider(
-          height: 0,
-        ),
-        ListTile(
-          title: const Text('TBAK SBAR'),
-          onTap: () => Navigator.pop(context, 'tbak'),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
-          trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
-        )
       ],
     );
   }

@@ -1,6 +1,6 @@
 import 'package:admin_dokter_panggil/src/blocs/mr_pengkajian_dokter_bloc.dart';
 import 'package:admin_dokter_panggil/src/models/mr_pengkajian_dokter_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/mr_riwayat_kunjungan_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/dashboard_card_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
@@ -23,10 +23,10 @@ import 'package:flutter/material.dart';
 class MrPengkajianDokter extends StatefulWidget {
   const MrPengkajianDokter({
     super.key,
-    this.data,
+    this.riwayatKunjungan,
   });
 
-  final MrRiwayatDetail? data;
+  final MrRiwayatKunjungan? riwayatKunjungan;
 
   @override
   State<MrPengkajianDokter> createState() => _MrPengkajianDokterState();
@@ -42,7 +42,8 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
   }
 
   void _getPengkajian() {
-    _mrPengkajianDokterBloc.idKunjunganSik.add(widget.data!.id!);
+    _mrPengkajianDokterBloc.idKunjunganSik
+        .add(widget.riwayatKunjungan!.idKunjungan!);
     _mrPengkajianDokterBloc.getPengkajianDokter();
   }
 
@@ -86,7 +87,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MrAnamnesaForm(
-                  idKunjungan: widget.data!.id,
+                  idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                   mrKunjunganAnamnesa: pengkajian!.anamnesa,
                 ),
                 Divider(
@@ -95,9 +96,9 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                   height: 5,
                 ),
                 MrPemeriksaanFisisForm(
-                  idKunjungan: widget.data!.id,
+                  idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                   mrKunjunganPemeriksaanFisis: pengkajian.pemeriksaanFisis,
-                  pasien: widget.data!.pasien,
+                  pasien: widget.riwayatKunjungan!.pasien,
                 ),
                 Divider(
                   color: Colors.grey[200],
@@ -111,7 +112,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MrDiagnosaForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         mrDiagnosaDokter: pengkajian.mrDiagnosaDokter,
                         mrDiagnosaIcdDokter: pengkajian.mrDiagnosaIcdDokter,
                       ),
@@ -120,7 +121,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                         color: Colors.grey,
                       ),
                       MrProsedurForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         mrProsedur: pengkajian.mrProsedur,
                       ),
                     ],
@@ -138,7 +139,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MrRencanaTerapiForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         mrKunjunganRencanaTerapi: pengkajian.rencanaTerapi,
                       ),
                       const Divider(
@@ -146,7 +147,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                         color: Colors.grey,
                       ),
                       MrTindakanForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         tindakan: pengkajian.kunjunganTindakan,
                       ),
                       const Divider(
@@ -154,7 +155,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                         color: Colors.grey,
                       ),
                       MrObatInjeksiForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         mrKunjunganObatInjeksi: pengkajian.kunjunganObatInjeksi,
                       ),
                       const SizedBox(
@@ -165,7 +166,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                         color: Colors.grey,
                       ),
                       MrResepForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         mrKunjunganResep: pengkajian.kunjunganResep!,
                       ),
                       const SizedBox(
@@ -176,7 +177,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                         color: Colors.grey,
                       ),
                       MrResepRacikanForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         mrKunjunganResepRacikan:
                             pengkajian.kunjunganResepRacikan,
                       ),
@@ -188,7 +189,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                         color: Colors.grey,
                       ),
                       MrTindakanLabForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         mrKunjunganTindakanLab: pengkajian.kunjunganTindakanLab,
                         dokumenLab: pengkajian.dokumenLab,
                       ),
@@ -200,7 +201,7 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                         color: Colors.grey,
                       ),
                       MrTindakanRadForm(
-                        idKunjungan: widget.data!.id,
+                        idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                         mrKunjunganTindakanRad: pengkajian.kunjunganTindakanRad,
                         dokumenRad: pengkajian.dokumenRad,
                       ),
@@ -212,9 +213,9 @@ class _MrPengkajianDokterState extends State<MrPengkajianDokter> {
                     height: 0,
                     color: Colors.grey,
                   ),
-                if (pengkajian!.layananLanjutan != null)
+                if (pengkajian.layananLanjutan != null)
                   MrTindakanLanjutanForm(
-                    idKunjungan: widget.data!.id,
+                    idKunjungan: widget.riwayatKunjungan!.idKunjungan,
                     layananLanjutan: pengkajian.layananLanjutan,
                   ),
                 SizedBox(

@@ -236,6 +236,7 @@ class _PencarianPasianpageState extends State<PencarianPasianpage> {
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               itemCount: pasien.length,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               itemBuilder: (context, i) {
                 var data = pasien[i];
                 return ListTile(

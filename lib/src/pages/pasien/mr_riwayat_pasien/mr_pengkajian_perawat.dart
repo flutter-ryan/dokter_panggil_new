@@ -1,7 +1,7 @@
 import 'package:admin_dokter_panggil/src/blocs/mr_pengkajian_perawat_bloc.dart';
 import 'package:admin_dokter_panggil/src/models/mr_kunjungan_pengkajian_perawat_model.dart';
 import 'package:admin_dokter_panggil/src/models/mr_pengkajian_perawat_anak_model.dart';
-import 'package:admin_dokter_panggil/src/models/mr_riwayat_detail_model.dart';
+import 'package:admin_dokter_panggil/src/models/mr_riwayat_kunjungan_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:admin_dokter_panggil/src/pages/pasien/mr_riwayat_pasien/pengkajian_perawat_anak_form.dart';
@@ -13,10 +13,10 @@ import 'package:flutter/material.dart';
 class MrPengkajianPerawat extends StatefulWidget {
   const MrPengkajianPerawat({
     super.key,
-    this.data,
+    this.riwayatKunjungan,
   });
 
-  final MrRiwayatDetail? data;
+  final MrRiwayatKunjungan? riwayatKunjungan;
 
   @override
   State<MrPengkajianPerawat> createState() => _MrPengkajianPerawatState();
@@ -32,8 +32,9 @@ class _MrPengkajianPerawatState extends State<MrPengkajianPerawat> {
   }
 
   void _getPengkajianPerawat() {
-    _mrPengkajianPerawatBloc.idKunjunganSink.add(widget.data!.id!);
-    if (widget.data!.pasien!.isDewasa!) {
+    _mrPengkajianPerawatBloc.idKunjunganSink
+        .add(widget.riwayatKunjungan!.idKunjungan!);
+    if (widget.riwayatKunjungan!.pasien!.isDewasa) {
       _mrPengkajianPerawatBloc.getPengkajianPerawat();
     } else {
       _mrPengkajianPerawatBloc.getPengkajianPerawatAnak();
@@ -48,7 +49,7 @@ class _MrPengkajianPerawatState extends State<MrPengkajianPerawat> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.data!.pasien!.isDewasa!) {
+    if (!widget.riwayatKunjungan!.pasien!.isDewasa) {
       return _streamPengkajianPerawatAnak(context);
     }
     return StreamBuilder<ApiResponse<MrKunjunganPengkajianPerawatModel>>(
@@ -70,9 +71,9 @@ class _MrPengkajianPerawatState extends State<MrPengkajianPerawat> {
               );
             case Status.completed:
               return PengkajianPerawatForm(
-                pasien: widget.data!.pasien!,
+                pasien: widget.riwayatKunjungan!.pasien!,
                 data: snapshot.data!.data!.data,
-                idKunjungan: widget.data!.id,
+                idKunjungan: widget.riwayatKunjungan!.idKunjungan,
               );
           }
         }
@@ -101,9 +102,9 @@ class _MrPengkajianPerawatState extends State<MrPengkajianPerawat> {
               );
             case Status.completed:
               return PengkajianPerawatAnakForm(
-                pasien: widget.data!.pasien!,
+                pasien: widget.riwayatKunjungan!.pasien!,
                 data: snapshot.data!.data!.data,
-                idKunjungan: widget.data!.id,
+                idKunjungan: widget.riwayatKunjungan!.idKunjungan,
               );
           }
         }

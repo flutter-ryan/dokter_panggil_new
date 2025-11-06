@@ -39,6 +39,7 @@ class Pasien {
     this.pasienKontakDarurat,
     this.pasienStatusPerkawinan,
     this.pasienAdministrativeCode,
+    this.isDewasa = true,
   });
 
   int? id;
@@ -58,6 +59,7 @@ class Pasien {
   PasienKontakDarurat? pasienKontakDarurat;
   PasienStatusPerkawinan? pasienStatusPerkawinan;
   PasienAdministrativeCode? pasienAdministrativeCode;
+  bool isDewasa;
 
   factory Pasien.fromJson(Map<String, dynamic> json) => Pasien(
         id: json["id"],
@@ -85,6 +87,7 @@ class Pasien {
         pasienAdministrativeCode: json["administrative_code"] == null
             ? null
             : PasienAdministrativeCode.fromJson(json["administrative_code"]),
+        isDewasa: json["is_dewasa"],
       );
 }
 
