@@ -459,7 +459,7 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                       style: TextStyle(
                           fontSize: 13.0, fontWeight: FontWeight.w600),
                     ),
-                    if (widget.tagihanSementara)
+                    if (widget.tagihanSementara && widget.type == 'create')
                       Text(
                         _noRupiah.format(_data.total! + totalBiaya),
                         style: const TextStyle(
@@ -478,18 +478,20 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
           ),
         if (widget.type == 'view')
           Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 22.0),
+            padding: const EdgeInsets.all(18),
             child: ElevatedButton(
               onPressed: () => Navigator.pop(context, _data),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 45),
                 backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
               ),
               child: const Text('Kirim Kwitansi'),
             ),
           ),
-        if (!widget.finalTagihan)
+        if (!widget.finalTagihan && widget.type == 'create')
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: ElevatedButton(
@@ -728,18 +730,11 @@ class _ListBiayaAdminState extends State<ListBiayaAdmin> {
                       style: TextStyle(
                           fontSize: 13.0, fontWeight: FontWeight.w600),
                     ),
-                    if (widget.finalTagihan)
-                      Text(
-                        _noRupiah.format(_data.subTotal! + _data.biayaLayanan!),
-                        style: const TextStyle(
-                            fontSize: 13.0, fontWeight: FontWeight.w600),
-                      )
-                    else
-                      Text(
-                        _noRupiah.format(_data.subTotal! + _data.biayaLayanan!),
-                        style: const TextStyle(
-                            fontSize: 13.0, fontWeight: FontWeight.w600),
-                      )
+                    Text(
+                      _noRupiah.format(_data.subTotal! + _data.biayaLayanan!),
+                      style: const TextStyle(
+                          fontSize: 13.0, fontWeight: FontWeight.w600),
+                    )
                   ],
                 ),
               ),

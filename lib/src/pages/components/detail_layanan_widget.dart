@@ -467,8 +467,11 @@ class _DetailLayananWidgetState extends State<DetailLayananWidget> {
                 if (_data!.status == 5)
                   ElevatedButton(
                     onPressed: _kwitansi,
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(32)),
+                        minimumSize: Size(140, 40)),
                     child: const Text('Kirim Kwitansi'),
                   )
                 else if (_data!.status == 4)
