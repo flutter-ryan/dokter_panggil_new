@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admin_dokter_panggil/src/blocs/auth_bloc.dart';
 import 'package:admin_dokter_panggil/src/blocs/kunjungan_bloc.dart';
 import 'package:admin_dokter_panggil/src/blocs/kunjungan_final_bloc.dart';
@@ -20,7 +18,7 @@ import 'package:admin_dokter_panggil/src/pages/current_user_page.dart';
 import 'package:admin_dokter_panggil/src/pages/riwayat_kunjungan_page.dart';
 import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:admin_dokter_panggil/src/source/config.dart';
-import 'package:admin_dokter_panggil/src/source/local_notification_service.dart';
+import 'package:admin_dokter_panggil/src/source/notification_service.dart';
 import 'package:admin_dokter_panggil/src/source/size_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -76,9 +74,7 @@ class _HomepageState extends State<Homepage> {
       sound: true,
     );
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (Platform.isAndroid) {
-        LocalNotificationService.showNotification(message);
-      }
+      NotificationService.showFromFCM(message);
     });
     _handleMessage();
   }
@@ -378,7 +374,7 @@ class _HomepageState extends State<Homepage> {
                                 withNavBar: false,
                               ),
                               label: const Text(
-                                'History',
+                                'Riwayat',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 12.0),
                               ),

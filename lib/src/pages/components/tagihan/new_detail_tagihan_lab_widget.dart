@@ -14,6 +14,7 @@ import 'package:admin_dokter_panggil/src/models/tagihan_tindakan_lab_model.dart'
 import 'package:admin_dokter_panggil/src/models/tindakan_lab_proses_model.dart';
 import 'package:admin_dokter_panggil/src/models/tindakan_lab_tagihan_modal.dart';
 import 'package:admin_dokter_panggil/src/pages/components/card_tagihan_lab.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_response.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
@@ -86,7 +87,7 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
     showMaterialModalBottomSheet(
       context: context,
       builder: (context) {
-        return _modalPilihPegawai(context);
+        return _modalPilihLab(context);
       },
       duration: const Duration(milliseconds: 500),
     ).then((value) {
@@ -101,8 +102,10 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
   void _ePengantarLab(PengantarLabMr? pengantar) {
     showMaterialModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (context) {
-        return _epengantarLabWidget(context, pengantar);
+        return SafeArea(
+            bottom: false, child: _epengantarLabWidget(context, pengantar));
       },
       duration: const Duration(milliseconds: 500),
     ).then((value) {
@@ -616,7 +619,7 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
     );
   }
 
-  Widget _modalPilihPegawai(BuildContext context) {
+  Widget _modalPilihLab(BuildContext context) {
     return SizedBox(
       height: SizeConfig.blockSizeVertical * 70,
       child: Column(
@@ -678,43 +681,54 @@ class _NewDetailTagihanLabWidgetState extends State<NewDetailTagihanLabWidget> {
 
   Widget _epengantarLabWidget(BuildContext context, PengantarLabMr? pengantar) {
     return Container(
-      constraints: BoxConstraints(
-        maxHeight: SizeConfig.blockSizeVertical * 92,
-      ),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(22), topRight: Radius.circular(22))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 22.0, vertical: 12.0),
+            padding: EdgeInsets.fromLTRB(22, 22, 22, 12),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
-                    'Pengantar Laboratorium',
+                    'E-Pengantar Laboratorium',
                     style:
                         TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
                 ),
-                CloseButton(
-                  color: Colors.grey[400],
-                  onPressed: () => Navigator.pop(context),
-                )
+                CloseButtonWidget()
               ],
             ),
           ),
-          const Divider(
-            height: 0,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                visualDensity: VisualDensity.compact,
+                title: Text(
+                  'Dokter',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[400]),
+                ),
+                subtitle: Text('${pengantar!.dokter}'),
+              ),
+            ),
           ),
           Flexible(
             child: ListView.separated(
               shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(vertical: 12.0),
-              itemCount: pengantar!.tindakanLab!.length,
+              padding: const EdgeInsets.all(18),
+              itemCount: pengantar.tindakanLab!.length,
               itemBuilder: (context, i) {
                 var tindakan = pengantar.tindakanLab![i];
                 return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 22.0),
                   title: Text('${tindakan.tindakanLab}'),
                 );
               },

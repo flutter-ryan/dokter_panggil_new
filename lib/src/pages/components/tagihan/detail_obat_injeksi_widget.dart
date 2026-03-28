@@ -1,3 +1,4 @@
+import 'package:admin_dokter_panggil/src/pages/components/close_button_widget.dart';
 import 'package:animate_icons/animate_icons.dart';
 import 'package:admin_dokter_panggil/src/blocs/kunjungan_obat_injeksi_update_bloc.dart';
 import 'package:admin_dokter_panggil/src/blocs/mr_eresep_bloc.dart';
@@ -168,8 +169,10 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
   void _eresep(ObatInjeksiMr? resep) {
     showMaterialModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (context) {
-        return _eresepInjeksiWidget(context, resep);
+        return SafeArea(
+            bottom: false, child: _eresepInjeksiWidget(context, resep));
       },
     ).then((value) {
       if (value != null) {
@@ -500,68 +503,82 @@ class _DetailObatInjeksiWidgetState extends State<DetailObatInjeksiWidget> {
   }
 
   Widget _eresepInjeksiWidget(BuildContext context, ObatInjeksiMr? resep) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'E-Resep Obat Injeksi',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(18), topRight: Radius.circular(18))),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(18, 22, 18, 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'E-Resep Obat Injeksi',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
                 ),
-              ),
-              CloseButton(
-                onPressed: () => Navigator.pop(context),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              visualDensity: VisualDensity.compact,
-              title: Text(
-                'Dokter',
-                style: TextStyle(fontSize: 12, color: Colors.grey[400]),
-              ),
-              subtitle: Text('${resep!.dokter}'),
+                CloseButtonWidget()
+              ],
             ),
           ),
-        ),
-        ...resep.obatInjeksi!.map(
-          (obatInjeksi) => ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
-            title: Text('${obatInjeksi.barang!.namaBarang}'),
-            subtitle: Text('${obatInjeksi.aturanPakai}'),
-            trailing: Text('${obatInjeksi.jumlah} Pcs'),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 22, vertical: 18),
-          child: ElevatedButton(
-            onPressed: () => Navigator.pop(context, resep),
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12),
               ),
-              minimumSize: Size(double.infinity, 42),
+              child: ListTile(
+                visualDensity: VisualDensity.compact,
+                title: Text(
+                  'Dokter',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[400]),
+                ),
+                subtitle: Text('${resep!.dokter}'),
+              ),
             ),
-            child: Text('Kirim E-Resep'),
           ),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
-        )
-      ],
+          Flexible(
+            child: ListView.separated(
+                padding: EdgeInsets.all(18),
+                shrinkWrap: true,
+                itemBuilder: (context, i) {
+                  final obatInjeksi = resep.obatInjeksi![i];
+                  return ListTile(
+                    title: Text('${obatInjeksi.barang!.namaBarang}'),
+                    subtitle: Text('${obatInjeksi.aturanPakai}'),
+                    trailing: Text('${obatInjeksi.jumlah} Pcs'),
+                  );
+                },
+                separatorBuilder: (context, i) => SizedBox(
+                      height: 8,
+                    ),
+                itemCount: resep.obatInjeksi!.length),
+          ),
+          Divider(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 22, vertical: 18),
+            child: ElevatedButton(
+              onPressed: () => Navigator.pop(context, resep),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                minimumSize: Size(double.infinity, 42),
+              ),
+              child: Text('Kirim E-Resep'),
+            ),
+          ),
+          SizedBox(
+            height: 18,
+          )
+        ],
+      ),
     );
   }
 }

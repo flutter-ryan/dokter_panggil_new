@@ -155,6 +155,7 @@ class _EditPasienPageState extends State<EditPasienPage> {
         _mrPasienUpdateBloc.jenisKelaminSink.add(data['id']);
         setState(() {
           _jenisKelaminCon.text = data['jenis'];
+          _selectedJk = data['id'];
         });
       }
     });
@@ -169,7 +170,6 @@ class _EditPasienPageState extends State<EditPasienPage> {
       _mrPasienUpdateBloc.namaPasienSink.add(_namaCon.text);
       _mrPasienUpdateBloc.tempatLahirSink.add(_tempatLahirCon.text);
       _mrPasienUpdateBloc.tanggalLahirSink.add(_tanggalLahirCon.text);
-      _mrPasienUpdateBloc.jenisKelaminSink.add('$_selectedJk');
       _mrPasienUpdateBloc.alamatSink.add(_alamatCon.text);
       _mrPasienUpdateBloc.nomorHpSink.add(_noHp!);
       _mrPasienUpdateBloc.rwSink.add(_rwCon.text);

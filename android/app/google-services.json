@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1062007042591",
-    "project_id": "mr-admin-drp",
-    "storage_bucket": "mr-admin-drp.firebasestorage.app"
+    "project_number": "921812978955",
+    "project_id": "drp-notification",
+    "storage_bucket": "drp-notification.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1062007042591:android:7bead4f96963a56ca49b2a",
+        "mobilesdk_app_id": "1:921812978955:android:d7a321e26c7fac2966260e",
         "android_client_info": {
           "package_name": "com.dokterpanggil.admin_dokter_panggil"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAA5mKCLQYUACU97vj-E3fKo3obK3K_yxo"
+          "current_key": "AIzaSyB8fd_KzbbEFkz5u0fX_2Zxwt-MyqkKqhw"
         }
       ],
       "services": {

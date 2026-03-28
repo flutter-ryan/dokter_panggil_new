@@ -11,6 +11,7 @@ import 'package:admin_dokter_panggil/src/models/pasien_kunjungan_detail_model.da
 import 'package:admin_dokter_panggil/src/models/tagihan_tindakan_rad_model.dart';
 import 'package:admin_dokter_panggil/src/models/tindakan_rad_proses_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/card_tagihan_lab.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
@@ -87,7 +88,9 @@ class _NewDetailTagihanRadWidgetState extends State<NewDetailTagihanRadWidget> {
   void _ePengantarRad(PengantarRadMr? pengantar) {
     showMaterialModalBottomSheet(
       context: context,
-      builder: (context) => _modalEresepMr(context, pengantar),
+      backgroundColor: Colors.transparent,
+      builder: (context) =>
+          SafeArea(bottom: false, child: _modalEresepMr(context, pengantar)),
     ).then((value) {
       if (value != null) {
         Future.delayed(const Duration(milliseconds: 500), () {
@@ -581,34 +584,49 @@ class _NewDetailTagihanRadWidgetState extends State<NewDetailTagihanRadWidget> {
 
   Widget _modalEresepMr(BuildContext context, PengantarRadMr? pengantar) {
     return Container(
-      constraints: BoxConstraints(
-          minHeight: SizeConfig.blockSizeVertical * 20,
-          maxHeight: SizeConfig.blockSizeVertical * 94),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(22), topRight: Radius.circular(22))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+            padding: EdgeInsets.fromLTRB(22, 22, 22, 12),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
-                    'E-PENGANTAR Tindakan Radiologi',
+                    'E-Pengantar Tindakan Radiologi',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ),
-                CloseButton(
-                  color: Colors.grey[400],
-                  onPressed: () => Navigator.pop(context),
-                )
+                CloseButtonWidget()
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                visualDensity: VisualDensity.compact,
+                title: Text(
+                  'Dokter',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[400]),
+                ),
+                subtitle: Text('${pengantar!.dokter}'),
+              ),
             ),
           ),
           Flexible(
             child: ListView.separated(
               shrinkWrap: true,
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.all(18),
               itemBuilder: (context, i) {
                 final tindakanRad = pengantar.tindakanRad![i];
                 return ListTile(
@@ -619,9 +637,10 @@ class _NewDetailTagihanRadWidgetState extends State<NewDetailTagihanRadWidget> {
               separatorBuilder: (context, i) => SizedBox(
                 height: 18,
               ),
-              itemCount: pengantar!.tindakanRad!.length,
+              itemCount: pengantar.tindakanRad!.length,
             ),
           ),
+          Divider(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 22.0),
             child: ElevatedButton(

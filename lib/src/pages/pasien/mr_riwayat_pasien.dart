@@ -35,6 +35,14 @@ class _MrRiwayatPasienState extends State<MrRiwayatPasien> {
   void initState() {
     super.initState();
     _getRiwayat();
+    _controller.addListener(_scrollListen);
+  }
+
+  void _scrollListen() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      _mrRiwayatKunjunganBloc.normSink.add('${widget.pasien!.norm}');
+      _mrRiwayatKunjunganBloc.getRiwayatNextPage();
+    }
   }
 
   void _getRiwayat() {
@@ -67,6 +75,8 @@ class _MrRiwayatPasienState extends State<MrRiwayatPasien> {
   @override
   void dispose() {
     _mrRiwayatKunjunganBloc.dispose();
+    _controller.removeListener(_scrollListen);
+    _controller.dispose();
     super.dispose();
   }
 

@@ -5,17 +5,19 @@ class SearchWidgetPage extends StatelessWidget {
     super.key,
     required this.filter,
     required this.hint,
+    this.clearButton,
   });
 
   final TextEditingController filter;
   final String hint;
+  final Widget? clearButton;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 15.0),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         decoration: BoxDecoration(
           color: Colors.grey[100],
           borderRadius: BorderRadius.circular(8.0),
@@ -23,6 +25,13 @@ class SearchWidgetPage extends StatelessWidget {
         ),
         child: Row(
           children: [
+            const Icon(
+              Icons.search,
+              color: Colors.grey,
+            ),
+            SizedBox(
+              width: 12,
+            ),
             Expanded(
               child: TextField(
                 controller: filter,
@@ -33,10 +42,7 @@ class SearchWidgetPage extends StatelessWidget {
                 ),
               ),
             ),
-            const Icon(
-              Icons.search,
-              color: Colors.grey,
-            )
+            clearButton ?? SizedBox(),
           ],
         ),
       ),

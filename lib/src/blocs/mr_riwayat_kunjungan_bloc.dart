@@ -37,11 +37,11 @@ class MrRiwayatKunjunganBloc {
 
   Future<void> getRiwayatNextPage() async {
     final norm = _norm.value;
-    riwayatKunjunganSink.add(ApiResponse.loading('Memuat...'));
     try {
       final res = await _repo.getRiwayatKunjungan(norm, page);
       if (_streamRiwayatKunjungan!.isClosed) return;
-      mrRiwayatKunjunganModel = res;
+      mrRiwayatKunjunganModel!.currentPage = page;
+      mrRiwayatKunjunganModel!.data!.addAll(res.data!);
       page += 1;
       riwayatKunjunganSink.add(ApiResponse.completed(mrRiwayatKunjunganModel));
     } catch (e) {

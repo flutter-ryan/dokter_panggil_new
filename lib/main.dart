@@ -1,7 +1,5 @@
-import 'dart:io';
-
 import 'package:admin_dokter_panggil/src/pages/splash_page.dart';
-import 'package:admin_dokter_panggil/src/source/local_notification_service.dart';
+import 'package:admin_dokter_panggil/src/source/notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,20 +11,14 @@ import 'package:google_fonts/google_fonts.dart';
 @pragma('vm:entry-point')
 Future<void> _messageBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  if (Platform.isAndroid) {
-    LocalNotificationService.showNotification(message);
-  }
+  NotificationService.showFromFCM(message);
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_messageBackgroundHandler);
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+  await NotificationService.init();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(

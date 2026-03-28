@@ -1,4 +1,5 @@
 import 'package:admin_dokter_panggil/src/blocs/auth_bloc.dart';
+import 'package:admin_dokter_panggil/src/blocs/token_fcm_bloc.dart';
 import 'package:admin_dokter_panggil/src/pages/barang/barang_page.dart';
 import 'package:admin_dokter_panggil/src/pages/components/loading_kit.dart';
 import 'package:admin_dokter_panggil/src/pages/home_page.dart';
@@ -6,6 +7,7 @@ import 'package:admin_dokter_panggil/src/pages/laporan_page.dart';
 import 'package:admin_dokter_panggil/src/pages/master/master_page.dart';
 import 'package:admin_dokter_panggil/src/pages/pasien/tambah_pasien_page.dart';
 import 'package:admin_dokter_panggil/src/source/config.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -19,6 +21,7 @@ class Rootpage extends StatefulWidget {
 }
 
 class _RootpageState extends State<Rootpage> {
+  final _tokenFcmBloc = TokenFcmBloc();
   late PersistentTabController _controller;
   int? _role;
   String? _name;
@@ -33,11 +36,18 @@ class _RootpageState extends State<Rootpage> {
 
   void _getSaveProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token;
     setState(() {
       _name = prefs.getString('name');
+      token = prefs.getString('tokenFcm');
       _role = prefs.getInt('role');
       _isProfile = true;
     });
+    if (token == null) {
+      String? tokenFcm = await FirebaseMessaging.instance.getToken();
+      _tokenFcmBloc.tokenSink.add('$tokenFcm');
+      _tokenFcmBloc.updateTokenFcm();
+    }
   }
 
   List<PersistentTabConfig> _navBarsItems() {

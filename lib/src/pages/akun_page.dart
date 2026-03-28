@@ -14,7 +14,6 @@ import 'package:admin_dokter_panggil/src/pages/components/success_dialog.dart';
 import 'package:admin_dokter_panggil/src/pages/components/title_quick_act.dart';
 import 'package:admin_dokter_panggil/src/repositories/responseApi/api_response.dart';
 import 'package:admin_dokter_panggil/src/source/config.dart';
-import 'package:admin_dokter_panggil/src/source/local_notification_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -127,9 +126,6 @@ class _AkunPageState extends State<AkunPage> {
               title: 'Aktivasi notifikasi',
               body: 'Anda telah mengktifkan notifikasi'),
         );
-        LocalNotificationService.showNotification(payload);
-        _tokenFcmSaveBloc.tokenSink.add(_token!);
-        _tokenFcmSaveBloc.saveTokenFcm();
         if (!mounted) return;
         _showStreamSaveToken(context);
       }

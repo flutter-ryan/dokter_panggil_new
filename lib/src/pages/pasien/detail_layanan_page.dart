@@ -33,8 +33,7 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
   @override
   void initState() {
     super.initState();
-    _pasienKunjunganDetailBloc.idKunjunganSink.add(widget.id);
-    _pasienKunjunganDetailBloc.kunjunganDetail();
+    _reload();
   }
 
   void _reload() {

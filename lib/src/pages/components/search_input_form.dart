@@ -1,3 +1,4 @@
+import 'package:admin_dokter_panggil/src/source/color_style.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,6 +13,9 @@ class SearchInputForm extends StatelessWidget {
     this.autofocus = false,
     this.suffixIcon,
     this.autocorrect = true,
+    this.clearButton = false,
+    this.onClear,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
@@ -22,6 +26,9 @@ class SearchInputForm extends StatelessWidget {
   final bool autofocus;
   final Widget? suffixIcon;
   final bool autocorrect;
+  final bool clearButton;
+  final VoidCallback? onClear;
+  final Function(String val)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +68,18 @@ class SearchInputForm extends StatelessWidget {
                 ),
               ),
               onTap: onTap,
+              onChanged: onChanged,
               textCapitalization: TextCapitalization.sentences,
             ),
           ),
+          clearButton
+              ? IconButton(
+                  onPressed: onClear,
+                  padding: EdgeInsets.zero,
+                  icon: Icon(Icons.cancel_outlined),
+                  color: Colors.red[300],
+                )
+              : SizedBox(),
         ],
       ),
     );

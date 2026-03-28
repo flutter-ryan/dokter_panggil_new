@@ -9,6 +9,7 @@ import 'package:admin_dokter_panggil/src/models/resep_oral_proses_model.dart';
 import 'package:admin_dokter_panggil/src/models/tagihan_resep_oral_update_model.dart';
 import 'package:admin_dokter_panggil/src/models/transportasi_resep_model.dart';
 import 'package:admin_dokter_panggil/src/pages/components/card_tagihan_resep.dart';
+import 'package:admin_dokter_panggil/src/pages/components/close_button_widget.dart';
 import 'package:admin_dokter_panggil/src/pages/components/confirm_dialog.dart';
 import 'package:admin_dokter_panggil/src/pages/components/error_dialog.dart';
 import 'package:admin_dokter_panggil/src/pages/components/input_form.dart';
@@ -199,7 +200,9 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
   void _eresepOral(ResepMr? resep) {
     showMaterialModalBottomSheet(
       context: context,
-      builder: (context) => _eresepOralWidget(context, resep),
+      backgroundColor: Colors.transparent,
+      builder: (context) =>
+          SafeArea(bottom: false, child: _eresepOralWidget(context, resep)),
     ).then((value) {
       if (value != null) {
         final resep = value as ResepMr;
@@ -816,71 +819,81 @@ class _DetailTagihanResepWidgetState extends State<DetailTagihanResepWidget> {
   }
 
   Widget _eresepOralWidget(BuildContext context, ResepMr? resep) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'E-Resep Obat Oral/Minum',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(18, 22, 18, 18),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'E-Resep Obat Oral/Minum',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
                 ),
-              ),
-              CloseButton(
-                onPressed: () => Navigator.pop(context),
-                color: Colors.grey[400],
-              )
-            ],
-          ),
-        ),
-        Divider(
-          color: Colors.grey[400],
-          height: 0,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(12)),
-            child: ListTile(
-              visualDensity: VisualDensity.compact,
-              title: Text(
-                'Dokter',
-                style: TextStyle(fontSize: 12, color: Colors.grey[400]),
-              ),
-              subtitle: Text('${resep!.dokter}'),
+                CloseButtonWidget()
+              ],
             ),
           ),
-        ),
-        ...resep.obatOral!.map(
-          (obatOral) => ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-            title: Text('${obatOral.barang}'),
-            subtitle: Text('${obatOral.aturanPakai}'),
-            trailing: Text('${obatOral.jumlah} Pcs'),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(18),
-          child: ElevatedButton(
-            onPressed: () => Navigator.pop(context, resep),
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(12)),
+              child: ListTile(
+                visualDensity: VisualDensity.compact,
+                title: Text(
+                  'Dokter',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[400]),
+                ),
+                subtitle: Text('${resep!.dokter}'),
               ),
-              minimumSize: Size(double.infinity, 42),
             ),
-            child: Text('Kirim E-Resep'),
           ),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
-        )
-      ],
+          Flexible(
+            child: ListView.separated(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(18),
+              itemBuilder: (context, i) {
+                final obatOral = resep.obatOral![i];
+                return ListTile(
+                  title: Text('${obatOral.barang}'),
+                  subtitle: Text('${obatOral.aturanPakai}'),
+                  trailing: Text('${obatOral.jumlah} Pcs'),
+                );
+              },
+              separatorBuilder: (context, i) => SizedBox(
+                height: 8,
+              ),
+              itemCount: resep.obatOral!.length,
+            ),
+          ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.all(18),
+            child: ElevatedButton(
+              onPressed: () => Navigator.pop(context, resep),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                minimumSize: Size(double.infinity, 42),
+              ),
+              child: Text('Kirim E-Resep'),
+            ),
+          ),
+          SizedBox(
+            height: 18,
+          )
+        ],
+      ),
     );
   }
 

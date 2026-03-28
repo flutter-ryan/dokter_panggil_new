@@ -9,6 +9,7 @@ class MasterTindakanRadCariBloc {
   final _repo = MasterTindakanRadCariRepo();
   StreamController<ApiResponse<ResponseMasterTindakanRadCariModel>>?
       _streamMasterTindakanRadCari;
+  ResponseMasterTindakanRadCariModel? _tindakanRad;
   final BehaviorSubject<String> _filter = BehaviorSubject.seeded('');
   StreamSink<String> get filterSink => _filter.sink;
   StreamSink<ApiResponse<ResponseMasterTindakanRadCariModel>>
@@ -25,7 +26,24 @@ class MasterTindakanRadCariBloc {
     try {
       final res = await _repo.cariTindakanRad(masterTindakanRadCariModel);
       if (_streamMasterTindakanRadCari!.isClosed) return;
-      masterTindakanRadCariSink.add(ApiResponse.completed(res));
+      _tindakanRad = res;
+      masterTindakanRadCariSink.add(ApiResponse.completed(_tindakanRad));
+    } catch (e) {
+      if (_streamMasterTindakanRadCari!.isClosed) return;
+      masterTindakanRadCariSink.add(ApiResponse.error(e.toString()));
+    }
+  }
+
+  Future<void> filterTindakanRadLayanan() async {
+    final filter = _filter.value;
+    masterTindakanRadCariSink.add(ApiResponse.loading('Memuat...'));
+    MasterTindakanRadCariModel masterTindakanRadCariModel =
+        MasterTindakanRadCariModel(filter: filter);
+    try {
+      final res = await _repo.cariTindakanRad(masterTindakanRadCariModel);
+      if (_streamMasterTindakanRadCari!.isClosed) return;
+      _tindakanRad = res;
+      masterTindakanRadCariSink.add(ApiResponse.completed(_tindakanRad));
     } catch (e) {
       if (_streamMasterTindakanRadCari!.isClosed) return;
       masterTindakanRadCariSink.add(ApiResponse.error(e.toString()));
